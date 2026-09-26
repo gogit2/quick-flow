@@ -1,0 +1,48 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.quickflow:backend >------------------------
+[INFO] Building quickflow-backend 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:3.3.1:resources (default-resources) @ backend ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.14.0:compile (default-compile) @ backend ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- maven-resources-plugin:3.3.1:testResources (default-testResources) @ backend ---
+[INFO] skip non existing resourceDirectory /home/ahmoh/Documents/proj/QuickFlow/backend/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.14.0:testCompile (default-testCompile) @ backend ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- maven-surefire-plugin:3.5.4:test (default-test) @ backend ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+Downloading from central: https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-launcher/1.12.2/junit-platform-launcher-1.12.2.pom
+Progress (1): 3.0 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-launcher/1.12.2/junit-platform-launcher-1.12.2.pom (3.0 kB at 1.9 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-launcher/1.12.2/junit-platform-launcher-1.12.2.jar
+Progress (1): 2.3/208 kBProgress (1): 5.0/208 kBProgress (1): 7.7/208 kBProgress (1): 10/208 kB Progress (1): 13/208 kBProgress (1): 16/208 kBProgress (1): 19/208 kBProgress (1): 21/208 kBProgress (1): 24/208 kBProgress (1): 27/208 kBProgress (1): 30/208 kBProgress (1): 32/208 kBProgress (1): 35/208 kBProgress (1): 38/208 kBProgress (1): 41/208 kBProgress (1): 43/208 kBProgress (1): 46/208 kBProgress (1): 49/208 kBProgress (1): 53/208 kBProgress (1): 57/208 kBProgress (1): 61/208 kBProgress (1): 65/208 kBProgress (1): 69/208 kBProgress (1): 73/208 kBProgress (1): 76/208 kBProgress (1): 80/208 kBProgress (1): 84/208 kBProgress (1): 88/208 kBProgress (1): 92/208 kBProgress (1): 96/208 kBProgress (1): 100/208 kBProgress (1): 104/208 kBProgress (1): 108/208 kBProgress (1): 112/208 kBProgress (1): 117/208 kBProgress (1): 121/208 kBProgress (1): 125/208 kBProgress (1): 129/208 kBProgress (1): 131/208 kBProgress (1): 135/208 kBProgress (1): 139/208 kBProgress (1): 143/208 kBProgress (1): 147/208 kBProgress (1): 151/208 kBProgress (1): 155/208 kBProgress (1): 160/208 kBProgress (1): 164/208 kBProgress (1): 168/208 kBProgress (1): 172/208 kBProgress (1): 176/208 kBProgress (1): 180/208 kBProgress (1): 184/208 kBProgress (1): 188/208 kBProgress (1): 192/208 kBProgress (1): 196/208 kBProgress (1): 199/208 kBProgress (1): 203/208 kBProgress (1): 207/208 kBProgress (1): 208 kB                        Downloaded from central: https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-launcher/1.12.2/junit-platform-launcher-1.12.2.jar (208 kB at 257 kB/s)
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.quickflow.common.time.AppTimeTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.370 s -- in com.quickflow.common.time.AppTimeTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-jar-plugin:3.4.2:jar (default-jar) @ backend ---
+[INFO] 
+[INFO] --- spring-boot-maven-plugin:3.5.6:repackage (repackage) @ backend ---
+[INFO] Replacing main artifact /home/ahmoh/Documents/proj/QuickFlow/backend/target/backend-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /home/ahmoh/Documents/proj/QuickFlow/backend/target/backend-0.0.1-SNAPSHOT.jar.original
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  10.080 s
+[INFO] Finished at: 2026-09-26T19:37:14+03:00
+[INFO] ------------------------------------------------------------------------

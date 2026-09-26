@@ -1,0 +1,13 @@
+=== M01-foundation.sh ===
+PASS A1 health 200
+PASS A1 health UP
+PASS A2 api-docs 200
+PASS A2 api-docs title
+PASS A3 swagger-ui 200/302
+PASS A4 unknown route 404
+PASS A4 problem+json content type
+PASS A4 problem status field
+PASS A5 CORS allow-origin echoed
+--- 9 passed, 0 failed
+
+REGRESSION PASSED: 1 suite(s)

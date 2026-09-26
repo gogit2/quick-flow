@@ -1,0 +1,16 @@
+{
+  "components": {},
+  "info": {
+    "description": "Single-user productivity API: tasks, habits, learning resources, todo plans, dashboard, settings.",
+    "title": "QuickFlow API",
+    "version": "v1"
+  },
+  "openapi": "3.1.0",
+  "paths": {},
+  "servers": [
+    {
+      "description": "Generated server url",
+      "url": "http://localhost:8081"
+    }
+  ]
+}
