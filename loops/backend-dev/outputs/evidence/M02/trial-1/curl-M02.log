@@ -1,0 +1,73 @@
+=== M02-tasks.sh ===
+PASS A1 create 201
+PASS A1 Location header
+PASS A1 title echoed
+PASS A1 description echoed
+PASS A1 priority HIGH
+PASS A1 dueDate echoed
+PASS A1 status TODO
+PASS A1 archived false
+PASS A1 completedAt null
+PASS A1 priority defaults MEDIUM
+PASS A1 dueDate optional
+PASS A2 blank title 400
+PASS A2 errors.title present
+PASS A2 missing title 400
+PASS A3 201-char title 400
+PASS A3 200-char title 201
+PASS A3 2001-char description 400
+PASS A3 errors.description present
+PASS A4 bad status 400
+PASS A4 bad priority 400
+PASS A4 bad status filter 400
+PASS A4 bad sort 400
+PASS A5 PUT 200
+PASS A5 title updated
+PASS A5 priority updated
+PASS A5 dueDate updated
+PASS A5 status kept
+PASS A5 updatedAt changed
+PASS A6 complete 200
+PASS A6 status DONE
+PASS A6 completedAt set
+PASS A6 back to TODO
+PASS A6 completedAt cleared
+PASS A6 PUT DONE sets completedAt
+PASS A7 archive 200
+PASS A7 archived true
+PASS A7 excluded from default list
+PASS A7 present with archived=true
+PASS A7 archived list has only archived
+PASS A7 restore archived false
+PASS A7 back in default list
+PASS A8 delete 204
+PASS A8 GET deleted 404
+PASS A8 not in default list
+PASS A8 not in archived list
+PASS A9 search 200
+PASS A9 mixed-case search finds 3
+PASS A9 all results contain term
+PASS A9 status filter
+PASS A9 status AND priority
+PASS A9 status AND priority -> gamma
+PASS A9 priority filter
+PASS A10 dueDate asc, nulls last
+PASS A10 dueDate desc, nulls last
+PASS A10 createdAt desc
+PASS A10 createdAt asc
+PASS A10 dueDate equality filter
+PASS A10 due range filter
+PASS A10 inverted range 400
+PASS A11 yesterday TODO overdue
+PASS A11 due today not overdue
+PASS A11 yesterday DONE not overdue
+PASS A11 archived not overdue
+PASS A11 no-due task not overdue
+PASS A12 GET unknown 404
+PASS A12 ProblemDetail status
+PASS A12 PUT unknown 404
+PASS A12 DELETE unknown 404
+PASS A12 complete unknown 404
+--- 69 passed, 0 failed
+
+REGRESSION PASSED: 1 suite(s)

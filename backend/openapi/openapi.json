@@ -131,6 +131,120 @@
           }
         },
         "type": "object"
+      },
+      "TaskRequest": {
+        "description": "Create or update a task",
+        "properties": {
+          "description": {
+            "example": "Quarterly numbers",
+            "maxLength": 2000,
+            "minLength": 0,
+            "type": "string"
+          },
+          "dueDate": {
+            "description": "Optional due date. On update, omitted/null clears it",
+            "example": "2026-09-30",
+            "format": "date",
+            "type": "string"
+          },
+          "priority": {
+            "description": "Create: defaults to MEDIUM. Update: omitted keeps the current priority",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ],
+            "example": "HIGH",
+            "type": "string"
+          },
+          "status": {
+            "description": "Create: defaults to TODO. Update: omitted keeps the current status",
+            "enum": [
+              "TODO",
+              "IN_PROGRESS",
+              "DONE"
+            ],
+            "example": "TODO",
+            "type": "string"
+          },
+          "title": {
+            "example": "Write the report",
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "TaskResponse": {
+        "description": "A task with its computed overdue flag",
+        "properties": {
+          "archived": {
+            "example": false,
+            "type": "boolean"
+          },
+          "completedAt": {
+            "description": "Set while status is DONE",
+            "example": "2026-09-26T16:00:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdAt": {
+            "example": "2026-09-26T15:00:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "example": "Quarterly numbers",
+            "type": "string"
+          },
+          "dueDate": {
+            "example": "2026-09-30",
+            "format": "date",
+            "type": "string"
+          },
+          "id": {
+            "example": 1,
+            "format": "int64",
+            "type": "integer"
+          },
+          "overdue": {
+            "description": "dueDate is before today, status is not DONE, and the task is not archived",
+            "example": false,
+            "type": "boolean"
+          },
+          "priority": {
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ],
+            "example": "HIGH",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "TODO",
+              "IN_PROGRESS",
+              "DONE"
+            ],
+            "example": "TODO",
+            "type": "string"
+          },
+          "title": {
+            "example": "Write the report",
+            "type": "string"
+          },
+          "updatedAt": {
+            "example": "2026-09-26T15:00:00Z",
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "type": "object"
       }
     }
   },
@@ -144,7 +258,7 @@
     "/api/v1/habits": {
       "get": {
         "description": "All habits by id; filter with `active`.",
-        "operationId": "list",
+        "operationId": "list_1",
         "parameters": [
           {
             "description": "true = active only, false = deactivated only, omitted = all",
@@ -177,7 +291,7 @@
         ]
       },
       "post": {
-        "operationId": "create",
+        "operationId": "create_1",
         "requestBody": {
           "content": {
             "application/json": {
@@ -219,7 +333,7 @@
     "/api/v1/habits/{id}": {
       "delete": {
         "description": "Hard delete; its completions are deleted too (D-25).",
-        "operationId": "delete",
+        "operationId": "delete_1",
         "parameters": [
           {
             "in": "path",
@@ -245,7 +359,7 @@
         ]
       },
       "get": {
-        "operationId": "get",
+        "operationId": "get_1",
         "parameters": [
           {
             "in": "path",
@@ -275,7 +389,7 @@
         ]
       },
       "put": {
-        "operationId": "update",
+        "operationId": "update_1",
         "parameters": [
           {
             "in": "path",
@@ -394,7 +508,7 @@
       },
       "post": {
         "description": "For today, or for `date` (not in the future).",
-        "operationId": "complete",
+        "operationId": "complete_1",
         "parameters": [
           {
             "in": "path",
@@ -560,6 +674,380 @@
           "Habits"
         ]
       }
+    },
+    "/api/v1/tasks": {
+      "get": {
+        "description": "Filters combine with AND. Archived tasks are excluded unless `archived=true` (which lists only archived ones). Sort by `createdAt` (default, newest first) or `dueDate` (default ascending); tasks without a due date always sort last.",
+        "operationId": "list",
+        "parameters": [
+          {
+            "description": "Case-insensitive substring of the title",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "TODO",
+                "IN_PROGRESS",
+                "DONE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {
+              "enum": [
+                "LOW",
+                "MEDIUM",
+                "HIGH"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Exact due date",
+            "in": "query",
+            "name": "dueDate",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Due on or after this date",
+            "in": "query",
+            "name": "dueFrom",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Due on or before this date",
+            "in": "query",
+            "name": "dueTo",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "false (default) = active tasks, true = archived tasks only",
+            "in": "query",
+            "name": "archived",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "enum": [
+                "createdAt",
+                "dueDate"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dir",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TaskResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Invalid filter, sort or dir"
+          }
+        },
+        "summary": "List and search tasks",
+        "tags": [
+          "Tasks"
+        ]
+      },
+      "post": {
+        "description": "Status defaults to TODO, priority to MEDIUM.",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "Validation failed"
+          }
+        },
+        "summary": "Create a task",
+        "tags": [
+          "Tasks"
+        ]
+      }
+    },
+    "/api/v1/tasks/{id}": {
+      "delete": {
+        "description": "Hard delete (BR-14).",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "404": {
+            "description": "Task not found"
+          }
+        },
+        "summary": "Delete a task",
+        "tags": [
+          "Tasks"
+        ]
+      },
+      "get": {
+        "operationId": "get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "Task not found"
+          }
+        },
+        "summary": "Get a task",
+        "tags": [
+          "Tasks"
+        ]
+      },
+      "put": {
+        "description": "Setting status to DONE sets `completedAt`; leaving DONE clears it.",
+        "operationId": "update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "Validation failed"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "Task not found"
+          }
+        },
+        "summary": "Update a task",
+        "tags": [
+          "Tasks"
+        ]
+      }
+    },
+    "/api/v1/tasks/{id}/archive": {
+      "post": {
+        "description": "Hidden from the default list; see `archived=true`.",
+        "operationId": "archive",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "Task not found"
+          }
+        },
+        "summary": "Archive a task",
+        "tags": [
+          "Tasks"
+        ]
+      }
+    },
+    "/api/v1/tasks/{id}/complete": {
+      "post": {
+        "description": "Sets status DONE and `completedAt`.",
+        "operationId": "complete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "Task not found"
+          }
+        },
+        "summary": "Complete a task",
+        "tags": [
+          "Tasks"
+        ]
+      }
+    },
+    "/api/v1/tasks/{id}/restore": {
+      "post": {
+        "operationId": "restore",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "Task not found"
+          }
+        },
+        "summary": "Restore an archived task",
+        "tags": [
+          "Tasks"
+        ]
+      }
     }
   },
   "servers": [
@@ -569,6 +1057,10 @@
     }
   ],
   "tags": [
+    {
+      "description": "Tasks: CRUD, complete, archive/restore, search and filters (FR-01, FR-02)",
+      "name": "Tasks"
+    },
     {
       "description": "Recurring habits and their completions (FR-03, FR-04)",
       "name": "Habits"

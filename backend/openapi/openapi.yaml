@@ -8,15 +8,89 @@ servers:
 - url: http://localhost:8081
   description: Generated server url
 tags:
+- name: Tasks
+  description: "Tasks: CRUD, complete, archive/restore, search and filters (FR-01,\
+    \ FR-02)"
 - name: Habits
   description: "Recurring habits and their completions (FR-03, FR-04)"
 paths:
+  /api/v1/tasks/{id}:
+    get:
+      tags:
+      - Tasks
+      summary: Get a task
+      operationId: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Task not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+    put:
+      tags:
+      - Tasks
+      summary: Update a task
+      description: Setting status to DONE sets `completedAt`; leaving DONE clears
+        it.
+      operationId: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskRequest"
+        required: true
+      responses:
+        "400":
+          description: Validation failed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "404":
+          description: Task not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+    delete:
+      tags:
+      - Tasks
+      summary: Delete a task
+      description: Hard delete (BR-14).
+      operationId: delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Task not found
   /api/v1/habits/{id}:
     get:
       tags:
       - Habits
       summary: Get a habit
-      operationId: get
+      operationId: get_1
       parameters:
       - name: id
         in: path
@@ -35,7 +109,7 @@ paths:
       tags:
       - Habits
       summary: Update a habit
-      operationId: update
+      operationId: update_1
       parameters:
       - name: id
         in: path
@@ -67,7 +141,7 @@ paths:
       - Habits
       summary: Delete a habit
       description: Hard delete; its completions are deleted too (D-25).
-      operationId: delete
+      operationId: delete_1
       parameters:
       - name: id
         in: path
@@ -80,13 +154,187 @@ paths:
           description: Deleted
         "404":
           description: Habit not found
+  /api/v1/tasks:
+    get:
+      tags:
+      - Tasks
+      summary: List and search tasks
+      description: "Filters combine with AND. Archived tasks are excluded unless `archived=true`\
+        \ (which lists only archived ones). Sort by `createdAt` (default, newest first)\
+        \ or `dueDate` (default ascending); tasks without a due date always sort last."
+      operationId: list
+      parameters:
+      - name: q
+        in: query
+        description: Case-insensitive substring of the title
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - TODO
+          - IN_PROGRESS
+          - DONE
+      - name: priority
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - LOW
+          - MEDIUM
+          - HIGH
+      - name: dueDate
+        in: query
+        description: Exact due date
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: dueFrom
+        in: query
+        description: Due on or after this date
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: dueTo
+        in: query
+        description: Due on or before this date
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: archived
+        in: query
+        description: "false (default) = active tasks, true = archived tasks only"
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - createdAt
+          - dueDate
+      - name: dir
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        "400":
+          description: "Invalid filter, sort or dir"
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TaskResponse"
+    post:
+      tags:
+      - Tasks
+      summary: Create a task
+      description: "Status defaults to TODO, priority to MEDIUM."
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+        "400":
+          description: Validation failed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+  /api/v1/tasks/{id}/restore:
+    post:
+      tags:
+      - Tasks
+      summary: Restore an archived task
+      operationId: restore
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Task not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+  /api/v1/tasks/{id}/complete:
+    post:
+      tags:
+      - Tasks
+      summary: Complete a task
+      description: Sets status DONE and `completedAt`.
+      operationId: complete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Task not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
+  /api/v1/tasks/{id}/archive:
+    post:
+      tags:
+      - Tasks
+      summary: Archive a task
+      description: Hidden from the default list; see `archived=true`.
+      operationId: archive
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Task not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
   /api/v1/habits:
     get:
       tags:
       - Habits
       summary: List habits
       description: All habits by id; filter with `active`.
-      operationId: list
+      operationId: list_1
       parameters:
       - name: active
         in: query
@@ -107,7 +355,7 @@ paths:
       tags:
       - Habits
       summary: Create a habit
-      operationId: create
+      operationId: create_1
       requestBody:
         content:
           application/json:
@@ -176,7 +424,7 @@ paths:
       - Habits
       summary: Complete a habit
       description: "For today, or for `date` (not in the future)."
-      operationId: complete
+      operationId: complete_1
       parameters:
       - name: id
         in: path
@@ -278,6 +526,98 @@ paths:
           description: "Habit not found, or not completed today"
 components:
   schemas:
+    TaskRequest:
+      type: object
+      description: Create or update a task
+      properties:
+        title:
+          type: string
+          example: Write the report
+          maxLength: 200
+          minLength: 0
+        description:
+          type: string
+          example: Quarterly numbers
+          maxLength: 2000
+          minLength: 0
+        status:
+          type: string
+          description: "Create: defaults to TODO. Update: omitted keeps the current\
+            \ status"
+          enum:
+          - TODO
+          - IN_PROGRESS
+          - DONE
+          example: TODO
+        priority:
+          type: string
+          description: "Create: defaults to MEDIUM. Update: omitted keeps the current\
+            \ priority"
+          enum:
+          - LOW
+          - MEDIUM
+          - HIGH
+          example: HIGH
+        dueDate:
+          type: string
+          format: date
+          description: "Optional due date. On update, omitted/null clears it"
+          example: 2026-09-30
+      required:
+      - title
+    TaskResponse:
+      type: object
+      description: A task with its computed overdue flag
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        title:
+          type: string
+          example: Write the report
+        description:
+          type: string
+          example: Quarterly numbers
+        status:
+          type: string
+          enum:
+          - TODO
+          - IN_PROGRESS
+          - DONE
+          example: TODO
+        priority:
+          type: string
+          enum:
+          - LOW
+          - MEDIUM
+          - HIGH
+          example: HIGH
+        dueDate:
+          type: string
+          format: date
+          example: 2026-09-30
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-09-26T15:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2026-09-26T15:00:00Z
+        completedAt:
+          type: string
+          format: date-time
+          description: Set while status is DONE
+          example: 2026-09-26T16:00:00Z
+        archived:
+          type: boolean
+          example: false
+        overdue:
+          type: boolean
+          description: "dueDate is before today, status is not DONE, and the task\
+            \ is not archived"
+          example: false
     HabitRequest:
       type: object
       description: Create or update a habit

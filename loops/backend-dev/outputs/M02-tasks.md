@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Loop | backend-dev |
-| Status | pending |
+| Status | done |
 | Depends on | M01 |
 | Stories | US-TASK-01, US-TASK-02, US-TASK-03, US-TASK-04, US-TASK-05, US-TASK-06, US-TASK-07 |
 | Requirements | FR-01, FR-02, BR-1, BR-2, BR-3, BR-4, BR-5, BR-14, D-10..D-14 |
@@ -24,12 +24,12 @@ Full task CRUD with archive/restore, complete, search, filters, sorting and an `
 - Expose a `TaskService.completeFromPlan(id)` hook for M06 and a deletion event/hook so M06 can remove plan items (D-48). Keep simple: M06 will add the cascade call.
 
 ## 3. Tasks
-- [ ] M02-T01 Migration `V2__tasks.sql` + `Task` entity + enums + `TaskRepository` (JpaSpecificationExecutor)
-- [ ] M02-T02 `TaskRules` (completedAt set/clear, overdue) + unit tests with fixed Clock
-- [ ] M02-T03 `TaskService`: create/get/update/delete/complete/archive/restore
-- [ ] M02-T04 Search/filter/sort query (q, status, priority, due-date range/equality, archived, sort, dir; nulls last)
-- [ ] M02-T05 `TaskController` + request/response records + mapper + Swagger annotations
-- [ ] M02-T06 Curl suite `outputs/curl/M02-tasks.sh` (§4)
+- [x] M02-T01 Migration `V2__tasks.sql` + `Task` entity + enums + `TaskRepository` (JpaSpecificationExecutor)
+- [x] M02-T02 `TaskRules` (completedAt set/clear, overdue) + unit tests with fixed Clock
+- [x] M02-T03 `TaskService`: create/get/update/delete/complete/archive/restore
+- [x] M02-T04 Search/filter/sort query (q, status, priority, due-date range/equality, archived, sort, dir; nulls last)
+- [x] M02-T05 `TaskController` + request/response records + mapper + Swagger annotations
+- [x] M02-T06 Curl suite `outputs/curl/M02-tasks.sh` (§4)
 
 ## 4. Acceptance checks
 | # | Check | Proves | How |
@@ -52,5 +52,26 @@ Regression: M01 suite stays green.
 
 ## 5. Verification trials
 <!-- One section per trial, appended by VERIFY. Maximum 3 trials. -->
+### Trial 1 (2026-09-26T19:47+03:00): PASS
+Commands: `./mvnw verify` → `scripts/backend.sh start-dev` → `scripts/export-swagger.sh` → `scripts/curl-regression.sh M02` → `scripts/curl-regression.sh` → `stop-dev`.
+| Check | Result |
+|---|---|
+| A1 create 201, Location, defaults | PASS |
+| A2 blank/missing title 400 | PASS |
+| A3 title 201 / description 2001 → 400 | PASS |
+| A4 bad status/priority (body + filter), bad sort → 400 | PASS |
+| A5 PUT updates, updatedAt changes | PASS |
+| A6 complete → DONE + completedAt; TODO clears it | PASS |
+| A7 archive/restore and list visibility | PASS |
+| A8 hard delete 204, 404, absent from lists | PASS |
+| A9 mixed-case search, status AND priority | PASS |
+| A10 dueDate asc/desc nulls last, createdAt asc/desc, due filters | PASS |
+| A11 overdue flag (yesterday/today/DONE/archived) | PASS |
+| A12 unknown id 404 ProblemDetail | PASS |
+| A13 `./mvnw verify` (TaskRulesTest 4/4, total 14/14) | PASS |
+M02 suite 69/69; regression M01 9/9, M02 69/69, M03 50/50. Swagger: 8 task operations under `/api/v1/tasks`, all with summaries. Evidence: `outputs/evidence/M02/trial-1/{verify,curl-M02,regression}.log`. Jar published.
 
 ## 6. Notes / Blocked
+- Files: `db/migration/V2__tasks.sql`, `task/domain/{Task,TaskStatus,TaskPriority,TaskRules}`, `task/repo/TaskRepository`, `task/service/TaskService`, `task/api/{TaskController,TaskRequest,TaskResponse,TaskMapper}`, test `TaskRulesTest`, `outputs/curl/M02-tasks.sh`.
+- Filtering via JPA Specification; sorting in memory (nulls last in both directions, tie by id). List defaults and PUT semantics: A-06.
+- M06 hooks: `TaskService.complete(id)` (D-47). The plan-item cascade on task delete (D-48) is added in M06.

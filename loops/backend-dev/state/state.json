@@ -6,7 +6,7 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 3,
+  "iteration": 4,
   "current_milestone": null,
   "milestones": [
     {
@@ -25,12 +25,12 @@
       "id": "M02",
       "title": "Tasks",
       "file": "outputs/M02-tasks.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": ["M01"],
       "stories": ["US-TASK-01", "US-TASK-02", "US-TASK-03", "US-TASK-04", "US-TASK-05", "US-TASK-06", "US-TASK-07"],
       "tasks_total": 6,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 6,
+      "trials": 1,
       "last_error": null
     },
     {
@@ -108,10 +108,10 @@
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M03",
+    "milestone": "M02",
     "mode": "VERIFY",
-    "summary": "M03 T01-T05 built (V3 habits migration, HabitRules + 7 unit tests, HabitService, HabitController 11 ops, curl suite); trial 1 PASS 50/50, regression green, jar published",
+    "summary": "M02 T01-T06 built (V2 tasks migration, TaskRules + 4 unit tests, TaskService search/filter/sort, TaskController 8 ops, curl suite); trial 1 PASS 69/69, regression green, jar published",
     "result": "ok"
   },
-  "updated_at": "2026-09-26T19:44:00+03:00"
+  "updated_at": "2026-09-26T19:47:19+03:00"
 }
