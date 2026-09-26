@@ -1,0 +1,54 @@
+=== M03-habits.sh ===
+PASS A1 create daily 201
+PASS A1 frequency DAILY
+PASS A1 active true
+PASS A1 doneToday false initially
+PASS A1 Location header
+PASS A1 create weekly 201
+PASS A1 frequency WEEKLY
+PASS A2 blank name 400
+PASS A2 errors.name present
+PASS A2 151-char name 400
+PASS A2 bad frequency 400
+PASS A2 missing frequency 400
+PASS A3 complete today 201
+PASS A3 doneToday true
+PASS A3 doneThisPeriod true
+PASS A3 streak >= 1
+PASS A3 lastCompletedDate today
+PASS A4 duplicate completion 409
+PASS A4 problem status 409
+PASS A5 future date 400
+PASS A5 errors.date present
+PASS A5 yesterday 201
+PASS A5 streak 2
+PASS A6 progressPercent 29
+PASS A6 streak 0 (gap)
+PASS A6 list completions 200
+PASS A6 3 completions
+PASS A3 weekly doneThisPeriod
+PASS A3 weekly streak 1
+PASS A6 weekly progress 25
+PASS A7 uncomplete today 204
+PASS A7 doneToday false
+PASS A7 streak still 1 (yesterday)
+PASS A7 uncomplete again 404
+PASS A7 remove dated completion 204
+PASS A7 bad date path 400
+PASS A8 deactivate 200
+PASS A8 active false
+PASS A8 listed as inactive
+PASS A8 not listed as active
+PASS A8 active true
+PASS A8 update 200
+PASS A8 name updated
+PASS A8 frequency updated
+PASS A8 update blank name 400
+PASS A9 delete 204
+PASS A9 get deleted 404
+PASS A9 completions of deleted 404
+PASS A9 delete again 404
+PASS A9 unknown habit 404
+--- 50 passed, 0 failed
+
+REGRESSION PASSED: 1 suite(s)

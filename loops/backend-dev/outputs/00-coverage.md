@@ -11,11 +11,11 @@ Status is filled in by VERIFY / FINAL (`pending` → `pass`). Check IDs point to
 | US-TASK-05 filter status/priority | M02 | A9 | pending |
 | US-TASK-06 search | M02 | A9 | pending |
 | US-TASK-07 overdue | M02 | A11 | pending |
-| US-HABIT-01 create habit | M03 | A1 | pending |
-| US-HABIT-02 daily/weekly | M03 | A1 | pending |
-| US-HABIT-03 complete today | M03 | A3 | pending |
-| US-HABIT-04 progress | M03 | A6 | pending |
-| US-HABIT-05 remove habit | M03 | A9 | pending |
+| US-HABIT-01 create habit | M03 | A1 | pass (M03 trial 1) |
+| US-HABIT-02 daily/weekly | M03 | A1 | pass (M03 trial 1) |
+| US-HABIT-03 complete today | M03 | A3 | pass (M03 trial 1) |
+| US-HABIT-04 progress | M03 | A6 | pass (M03 trial 1) |
+| US-HABIT-05 remove habit | M03 | A9 | pass (M03 trial 1) |
 | US-LEARN-01 add card | M04 | A1 | pending |
 | US-LEARN-02 remove card | M04 | A8 | pending |
 | US-LEARN-03 add milestones | M04 | A3 | pending |
@@ -39,8 +39,8 @@ Status is filled in by VERIFY / FINAL (`pending` → `pass`). Check IDs point to
 | US-DASH-06 learning snapshot | M07 | A7 | pending |
 | FR-01 task entity + CRUD/archive/restore | M02 | A1, A5–A8 | pending |
 | FR-02 search/filter/sort | M02 | A9, A10 | pending |
-| FR-03 habit entity + CRUD/deactivate | M03 | A1, A8, A9 | pending |
-| FR-04 habit completion, no duplicates | M03 | A3, A4 | pending |
+| FR-03 habit entity + CRUD/deactivate | M03 | A1, A8, A9 | pass (M03 trial 1) |
+| FR-04 habit completion, no duplicates | M03 | A3, A4 | pass (M03 trial 1) |
 | FR-05 learning card | M04 | A1, A8 | pending |
 | FR-06 milestones + notes | M04 | A3, A4, A6, A7 | pending |
 | FR-07 plan composition | M05, M06 | M05-A1, A8; M06-A1 | pending |
@@ -51,8 +51,8 @@ Status is filled in by VERIFY / FINAL (`pending` → `pass`). Check IDs point to
 | BR-3 valid status/priority | M02, M08 | M02-A4; M08-A4 | pending |
 | BR-4 archived excluded by default | M02 | A7 | pending |
 | BR-5 completed = DONE | M02 | A6 | pending |
-| BR-6 habit name required ≤150 | M03 | A2 | pending |
-| BR-7 one completion per date | M03 | A4 | pending |
+| BR-6 habit name required ≤150 | M03 | A2 | pass (M03 trial 1) |
+| BR-7 one completion per date | M03 | A4 | pass (M03 trial 1) |
 | BR-8 card title required | M04 | A2 | pending |
 | BR-9 milestone belongs to one card | M04 | A7 | pending |
 | BR-10 plan ≥1 existing item | M05 | A4 | pending |

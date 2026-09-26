@@ -7,5 +7,378 @@ info:
 servers:
 - url: http://localhost:8081
   description: Generated server url
-paths: {}
-components: {}
+tags:
+- name: Habits
+  description: "Recurring habits and their completions (FR-03, FR-04)"
+paths:
+  /api/v1/habits/{id}:
+    get:
+      tags:
+      - Habits
+      summary: Get a habit
+      operationId: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Habit not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HabitResponse"
+    put:
+      tags:
+      - Habits
+      summary: Update a habit
+      operationId: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HabitRequest"
+        required: true
+      responses:
+        "400":
+          description: Validation failed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HabitResponse"
+        "404":
+          description: Habit not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HabitResponse"
+    delete:
+      tags:
+      - Habits
+      summary: Delete a habit
+      description: Hard delete; its completions are deleted too (D-25).
+      operationId: delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Habit not found
+  /api/v1/habits:
+    get:
+      tags:
+      - Habits
+      summary: List habits
+      description: All habits by id; filter with `active`.
+      operationId: list
+      parameters:
+      - name: active
+        in: query
+        description: "true = active only, false = deactivated only, omitted = all"
+        required: false
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/HabitResponse"
+    post:
+      tags:
+      - Habits
+      summary: Create a habit
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HabitRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HabitResponse"
+        "400":
+          description: Validation failed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HabitResponse"
+  /api/v1/habits/{id}/deactivate:
+    post:
+      tags:
+      - Habits
+      summary: Deactivate a habit
+      description: Hidden from today's lists but kept.
+      operationId: deactivate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HabitResponse"
+  /api/v1/habits/{id}/completions:
+    get:
+      tags:
+      - Habits
+      summary: List a habit's completions
+      description: Newest first.
+      operationId: completions
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Habit not found
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CompletionResponse"
+    post:
+      tags:
+      - Habits
+      summary: Complete a habit
+      description: "For today, or for `date` (not in the future)."
+      operationId: complete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompletionRequest"
+      responses:
+        "201":
+          description: Completion recorded
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompletionResponse"
+        "400":
+          description: Date in the future
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompletionResponse"
+        "404":
+          description: Habit not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompletionResponse"
+        "409":
+          description: Already completed on that date
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompletionResponse"
+  /api/v1/habits/{id}/activate:
+    post:
+      tags:
+      - Habits
+      summary: Activate a habit
+      operationId: activate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HabitResponse"
+  /api/v1/habits/{id}/completions/{date}:
+    delete:
+      tags:
+      - Habits
+      summary: Remove a completion on a date
+      operationId: uncomplete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: date
+        in: path
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        "204":
+          description: Removed
+        "404":
+          description: "Habit not found, or not completed on that date"
+  /api/v1/habits/{id}/completions/today:
+    delete:
+      tags:
+      - Habits
+      summary: Un-complete a habit for today
+      operationId: uncompleteToday
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Removed
+        "404":
+          description: "Habit not found, or not completed today"
+components:
+  schemas:
+    HabitRequest:
+      type: object
+      description: Create or update a habit
+      properties:
+        name:
+          type: string
+          example: Read 20 pages
+          maxLength: 150
+          minLength: 0
+        description:
+          type: string
+          example: Before bed
+          maxLength: 1000
+          minLength: 0
+        frequency:
+          type: string
+          enum:
+          - DAILY
+          - WEEKLY
+          example: DAILY
+      required:
+      - frequency
+      - name
+    HabitResponse:
+      type: object
+      description: A habit with its computed progress fields
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Read 20 pages
+        description:
+          type: string
+          example: Before bed
+        frequency:
+          type: string
+          enum:
+          - DAILY
+          - WEEKLY
+          example: DAILY
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-09-26T15:00:00Z
+        doneToday:
+          type: boolean
+          description: A completion exists for today (any frequency)
+          example: true
+        doneThisPeriod:
+          type: boolean
+          description: "Daily: done today. Weekly: at least one completion in the\
+            \ current ISO week"
+          example: true
+        currentStreak:
+          type: integer
+          format: int32
+          description: "Consecutive days (daily) or ISO weeks (weekly) completed,\
+            \ ending now or in the previous period"
+          example: 3
+        progressPercent:
+          type: integer
+          format: int32
+          description: "Daily: completed days in the last 7 ÷ 7. Weekly: completed\
+            \ weeks in the last 4 ÷ 4. 0–100"
+          example: 43
+        lastCompletedDate:
+          type: string
+          format: date
+          example: 2026-09-26
+    CompletionRequest:
+      type: object
+      description: Optional completion body. Omit it (or `date`) to complete for today.
+      properties:
+        date:
+          type: string
+          format: date
+          description: Completion date in the app zone; not in the future
+          example: 2026-09-25
+    CompletionResponse:
+      type: object
+      description: One habit completion
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        habitId:
+          type: integer
+          format: int64
+          example: 1
+        date:
+          type: string
+          format: date
+          example: 2026-09-26
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-09-26T15:00:00Z

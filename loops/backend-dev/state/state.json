@@ -6,7 +6,7 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 2,
+  "iteration": 3,
   "current_milestone": null,
   "milestones": [
     {
@@ -37,12 +37,12 @@
       "id": "M03",
       "title": "Habits",
       "file": "outputs/M03-habits.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": ["M01"],
       "stories": ["US-HABIT-01", "US-HABIT-02", "US-HABIT-03", "US-HABIT-04", "US-HABIT-05"],
       "tasks_total": 5,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 5,
+      "trials": 1,
       "last_error": null
     },
     {
@@ -108,10 +108,10 @@
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M01",
+    "milestone": "M03",
     "mode": "VERIFY",
-    "summary": "M01 T01-T07 built (Spring Boot skeleton, Flyway V1, Clock/AppTime, ProblemDetail handler, CORS, OpenAPI, curl lib + smoke); trial 1 PASS, jar published",
+    "summary": "M03 T01-T05 built (V3 habits migration, HabitRules + 7 unit tests, HabitService, HabitController 11 ops, curl suite); trial 1 PASS 50/50, regression green, jar published",
     "result": "ok"
   },
-  "updated_at": "2026-09-26T19:38:18+03:00"
+  "updated_at": "2026-09-26T19:44:00+03:00"
 }

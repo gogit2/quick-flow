@@ -16,6 +16,8 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+    # Milestones may land out of numeric order (M03's V3 before M02's V2); see DECISIONS A-04.
+    out-of-order: true
   jackson:
     serialization:
       write-dates-as-timestamps: false

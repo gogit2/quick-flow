@@ -12,6 +12,7 @@ input:
 decisions: requirements/DECISIONS.md
 stack_profile: loops/_shared/stack-profiles/backend-springboot.md
 orchestrator_plan: null          # set by the orchestrator: loops/orchestrator/outputs/02-milestone-plan.md
+priority_override: [M03]          # human override: do these pending milestones next (LOOP_PROTOCOL §4 step 2)
 unit_tests: rules                # off | rules (domain rules only, default) | full (plus controller tests)
 ```
 
