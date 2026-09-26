@@ -1,0 +1,624 @@
+=== M01-foundation.sh ===
+PASS A1 health 200
+PASS A1 health UP
+PASS A2 api-docs 200
+PASS A2 api-docs title
+PASS A3 swagger-ui 200/302
+PASS A4 unknown route 404
+PASS A4 problem+json content type
+PASS A4 problem status field
+PASS A5 CORS allow-origin echoed
+--- 9 passed, 0 failed
+=== M02-tasks.sh ===
+PASS A1 create 201
+PASS A1 Location header
+PASS A1 title echoed
+PASS A1 description echoed
+PASS A1 priority HIGH
+PASS A1 dueDate echoed
+PASS A1 status TODO
+PASS A1 archived false
+PASS A1 completedAt null
+PASS A1 priority defaults MEDIUM
+PASS A1 dueDate optional
+PASS A2 blank title 400
+PASS A2 errors.title present
+PASS A2 missing title 400
+PASS A3 201-char title 400
+PASS A3 200-char title 201
+PASS A3 2001-char description 400
+PASS A3 errors.description present
+PASS A4 bad status 400
+PASS A4 bad priority 400
+PASS A4 bad status filter 400
+PASS A4 bad sort 400
+PASS A5 PUT 200
+PASS A5 title updated
+PASS A5 priority updated
+PASS A5 dueDate updated
+PASS A5 status kept
+PASS A5 updatedAt changed
+PASS A6 complete 200
+PASS A6 status DONE
+PASS A6 completedAt set
+PASS A6 back to TODO
+PASS A6 completedAt cleared
+PASS A6 PUT DONE sets completedAt
+PASS A7 archive 200
+PASS A7 archived true
+PASS A7 excluded from default list
+PASS A7 present with archived=true
+PASS A7 archived list has only archived
+PASS A7 restore archived false
+PASS A7 back in default list
+PASS A8 delete 204
+PASS A8 GET deleted 404
+PASS A8 not in default list
+PASS A8 not in archived list
+PASS A9 search 200
+PASS A9 mixed-case search finds 3
+PASS A9 all results contain term
+PASS A9 status filter
+PASS A9 status AND priority
+PASS A9 status AND priority -> gamma
+PASS A9 priority filter
+PASS A10 dueDate asc, nulls last
+PASS A10 dueDate desc, nulls last
+PASS A10 createdAt desc
+PASS A10 createdAt asc
+PASS A10 dueDate equality filter
+PASS A10 due range filter
+PASS A10 inverted range 400
+PASS A11 yesterday TODO overdue
+PASS A11 due today not overdue
+PASS A11 yesterday DONE not overdue
+PASS A11 archived not overdue
+PASS A11 no-due task not overdue
+PASS A12 GET unknown 404
+PASS A12 ProblemDetail status
+PASS A12 PUT unknown 404
+PASS A12 DELETE unknown 404
+PASS A12 complete unknown 404
+--- 69 passed, 0 failed
+=== M03-habits.sh ===
+PASS A1 create daily 201
+PASS A1 frequency DAILY
+PASS A1 active true
+PASS A1 doneToday false initially
+PASS A1 Location header
+PASS A1 create weekly 201
+PASS A1 frequency WEEKLY
+PASS A2 blank name 400
+PASS A2 errors.name present
+PASS A2 151-char name 400
+PASS A2 bad frequency 400
+PASS A2 missing frequency 400
+PASS A3 complete today 201
+PASS A3 doneToday true
+PASS A3 doneThisPeriod true
+PASS A3 streak >= 1
+PASS A3 lastCompletedDate today
+PASS A4 duplicate completion 409
+PASS A4 problem status 409
+PASS A5 future date 400
+PASS A5 errors.date present
+PASS A5 yesterday 201
+PASS A5 streak 2
+PASS A6 progressPercent 29
+PASS A6 streak 0 (gap)
+PASS A6 list completions 200
+PASS A6 3 completions
+PASS A3 weekly doneThisPeriod
+PASS A3 weekly streak 1
+PASS A6 weekly progress 25
+PASS A7 uncomplete today 204
+PASS A7 doneToday false
+PASS A7 streak still 1 (yesterday)
+PASS A7 uncomplete again 404
+PASS A7 remove dated completion 204
+PASS A7 bad date path 400
+PASS A8 deactivate 200
+PASS A8 active false
+PASS A8 listed as inactive
+PASS A8 not listed as active
+PASS A8 active true
+PASS A8 update 200
+PASS A8 name updated
+PASS A8 frequency updated
+PASS A8 update blank name 400
+PASS A9 delete 204
+PASS A9 get deleted 404
+PASS A9 completions of deleted 404
+PASS A9 delete again 404
+PASS A9 unknown habit 404
+--- 50 passed, 0 failed
+=== M04-learning.sh ===
+PASS A1 create card 201
+PASS A1 status NOT_STARTED
+PASS A1 milestones empty
+PASS A1 notes empty
+PASS A1 progress 0
+PASS A1 Location header
+PASS A1 card in list
+PASS A2 blank title 400
+PASS A2 errors.title present
+PASS A2 missing title 400
+PASS A2 blank milestone title 400
+PASS A2 blank note text 400
+PASS A2 unknown card 404
+PASS A3 add milestone 1 201
+PASS A3 Location header
+PASS A3 targetDate kept
+PASS A3 add milestone 2 201
+PASS A3 milestonesTotal 2
+PASS A3 second targetDate null
+PASS A4 complete milestone 200
+PASS A4 done true
+PASS A4 completedAt set
+PASS A4 status IN_PROGRESS
+PASS A4 progress 50
+PASS A4 milestonesDone 1
+PASS A4 all done → COMPLETED
+PASS A4 progress 100
+PASS A4 uncomplete 200
+PASS A4 uncompleted → IN_PROGRESS
+PASS A4 completedAt cleared
+PASS A4 PUT milestone 200
+PASS A4 PUT renames
+PASS A4 PUT done → COMPLETED
+PASS A5 PUT card 200
+PASS A5 manual status saved
+PASS A5 title updated
+PASS A5 manual status persisted
+PASS A5 manual COMPLETED saved
+PASS A5 omitted status keeps it
+PASS A5 bad status 400
+PASS A6 add note 201
+PASS A6 createdAt set
+PASS A6 2 notes on card
+PASS A6 newest first
+PASS A6 delete note 204
+PASS A6 note gone
+PASS A7 milestone of other card 404
+PASS A7 delete milestone via other card 404
+PASS A7 delete note via other card 404
+PASS A7 delete milestone 204
+PASS A7 milestonesTotal 1
+PASS A7 re-derived COMPLETED (1/1 done)
+PASS A7 delete missing milestone 404
+PASS A8 delete card 204
+PASS A8 deleted card 404
+PASS A8 gone from list
+PASS A8 note on deleted card 404
+PASS A8 cleanup other card 204
+--- 58 passed, 0 failed
+=== M05-plans-core.sh ===
+PASS A1 create plan 201
+PASS A1 Location header
+PASS A1 status IN_PROGRESS
+PASS A1 totalItems 3
+PASS A1 doneItems 0
+PASS A1 progress 0
+PASS A1 remainingSeconds 2900–3000
+PASS A1 startsInSeconds null
+PASS A1 task sourceTitle
+PASS A1 task sourceStatus
+PASS A1 habit sourceTitle
+PASS A1 habit sourceStatus
+PASS A1 card sourceTitle
+PASS A1 card sourceStatus
+PASS A1 items not done
+PASS A1 GET plan 200
+PASS A1 GET status IN_PROGRESS
+PASS A2 create future plan 201
+PASS A2 status NOT_STARTED
+PASS A2 remainingSeconds null
+PASS A2 startsInSeconds > 0
+PASS A3 create past plan 201
+PASS A3 status COMPLETED
+PASS A3 remainingSeconds null
+PASS A3 startsInSeconds null
+PASS A4 empty items 400
+PASS A4 errors.items present
+PASS A4 unknown source 400
+PASS A4 errors.items present
+PASS A4 duplicate source 400
+PASS A4 errors.items present
+PASS A4 item without sourceId 400
+PASS A5 end before start 400
+PASS A5 errors.endDateTime present
+PASS A5 end == start 400
+PASS A5 errors.endDateTime present
+PASS A6 estimatedDuration 0 → 400
+PASS A6 errors.estimatedDuration present
+PASS A6 priorityOrder 0 → 400
+PASS A6 errors.priorityOrder present
+PASS A6 bad sourceType 400
+PASS A6 blank title 400
+PASS A6 missing start 400
+PASS A6 bad status filter 400
+PASS A7 list 200
+PASS A7 group + priority order
+PASS A7 status filter
+PASS A7 filter includes P2
+PASS A8 PUT 200
+PASS A8 title updated
+PASS A8 priority updated
+PASS A8 status recomputed IN_PROGRESS
+PASS A8 items replaced (3)
+PASS A8 remainingSeconds set
+PASS A8 window in past → COMPLETED
+PASS A8 items shrunk (1)
+PASS A8 PUT bad window 400
+PASS A8 PUT unknown 404
+PASS A9 DELETE 204
+PASS A9 GET deleted 404
+PASS A9 source task still exists
+PASS A9 source habit still exists
+PASS A9 DELETE again 404
+PASS A10 serverTime within 5 s (2026-09-26T17:19:38.062523949Z)
+--- 64 passed, 0 failed
+=== M06-plan-items.sh ===
+PASS A1 plan starts IN_PROGRESS
+PASS A1 PATCH item 200
+PASS A1 doneItems 1
+PASS A1 progress 33
+PASS A1 still IN_PROGRESS
+PASS A1 item done
+PASS A2 item sourceStatus DONE
+PASS A2 task status DONE
+PASS A2 task completedAt set
+PASS A3 PATCH habit item 200
+PASS A3 doneItems 2
+PASS A3 habit doneToday
+PASS A3 habit already done today → 200 (no 409)
+PASS A3 still one completion
+PASS A4 PATCH learning item 200
+PASS A4 doneItems 3
+PASS A4 card status unchanged
+PASS A5 un-mark 200
+PASS A5 item not done
+PASS A5 doneItems 2
+PASS A5 progress 67
+PASS A5 back to IN_PROGRESS
+PASS A5 task stays DONE
+PASS A6 re-mark 200
+PASS A6 status COMPLETED
+PASS A6 progress 100
+PASS A6 remainingSeconds null
+PASS A6 GET status COMPLETED
+PASS A7 GET history 200
+PASS A7 P1 in history with 100%
+PASS A7 only COMPLETED
+PASS A7 sorted by end desc
+PASS A7 P1 before OldB before OldA
+PASS A7 IN_PROGRESS plan not in history
+PASS A8 totalItems 2 before
+PASS A8 delete habit 204
+PASS A8 plan still exists
+PASS A8 totalItems 1 after
+PASS A8 habit item gone
+PASS A8 delete task 204
+PASS A8 emptied plan still exists
+PASS A8 emptied plan totalItems 0
+PASS A8 empty plan not COMPLETED by items
+PASS A8 delete card 204
+PASS A8 card item gone
+PASS A9 unknown item 404
+PASS A9 unknown plan 404
+PASS A9 item of another plan 404
+PASS A9 missing done 400
+PASS A9 errors.done present
+PASS A9 bad done value 400
+--- 51 passed, 0 failed
+=== M07-dashboard-settings.sh ===
+PASS A1 GET settings 200
+PASS A1 settings shape
+PASS A1 PUT settings 200
+PASS A1 PUT returns displayName
+PASS A1 displayName persisted
+PASS A1 defaultView persisted
+PASS A1 displayName 101 chars → 400
+PASS A1 error on displayName
+PASS A1 bad defaultView → 400
+PASS A1 blank displayName → 400
+PASS A1 rejected PUTs changed nothing
+PASS A2 GET dashboard 200
+PASS A2 greeting starts with Good
+PASS A2 greeting contains displayName
+PASS A2 today is local date
+PASS A2 serverTime present
+PASS A3 due-today task in dueToday
+PASS A3 overdue task in overdue
+PASS A3 overdue flag set
+PASS A3 due-today not in overdue
+PASS A3 archived task hidden
+PASS A4 complete task 200
+PASS A4 completed task in completedToday
+PASS A4 completionPercent = round(done/total*100)
+PASS A4 totalActive matches GET /tasks
+PASS A4 doneCount matches GET /tasks
+PASS A5 new daily habit in habits.today
+PASS A5 doneToday false
+PASS A5 complete habit 201
+PASS A5 doneToday true
+PASS A5 completedTodayCount +1
+PASS A5 currentStreak 1
+PASS A5 weekly done this week hidden
+PASS A5 deactivated habit absent
+PASS A6 create plan 201
+PASS A6 plan in plans.active
+PASS A6 remainingSeconds > 0
+PASS A6 progress 0
+PASS A6 activeCount = active length
+PASS A6 future plan in upcoming
+PASS A6 upcoming max 5, all NOT_STARTED
+PASS A6 PATCH item 200
+PASS A6 dashboard progress 50 immediately
+PASS A7 complete milestone 200
+PASS A7 milestonesCompletedLast7Days +1
+PASS A7 card in inProgress with 50%
+PASS A7 byStatus.NOT_STARTED matches GET /learning-cards
+PASS A7 byStatus.IN_PROGRESS matches GET /learning-cards
+PASS A7 byStatus.COMPLETED matches GET /learning-cards
+PASS A1 restore defaults 200
+PASS A1 defaults restored
+--- 51 passed, 0 failed
+=== M08-hardening.sh ===
+PASS A1 api-docs 200
+PASS A1 every operation has a summary
+PASS A1 every operation has a tag
+PASS A1 every request body has a schema
+PASS A1 every operation declares a 2xx
+PASS A1 non-void 2xx responses are application/json
+PASS A1 every 4xx response is a ProblemDetail
+PASS A1 every write operation documents 400
+PASS A1 every {id} operation documents 404
+PASS A2 POST /tasks truncated JSON → 400
+PASS A2 POST /tasks truncated JSON → 400: ProblemDetail body
+PASS A2 POST /tasks garbage → 400
+PASS A2 POST /tasks garbage → 400: ProblemDetail body
+PASS A2 POST /tasks array body → 400
+PASS A2 POST /tasks array body → 400: ProblemDetail body
+PASS A2 POST /tasks text/plain → 415
+PASS A2 POST /tasks text/plain → 415: ProblemDetail body
+PASS A2 PUT /tasks/22 truncated JSON → 400
+PASS A2 PUT /tasks/22 truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /tasks/22 garbage → 400
+PASS A2 PUT /tasks/22 garbage → 400: ProblemDetail body
+PASS A2 PUT /tasks/22 array body → 400
+PASS A2 PUT /tasks/22 array body → 400: ProblemDetail body
+PASS A2 PUT /tasks/22 text/plain → 415
+PASS A2 PUT /tasks/22 text/plain → 415: ProblemDetail body
+PASS A2 POST /habits truncated JSON → 400
+PASS A2 POST /habits truncated JSON → 400: ProblemDetail body
+PASS A2 POST /habits garbage → 400
+PASS A2 POST /habits garbage → 400: ProblemDetail body
+PASS A2 POST /habits array body → 400
+PASS A2 POST /habits array body → 400: ProblemDetail body
+PASS A2 POST /habits text/plain → 415
+PASS A2 POST /habits text/plain → 415: ProblemDetail body
+PASS A2 PUT /habits/11 truncated JSON → 400
+PASS A2 PUT /habits/11 truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /habits/11 garbage → 400
+PASS A2 PUT /habits/11 garbage → 400: ProblemDetail body
+PASS A2 PUT /habits/11 array body → 400
+PASS A2 PUT /habits/11 array body → 400: ProblemDetail body
+PASS A2 PUT /habits/11 text/plain → 415
+PASS A2 PUT /habits/11 text/plain → 415: ProblemDetail body
+PASS A2 POST /habits/11/completions truncated JSON → 400
+PASS A2 POST /habits/11/completions truncated JSON → 400: ProblemDetail body
+PASS A2 POST /habits/11/completions garbage → 400
+PASS A2 POST /habits/11/completions garbage → 400: ProblemDetail body
+PASS A2 POST /habits/11/completions array body → 400
+PASS A2 POST /habits/11/completions array body → 400: ProblemDetail body
+PASS A2 POST /habits/11/completions text/plain → 415
+PASS A2 POST /habits/11/completions text/plain → 415: ProblemDetail body
+PASS A2 POST /learning-cards truncated JSON → 400
+PASS A2 POST /learning-cards truncated JSON → 400: ProblemDetail body
+PASS A2 POST /learning-cards garbage → 400
+PASS A2 POST /learning-cards garbage → 400: ProblemDetail body
+PASS A2 POST /learning-cards array body → 400
+PASS A2 POST /learning-cards array body → 400: ProblemDetail body
+PASS A2 POST /learning-cards text/plain → 415
+PASS A2 POST /learning-cards text/plain → 415: ProblemDetail body
+PASS A2 PUT /learning-cards/7 truncated JSON → 400
+PASS A2 PUT /learning-cards/7 truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/7 garbage → 400
+PASS A2 PUT /learning-cards/7 garbage → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/7 array body → 400
+PASS A2 PUT /learning-cards/7 array body → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/7 text/plain → 415
+PASS A2 PUT /learning-cards/7 text/plain → 415: ProblemDetail body
+PASS A2 POST /learning-cards/7/milestones truncated JSON → 400
+PASS A2 POST /learning-cards/7/milestones truncated JSON → 400: ProblemDetail body
+PASS A2 POST /learning-cards/7/milestones garbage → 400
+PASS A2 POST /learning-cards/7/milestones garbage → 400: ProblemDetail body
+PASS A2 POST /learning-cards/7/milestones array body → 400
+PASS A2 POST /learning-cards/7/milestones array body → 400: ProblemDetail body
+PASS A2 POST /learning-cards/7/milestones text/plain → 415
+PASS A2 POST /learning-cards/7/milestones text/plain → 415: ProblemDetail body
+PASS A2 PUT /learning-cards/7/milestones/5 truncated JSON → 400
+PASS A2 PUT /learning-cards/7/milestones/5 truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/7/milestones/5 garbage → 400
+PASS A2 PUT /learning-cards/7/milestones/5 garbage → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/7/milestones/5 array body → 400
+PASS A2 PUT /learning-cards/7/milestones/5 array body → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/7/milestones/5 text/plain → 415
+PASS A2 PUT /learning-cards/7/milestones/5 text/plain → 415: ProblemDetail body
+PASS A2 POST /learning-cards/7/notes truncated JSON → 400
+PASS A2 POST /learning-cards/7/notes truncated JSON → 400: ProblemDetail body
+PASS A2 POST /learning-cards/7/notes garbage → 400
+PASS A2 POST /learning-cards/7/notes garbage → 400: ProblemDetail body
+PASS A2 POST /learning-cards/7/notes array body → 400
+PASS A2 POST /learning-cards/7/notes array body → 400: ProblemDetail body
+PASS A2 POST /learning-cards/7/notes text/plain → 415
+PASS A2 POST /learning-cards/7/notes text/plain → 415: ProblemDetail body
+PASS A2 POST /plans truncated JSON → 400
+PASS A2 POST /plans truncated JSON → 400: ProblemDetail body
+PASS A2 POST /plans garbage → 400
+PASS A2 POST /plans garbage → 400: ProblemDetail body
+PASS A2 POST /plans array body → 400
+PASS A2 POST /plans array body → 400: ProblemDetail body
+PASS A2 POST /plans text/plain → 415
+PASS A2 POST /plans text/plain → 415: ProblemDetail body
+PASS A2 PUT /plans/13 truncated JSON → 400
+PASS A2 PUT /plans/13 truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /plans/13 garbage → 400
+PASS A2 PUT /plans/13 garbage → 400: ProblemDetail body
+PASS A2 PUT /plans/13 array body → 400
+PASS A2 PUT /plans/13 array body → 400: ProblemDetail body
+PASS A2 PUT /plans/13 text/plain → 415
+PASS A2 PUT /plans/13 text/plain → 415: ProblemDetail body
+PASS A2 PATCH /plans/13/items/22 truncated JSON → 400
+PASS A2 PATCH /plans/13/items/22 truncated JSON → 400: ProblemDetail body
+PASS A2 PATCH /plans/13/items/22 garbage → 400
+PASS A2 PATCH /plans/13/items/22 garbage → 400: ProblemDetail body
+PASS A2 PATCH /plans/13/items/22 array body → 400
+PASS A2 PATCH /plans/13/items/22 array body → 400: ProblemDetail body
+PASS A2 PATCH /plans/13/items/22 text/plain → 415
+PASS A2 PATCH /plans/13/items/22 text/plain → 415: ProblemDetail body
+PASS A2 PUT /settings truncated JSON → 400
+PASS A2 PUT /settings truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /settings garbage → 400
+PASS A2 PUT /settings garbage → 400: ProblemDetail body
+PASS A2 PUT /settings array body → 400
+PASS A2 PUT /settings array body → 400: ProblemDetail body
+PASS A2 PUT /settings text/plain → 415
+PASS A2 PUT /settings text/plain → 415: ProblemDetail body
+PASS A2 POST /tasks empty body → 400
+PASS A2 POST /tasks empty body → 400: ProblemDetail body
+PASS A2 PUT /tasks/22 empty body → 400
+PASS A2 PUT /tasks/22 empty body → 400: ProblemDetail body
+PASS A2 POST /habits empty body → 400
+PASS A2 POST /habits empty body → 400: ProblemDetail body
+PASS A2 POST /learning-cards empty body → 400
+PASS A2 POST /learning-cards empty body → 400: ProblemDetail body
+PASS A2 POST /plans empty body → 400
+PASS A2 POST /plans empty body → 400: ProblemDetail body
+PASS A2 PATCH /plans/13/items/22 empty body → 400
+PASS A2 PATCH /plans/13/items/22 empty body → 400: ProblemDetail body
+PASS A2 PUT /settings empty body → 400
+PASS A2 PUT /settings empty body → 400: ProblemDetail body
+PASS A2 plan estimatedDuration string → 400
+PASS A2 plan estimatedDuration string → 400: ProblemDetail body
+PASS A2 plan bad instant → 400
+PASS A2 plan bad instant → 400: ProblemDetail body
+PASS A2 plan item sourceId string → 400
+PASS A2 plan item sourceId string → 400: ProblemDetail body
+PASS A2 plan null item → 400
+PASS A2 plan null item → 400: ProblemDetail body
+PASS A2 plan items object → 400
+PASS A2 plan items object → 400: ProblemDetail body
+PASS A2 plan int overflow → 400
+PASS A2 plan int overflow → 400: ProblemDetail body
+PASS A2 item done non-boolean → 400
+PASS A2 item done non-boolean → 400: ProblemDetail body
+PASS A2 task impossible date → 400
+PASS A2 task impossible date → 400: ProblemDetail body
+PASS A2 task title array → 400
+PASS A2 task title array → 400: ProblemDetail body
+PASS A2 completion bad date → 400
+PASS A2 completion bad date → 400: ProblemDetail body
+PASS A2 settings flag non-boolean → 400
+PASS A2 settings flag non-boolean → 400: ProblemDetail body
+PASS A3 GET /tasks/abc → 400
+PASS A3 GET /tasks/abc → 400: ProblemDetail body
+PASS A3 PUT /tasks/abc → 400
+PASS A3 PUT /tasks/abc → 400: ProblemDetail body
+PASS A3 DELETE /tasks/abc → 400
+PASS A3 DELETE /tasks/abc → 400: ProblemDetail body
+PASS A3 GET /tasks/<overflow> → 400
+PASS A3 GET /tasks/<overflow> → 400: ProblemDetail body
+PASS A3 GET /tasks/<missing> → 404
+PASS A3 GET /tasks/<missing> → 404: ProblemDetail body
+PASS A3 GET /habits/abc → 400
+PASS A3 GET /habits/abc → 400: ProblemDetail body
+PASS A3 PUT /habits/abc → 400
+PASS A3 PUT /habits/abc → 400: ProblemDetail body
+PASS A3 DELETE /habits/abc → 400
+PASS A3 DELETE /habits/abc → 400: ProblemDetail body
+PASS A3 GET /habits/<overflow> → 400
+PASS A3 GET /habits/<overflow> → 400: ProblemDetail body
+PASS A3 GET /habits/<missing> → 404
+PASS A3 GET /habits/<missing> → 404: ProblemDetail body
+PASS A3 GET /plans/abc → 400
+PASS A3 GET /plans/abc → 400: ProblemDetail body
+PASS A3 PUT /plans/abc → 400
+PASS A3 PUT /plans/abc → 400: ProblemDetail body
+PASS A3 DELETE /plans/abc → 400
+PASS A3 DELETE /plans/abc → 400: ProblemDetail body
+PASS A3 GET /plans/<overflow> → 400
+PASS A3 GET /plans/<overflow> → 400: ProblemDetail body
+PASS A3 GET /plans/<missing> → 404
+PASS A3 GET /plans/<missing> → 404: ProblemDetail body
+PASS A3 GET /learning-cards/abc → 400
+PASS A3 GET /learning-cards/abc → 400: ProblemDetail body
+PASS A3 PUT /learning-cards/abc → 400
+PASS A3 PUT /learning-cards/abc → 400: ProblemDetail body
+PASS A3 DELETE /learning-cards/abc → 400
+PASS A3 DELETE /learning-cards/abc → 400: ProblemDetail body
+PASS A3 GET /learning-cards/<overflow> → 400
+PASS A3 GET /learning-cards/<overflow> → 400: ProblemDetail body
+PASS A3 GET /learning-cards/<missing> → 404
+PASS A3 GET /learning-cards/<missing> → 404: ProblemDetail body
+PASS A3 POST /tasks/abc/complete → 400
+PASS A3 POST /tasks/abc/complete → 400: ProblemDetail body
+PASS A3 POST /habits/abc/activate → 400
+PASS A3 POST /habits/abc/activate → 400: ProblemDetail body
+PASS A3 GET /habits/abc/completions → 400
+PASS A3 GET /habits/abc/completions → 400: ProblemDetail body
+PASS A3 DELETE completion bad date → 400
+PASS A3 DELETE completion bad date → 400: ProblemDetail body
+PASS A3 PATCH item xyz → 400
+PASS A3 PATCH item xyz → 400: ProblemDetail body
+PASS A3 complete milestone abc → 400
+PASS A3 complete milestone abc → 400: ProblemDetail body
+PASS A3 DELETE note abc → 400
+PASS A3 DELETE note abc → 400: ProblemDetail body
+PASS A3 unknown route → 404
+PASS A3 unknown route → 404: ProblemDetail body
+PASS A3 wrong method → 405
+PASS A3 wrong method → 405: ProblemDetail body
+PASS A4 task status NOPE → 400
+PASS A4 task status NOPE → 400: ProblemDetail body
+PASS A4 task priority URGENT → 400
+PASS A4 task priority URGENT → 400: ProblemDetail body
+PASS A4 task priority lowercase → 400
+PASS A4 task priority lowercase → 400: ProblemDetail body
+PASS A4 habit frequency HOURLY → 400
+PASS A4 habit frequency HOURLY → 400: ProblemDetail body
+PASS A4 learning status PAUSED → 400
+PASS A4 learning status PAUSED → 400: ProblemDetail body
+PASS A4 plan sourceType NOTE → 400
+PASS A4 plan sourceType NOTE → 400: ProblemDetail body
+PASS A4 settings defaultView CALENDAR → 400
+PASS A4 settings defaultView CALENDAR → 400: ProblemDetail body
+PASS A4 GET /tasks?status=NOPE → 400
+PASS A4 GET /tasks?status=NOPE → 400: ProblemDetail body
+PASS A4 GET /tasks?priority=NOPE → 400
+PASS A4 GET /tasks?priority=NOPE → 400: ProblemDetail body
+PASS A4 GET /tasks?sort=title → 400
+PASS A4 GET /tasks?sort=title → 400: ProblemDetail body
+PASS A4 GET /tasks?dir=up → 400
+PASS A4 GET /tasks?dir=up → 400: ProblemDetail body
+PASS A4 GET /tasks?dueDate=soon → 400
+PASS A4 GET /tasks?dueDate=soon → 400: ProblemDetail body
+PASS A4 GET /tasks?archived=maybe → 400
+PASS A4 GET /tasks?archived=maybe → 400: ProblemDetail body
+PASS A4 GET /habits?active=maybe → 400
+PASS A4 GET /habits?active=maybe → 400: ProblemDetail body
+PASS A4 GET /plans?status=NOPE → 400
+PASS A4 GET /plans?status=NOPE → 400: ProblemDetail body
+PASS A4 seeded task intact
+PASS A4 seeded plan intact
+PASS A5 GET /tasks 0.003596s < 0.5s
+PASS A5 GET /habits 0.005205s < 0.5s
+PASS A5 GET /learning-cards 0.004415s < 0.5s
+PASS A5 GET /plans 0.023531s < 0.5s
+PASS A5 GET /plans/history 0.013336s < 0.5s
+PASS A5 GET /dashboard 0.025477s < 0.5s
+PASS A5 GET /settings 0.002002s < 0.5s
+--- 254 passed, 0 failed
+
+REGRESSION PASSED: 8 suite(s)
