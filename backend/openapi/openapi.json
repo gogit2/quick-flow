@@ -335,6 +335,221 @@
         },
         "type": "object"
       },
+      "PlanItemRequest": {
+        "description": "A plan item: an existing task, habit or learning card",
+        "properties": {
+          "sourceId": {
+            "description": "Id of the task, habit or learning card",
+            "example": 1,
+            "format": "int64",
+            "type": "integer"
+          },
+          "sourceType": {
+            "enum": [
+              "TASK",
+              "HABIT",
+              "LEARNING_RESOURCE"
+            ],
+            "example": "TASK",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sourceId",
+          "sourceType"
+        ],
+        "type": "object"
+      },
+      "PlanItemResponse": {
+        "description": "A plan item with its source's current title and status (D-48)",
+        "properties": {
+          "done": {
+            "example": false,
+            "type": "boolean"
+          },
+          "id": {
+            "example": 10,
+            "format": "int64",
+            "type": "integer"
+          },
+          "position": {
+            "description": "0-based display order",
+            "example": 0,
+            "format": "int32",
+            "type": "integer"
+          },
+          "sourceId": {
+            "example": 1,
+            "format": "int64",
+            "type": "integer"
+          },
+          "sourceStatus": {
+            "description": "TASK: TODO|IN_PROGRESS|DONE. LEARNING_RESOURCE: NOT_STARTED|IN_PROGRESS|COMPLETED. HABIT: DONE|PENDING|INACTIVE for the current period (A-08)",
+            "example": "TODO",
+            "type": "string"
+          },
+          "sourceTitle": {
+            "description": "Task title, habit name or learning card title",
+            "example": "Write report",
+            "type": "string"
+          },
+          "sourceType": {
+            "enum": [
+              "TASK",
+              "HABIT",
+              "LEARNING_RESOURCE"
+            ],
+            "example": "TASK",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PlanRequest": {
+        "description": "Create or update (full replace) a plan. On update, items whose source is kept keep their done flag.",
+        "properties": {
+          "endDateTime": {
+            "description": "Must be after startDateTime (BR-11)",
+            "example": "2026-09-26T09:00:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "estimatedDuration": {
+            "description": "Estimated duration in minutes (D-40); informational",
+            "example": 60,
+            "format": "int32",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PlanItemRequest"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "priorityOrder": {
+            "description": "1 = highest priority (D-41); need not be unique",
+            "example": 1,
+            "format": "int32",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "startDateTime": {
+            "example": "2026-09-26T08:00:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "title": {
+            "example": "Morning focus block",
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          }
+        },
+        "required": [
+          "endDateTime",
+          "estimatedDuration",
+          "items",
+          "priorityOrder",
+          "startDateTime",
+          "title"
+        ],
+        "type": "object"
+      },
+      "PlanResponse": {
+        "description": "A plan with its items and values computed at serverTime (D-43, D-44)",
+        "properties": {
+          "createdAt": {
+            "example": "2026-09-26T07:30:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "doneItems": {
+            "example": 1,
+            "format": "int32",
+            "type": "integer"
+          },
+          "endDateTime": {
+            "example": "2026-09-26T09:00:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "estimatedDuration": {
+            "description": "Minutes",
+            "example": 60,
+            "format": "int32",
+            "type": "integer"
+          },
+          "id": {
+            "example": 1,
+            "format": "int64",
+            "type": "integer"
+          },
+          "items": {
+            "description": "In display order",
+            "items": {
+              "$ref": "#/components/schemas/PlanItemResponse"
+            },
+            "type": "array"
+          },
+          "priorityOrder": {
+            "description": "1 = highest",
+            "example": 1,
+            "format": "int32",
+            "type": "integer"
+          },
+          "progressPercent": {
+            "description": "doneItems ÷ totalItems, 0–100; 0 when there are no items",
+            "example": 33,
+            "format": "int32",
+            "type": "integer"
+          },
+          "remainingSeconds": {
+            "description": "Seconds until endDateTime while IN_PROGRESS, else null (BR-12)",
+            "example": 1800,
+            "format": "int64",
+            "type": "integer"
+          },
+          "serverTime": {
+            "description": "Server clock when computed; use it to correct client clock skew",
+            "example": "2026-09-26T08:30:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "startDateTime": {
+            "example": "2026-09-26T08:00:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "startsInSeconds": {
+            "description": "Seconds until startDateTime while NOT_STARTED, else null (A-01)",
+            "example": 600,
+            "format": "int64",
+            "type": "integer"
+          },
+          "status": {
+            "description": "Derived: COMPLETED if all items done or now ≥ end; IN_PROGRESS if start ≤ now < end; else NOT_STARTED",
+            "enum": [
+              "NOT_STARTED",
+              "IN_PROGRESS",
+              "COMPLETED"
+            ],
+            "example": "IN_PROGRESS",
+            "type": "string"
+          },
+          "title": {
+            "example": "Morning focus block",
+            "type": "string"
+          },
+          "totalItems": {
+            "example": 3,
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
       "TaskRequest": {
         "description": "Create or update a task",
         "properties": {
@@ -461,7 +676,7 @@
     "/api/v1/habits": {
       "get": {
         "description": "All habits by id; filter with `active`.",
-        "operationId": "list_2",
+        "operationId": "list_3",
         "parameters": [
           {
             "description": "true = active only, false = deactivated only, omitted = all",
@@ -494,7 +709,7 @@
         ]
       },
       "post": {
-        "operationId": "create_2",
+        "operationId": "create_3",
         "requestBody": {
           "content": {
             "application/json": {
@@ -536,7 +751,7 @@
     "/api/v1/habits/{id}": {
       "delete": {
         "description": "Hard delete; its completions are deleted too (D-25).",
-        "operationId": "delete_2",
+        "operationId": "delete_3",
         "parameters": [
           {
             "in": "path",
@@ -562,7 +777,7 @@
         ]
       },
       "get": {
-        "operationId": "get_2",
+        "operationId": "get_3",
         "parameters": [
           {
             "in": "path",
@@ -592,7 +807,7 @@
         ]
       },
       "put": {
-        "operationId": "update_2",
+        "operationId": "update_3",
         "parameters": [
           {
             "in": "path",
@@ -881,7 +1096,7 @@
     "/api/v1/learning-cards": {
       "get": {
         "description": "All cards by id, each with milestones and notes.",
-        "operationId": "list_1",
+        "operationId": "list_2",
         "responses": {
           "200": {
             "content": {
@@ -904,7 +1119,7 @@
       },
       "post": {
         "description": "Starts NOT_STARTED; `status` in the body is ignored.",
-        "operationId": "create_1",
+        "operationId": "create_2",
         "requestBody": {
           "content": {
             "application/json": {
@@ -946,7 +1161,7 @@
     "/api/v1/learning-cards/{id}": {
       "delete": {
         "description": "Hard delete; its milestones and notes too (D-32).",
-        "operationId": "delete_1",
+        "operationId": "delete_2",
         "parameters": [
           {
             "in": "path",
@@ -972,7 +1187,7 @@
         ]
       },
       "get": {
-        "operationId": "get_1",
+        "operationId": "get_2",
         "parameters": [
           {
             "in": "path",
@@ -1003,7 +1218,7 @@
       },
       "put": {
         "description": "Replaces title and description. An optional `status` sets it manually (D-31).",
-        "operationId": "update_1",
+        "operationId": "update_2",
         "parameters": [
           {
             "in": "path",
@@ -1397,6 +1612,197 @@
         ]
       }
     },
+    "/api/v1/plans": {
+      "get": {
+        "description": "Sorted IN_PROGRESS, NOT_STARTED, COMPLETED; then priorityOrder (1 first), then start (D-41).",
+        "operationId": "list_1",
+        "parameters": [
+          {
+            "description": "Only plans with this derived status",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "NOT_STARTED",
+                "IN_PROGRESS",
+                "COMPLETED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PlanResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Invalid status filter"
+          }
+        },
+        "summary": "List plans",
+        "tags": [
+          "Plans"
+        ]
+      },
+      "post": {
+        "description": "Needs ≥ 1 item referencing existing sources, no duplicates, end after start (BR-10, BR-11, D-42).",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Validation or business rule failed"
+          }
+        },
+        "summary": "Create a plan",
+        "tags": [
+          "Plans"
+        ]
+      }
+    },
+    "/api/v1/plans/{id}": {
+      "delete": {
+        "description": "Hard delete of the plan and its items; sources are untouched.",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "404": {
+            "description": "Plan not found"
+          }
+        },
+        "summary": "Delete a plan",
+        "tags": [
+          "Plans"
+        ]
+      },
+      "get": {
+        "operationId": "get_1",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Plan not found"
+          }
+        },
+        "summary": "Get a plan",
+        "tags": [
+          "Plans"
+        ]
+      },
+      "put": {
+        "description": "Replaces every field and the item list; kept sources keep their done flag. Status is recomputed.",
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Validation or business rule failed"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Plan not found"
+          }
+        },
+        "summary": "Update a plan",
+        "tags": [
+          "Plans"
+        ]
+      }
+    },
     "/api/v1/tasks": {
       "get": {
         "description": "Filters combine with AND. Archived tasks are excluded unless `archived=true` (which lists only archived ones). Sort by `createdAt` (default, newest first) or `dueDate` (default ascending); tasks without a due date always sort last.",
@@ -1786,6 +2192,10 @@
     {
       "description": "Recurring habits and their completions (FR-03, FR-04)",
       "name": "Habits"
+    },
+    {
+      "description": "Todo plans built from tasks, habits and learning cards (FR-07, FR-08)",
+      "name": "Plans"
     },
     {
       "description": "Learning cards with milestones and notes (FR-05, FR-06)",

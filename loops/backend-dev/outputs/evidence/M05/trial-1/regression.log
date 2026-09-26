@@ -1,0 +1,262 @@
+=== M01-foundation.sh ===
+PASS A1 health 200
+PASS A1 health UP
+PASS A2 api-docs 200
+PASS A2 api-docs title
+PASS A3 swagger-ui 200/302
+PASS A4 unknown route 404
+PASS A4 problem+json content type
+PASS A4 problem status field
+PASS A5 CORS allow-origin echoed
+--- 9 passed, 0 failed
+=== M02-tasks.sh ===
+PASS A1 create 201
+PASS A1 Location header
+PASS A1 title echoed
+PASS A1 description echoed
+PASS A1 priority HIGH
+PASS A1 dueDate echoed
+PASS A1 status TODO
+PASS A1 archived false
+PASS A1 completedAt null
+PASS A1 priority defaults MEDIUM
+PASS A1 dueDate optional
+PASS A2 blank title 400
+PASS A2 errors.title present
+PASS A2 missing title 400
+PASS A3 201-char title 400
+PASS A3 200-char title 201
+PASS A3 2001-char description 400
+PASS A3 errors.description present
+PASS A4 bad status 400
+PASS A4 bad priority 400
+PASS A4 bad status filter 400
+PASS A4 bad sort 400
+PASS A5 PUT 200
+PASS A5 title updated
+PASS A5 priority updated
+PASS A5 dueDate updated
+PASS A5 status kept
+PASS A5 updatedAt changed
+PASS A6 complete 200
+PASS A6 status DONE
+PASS A6 completedAt set
+PASS A6 back to TODO
+PASS A6 completedAt cleared
+PASS A6 PUT DONE sets completedAt
+PASS A7 archive 200
+PASS A7 archived true
+PASS A7 excluded from default list
+PASS A7 present with archived=true
+PASS A7 archived list has only archived
+PASS A7 restore archived false
+PASS A7 back in default list
+PASS A8 delete 204
+PASS A8 GET deleted 404
+PASS A8 not in default list
+PASS A8 not in archived list
+PASS A9 search 200
+PASS A9 mixed-case search finds 3
+PASS A9 all results contain term
+PASS A9 status filter
+PASS A9 status AND priority
+PASS A9 status AND priority -> gamma
+PASS A9 priority filter
+PASS A10 dueDate asc, nulls last
+PASS A10 dueDate desc, nulls last
+PASS A10 createdAt desc
+PASS A10 createdAt asc
+PASS A10 dueDate equality filter
+PASS A10 due range filter
+PASS A10 inverted range 400
+PASS A11 yesterday TODO overdue
+PASS A11 due today not overdue
+PASS A11 yesterday DONE not overdue
+PASS A11 archived not overdue
+PASS A11 no-due task not overdue
+PASS A12 GET unknown 404
+PASS A12 ProblemDetail status
+PASS A12 PUT unknown 404
+PASS A12 DELETE unknown 404
+PASS A12 complete unknown 404
+--- 69 passed, 0 failed
+=== M03-habits.sh ===
+PASS A1 create daily 201
+PASS A1 frequency DAILY
+PASS A1 active true
+PASS A1 doneToday false initially
+PASS A1 Location header
+PASS A1 create weekly 201
+PASS A1 frequency WEEKLY
+PASS A2 blank name 400
+PASS A2 errors.name present
+PASS A2 151-char name 400
+PASS A2 bad frequency 400
+PASS A2 missing frequency 400
+PASS A3 complete today 201
+PASS A3 doneToday true
+PASS A3 doneThisPeriod true
+PASS A3 streak >= 1
+PASS A3 lastCompletedDate today
+PASS A4 duplicate completion 409
+PASS A4 problem status 409
+PASS A5 future date 400
+PASS A5 errors.date present
+PASS A5 yesterday 201
+PASS A5 streak 2
+PASS A6 progressPercent 29
+PASS A6 streak 0 (gap)
+PASS A6 list completions 200
+PASS A6 3 completions
+PASS A3 weekly doneThisPeriod
+PASS A3 weekly streak 1
+PASS A6 weekly progress 25
+PASS A7 uncomplete today 204
+PASS A7 doneToday false
+PASS A7 streak still 1 (yesterday)
+PASS A7 uncomplete again 404
+PASS A7 remove dated completion 204
+PASS A7 bad date path 400
+PASS A8 deactivate 200
+PASS A8 active false
+PASS A8 listed as inactive
+PASS A8 not listed as active
+PASS A8 active true
+PASS A8 update 200
+PASS A8 name updated
+PASS A8 frequency updated
+PASS A8 update blank name 400
+PASS A9 delete 204
+PASS A9 get deleted 404
+PASS A9 completions of deleted 404
+PASS A9 delete again 404
+PASS A9 unknown habit 404
+--- 50 passed, 0 failed
+=== M04-learning.sh ===
+PASS A1 create card 201
+PASS A1 status NOT_STARTED
+PASS A1 milestones empty
+PASS A1 notes empty
+PASS A1 progress 0
+PASS A1 Location header
+PASS A1 card in list
+PASS A2 blank title 400
+PASS A2 errors.title present
+PASS A2 missing title 400
+PASS A2 blank milestone title 400
+PASS A2 blank note text 400
+PASS A2 unknown card 404
+PASS A3 add milestone 1 201
+PASS A3 Location header
+PASS A3 targetDate kept
+PASS A3 add milestone 2 201
+PASS A3 milestonesTotal 2
+PASS A3 second targetDate null
+PASS A4 complete milestone 200
+PASS A4 done true
+PASS A4 completedAt set
+PASS A4 status IN_PROGRESS
+PASS A4 progress 50
+PASS A4 milestonesDone 1
+PASS A4 all done → COMPLETED
+PASS A4 progress 100
+PASS A4 uncomplete 200
+PASS A4 uncompleted → IN_PROGRESS
+PASS A4 completedAt cleared
+PASS A4 PUT milestone 200
+PASS A4 PUT renames
+PASS A4 PUT done → COMPLETED
+PASS A5 PUT card 200
+PASS A5 manual status saved
+PASS A5 title updated
+PASS A5 manual status persisted
+PASS A5 manual COMPLETED saved
+PASS A5 omitted status keeps it
+PASS A5 bad status 400
+PASS A6 add note 201
+PASS A6 createdAt set
+PASS A6 2 notes on card
+PASS A6 newest first
+PASS A6 delete note 204
+PASS A6 note gone
+PASS A7 milestone of other card 404
+PASS A7 delete milestone via other card 404
+PASS A7 delete note via other card 404
+PASS A7 delete milestone 204
+PASS A7 milestonesTotal 1
+PASS A7 re-derived COMPLETED (1/1 done)
+PASS A7 delete missing milestone 404
+PASS A8 delete card 204
+PASS A8 deleted card 404
+PASS A8 gone from list
+PASS A8 note on deleted card 404
+PASS A8 cleanup other card 204
+--- 58 passed, 0 failed
+=== M05-plans-core.sh ===
+PASS A1 create plan 201
+PASS A1 Location header
+PASS A1 status IN_PROGRESS
+PASS A1 totalItems 3
+PASS A1 doneItems 0
+PASS A1 progress 0
+PASS A1 remainingSeconds 2900–3000
+PASS A1 startsInSeconds null
+PASS A1 task sourceTitle
+PASS A1 task sourceStatus
+PASS A1 habit sourceTitle
+PASS A1 habit sourceStatus
+PASS A1 card sourceTitle
+PASS A1 card sourceStatus
+PASS A1 items not done
+PASS A1 GET plan 200
+PASS A1 GET status IN_PROGRESS
+PASS A2 create future plan 201
+PASS A2 status NOT_STARTED
+PASS A2 remainingSeconds null
+PASS A2 startsInSeconds > 0
+PASS A3 create past plan 201
+PASS A3 status COMPLETED
+PASS A3 remainingSeconds null
+PASS A3 startsInSeconds null
+PASS A4 empty items 400
+PASS A4 errors.items present
+PASS A4 unknown source 400
+PASS A4 errors.items present
+PASS A4 duplicate source 400
+PASS A4 errors.items present
+PASS A4 item without sourceId 400
+PASS A5 end before start 400
+PASS A5 errors.endDateTime present
+PASS A5 end == start 400
+PASS A5 errors.endDateTime present
+PASS A6 estimatedDuration 0 → 400
+PASS A6 errors.estimatedDuration present
+PASS A6 priorityOrder 0 → 400
+PASS A6 errors.priorityOrder present
+PASS A6 bad sourceType 400
+PASS A6 blank title 400
+PASS A6 missing start 400
+PASS A6 bad status filter 400
+PASS A7 list 200
+PASS A7 group + priority order
+PASS A7 status filter
+PASS A7 filter includes P2
+PASS A8 PUT 200
+PASS A8 title updated
+PASS A8 priority updated
+PASS A8 status recomputed IN_PROGRESS
+PASS A8 items replaced (3)
+PASS A8 remainingSeconds set
+PASS A8 window in past → COMPLETED
+PASS A8 items shrunk (1)
+PASS A8 PUT bad window 400
+PASS A8 PUT unknown 404
+PASS A9 DELETE 204
+PASS A9 GET deleted 404
+PASS A9 source task still exists
+PASS A9 source habit still exists
+PASS A9 DELETE again 404
+PASS A10 serverTime within 5 s (2026-09-26T16:59:34.866100179Z)
+--- 64 passed, 0 failed
+
+REGRESSION PASSED: 5 suite(s)

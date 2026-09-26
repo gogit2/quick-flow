@@ -6,7 +6,7 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 5,
+  "iteration": 6,
   "current_milestone": null,
   "milestones": [
     {
@@ -61,12 +61,12 @@
       "id": "M05",
       "title": "Todo plans: composition, status, progress, rest time",
       "file": "outputs/M05-plans-core.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": ["M02", "M03", "M04"],
       "stories": ["US-PLAN-01", "US-PLAN-02", "US-PLAN-03", "US-PLAN-04", "US-PLAN-06", "US-PLAN-07", "US-PLAN-08", "US-PLAN-09"],
       "tasks_total": 6,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 6,
+      "trials": 1,
       "last_error": null
     },
     {
@@ -108,10 +108,10 @@
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M04",
+    "milestone": "M05",
     "mode": "VERIFY",
-    "summary": "M04 T01-T05 built (V4 learning migration, LearningRules + 4 unit tests, LearningService, LearningCardController 12 ops, curl suite); trial 1 PASS 58/58, regression green, jar published",
+    "summary": "M05 T01-T06 built (V5 plans migration, PlanRules + 7 unit tests, PlanSourceResolver, PlanService, PlanController 5 ops, curl suite); trial 1 PASS 64/64, regression green, jar published; A-08",
     "result": "ok"
   },
-  "updated_at": "2026-09-26T19:52:44+03:00"
+  "updated_at": "2026-09-26T19:59:46+03:00"
 }

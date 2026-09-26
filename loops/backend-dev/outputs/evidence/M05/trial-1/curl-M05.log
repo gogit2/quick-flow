@@ -1,0 +1,68 @@
+=== M05-plans-core.sh ===
+PASS A1 create plan 201
+PASS A1 Location header
+PASS A1 status IN_PROGRESS
+PASS A1 totalItems 3
+PASS A1 doneItems 0
+PASS A1 progress 0
+PASS A1 remainingSeconds 2900–3000
+PASS A1 startsInSeconds null
+PASS A1 task sourceTitle
+PASS A1 task sourceStatus
+PASS A1 habit sourceTitle
+PASS A1 habit sourceStatus
+PASS A1 card sourceTitle
+PASS A1 card sourceStatus
+PASS A1 items not done
+PASS A1 GET plan 200
+PASS A1 GET status IN_PROGRESS
+PASS A2 create future plan 201
+PASS A2 status NOT_STARTED
+PASS A2 remainingSeconds null
+PASS A2 startsInSeconds > 0
+PASS A3 create past plan 201
+PASS A3 status COMPLETED
+PASS A3 remainingSeconds null
+PASS A3 startsInSeconds null
+PASS A4 empty items 400
+PASS A4 errors.items present
+PASS A4 unknown source 400
+PASS A4 errors.items present
+PASS A4 duplicate source 400
+PASS A4 errors.items present
+PASS A4 item without sourceId 400
+PASS A5 end before start 400
+PASS A5 errors.endDateTime present
+PASS A5 end == start 400
+PASS A5 errors.endDateTime present
+PASS A6 estimatedDuration 0 → 400
+PASS A6 errors.estimatedDuration present
+PASS A6 priorityOrder 0 → 400
+PASS A6 errors.priorityOrder present
+PASS A6 bad sourceType 400
+PASS A6 blank title 400
+PASS A6 missing start 400
+PASS A6 bad status filter 400
+PASS A7 list 200
+PASS A7 group + priority order
+PASS A7 status filter
+PASS A7 filter includes P2
+PASS A8 PUT 200
+PASS A8 title updated
+PASS A8 priority updated
+PASS A8 status recomputed IN_PROGRESS
+PASS A8 items replaced (3)
+PASS A8 remainingSeconds set
+PASS A8 window in past → COMPLETED
+PASS A8 items shrunk (1)
+PASS A8 PUT bad window 400
+PASS A8 PUT unknown 404
+PASS A9 DELETE 204
+PASS A9 GET deleted 404
+PASS A9 source task still exists
+PASS A9 source habit still exists
+PASS A9 DELETE again 404
+PASS A10 serverTime within 5 s (2026-09-26T16:59:26.689383328Z)
+--- 64 passed, 0 failed
+
+REGRESSION PASSED: 1 suite(s)

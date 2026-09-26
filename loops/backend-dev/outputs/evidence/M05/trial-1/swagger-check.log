@@ -1,0 +1,5 @@
+/api/v1/plans get List plans
+/api/v1/plans post Create a plan
+/api/v1/plans/{id} delete Delete a plan
+/api/v1/plans/{id} get Get a plan
+/api/v1/plans/{id} put Update a plan

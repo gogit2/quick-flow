@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Loop | backend-dev |
-| Status | pending |
+| Status | done |
 | Depends on | M02, M03, M04 |
 | Stories | US-PLAN-01, US-PLAN-02, US-PLAN-03, US-PLAN-04, US-PLAN-06, US-PLAN-07 (backend part), US-PLAN-08, US-PLAN-09 |
 | Requirements | FR-07, FR-08 (status, %, rest time), BR-10, BR-11, BR-12, NFR Reliability, D-40..D-45 |
@@ -23,12 +23,18 @@ Create, read, update and remove plans built from existing tasks, habits and lear
 - `PlanResponse`: id, title, estimatedDuration, startDateTime, endDateTime, priorityOrder, status, createdAt, items[{id, sourceType, sourceId, sourceTitle, sourceStatus, done}], doneItems, totalItems, progressPercent, remainingSeconds, startsInSeconds, serverTime.
 
 ## 3. Tasks
-- [ ] M05-T01 Migration `V5__plans.sql` + entities + enums + repositories
-- [ ] M05-T02 `PlanRules` (status, progress, remainingSeconds, startsInSeconds, window validation) + unit tests across NOT_STARTED → IN_PROGRESS → COMPLETED with fixed Clock
-- [ ] M05-T03 `PlanSourceResolver` (existence + title/status lookup across task/habit/learning repos)
-- [ ] M05-T04 `PlanService` create/get/list (sorted)/update/delete with validation (BR-10, BR-11, D-42) and status refresh
-- [ ] M05-T05 `PlanController` + records + mapper + Swagger annotations
-- [ ] M05-T06 Curl suite `outputs/curl/M05-plans-core.sh` (§4)
+- [x] M05-T01 Migration `V5__plans.sql` + entities + enums + repositories
+  - `db/migration/V5__plans.sql`, `plan/domain/{Plan,PlanItem,PlanStatus,PlanSourceType}.java`, `plan/repo/PlanRepository.java`, `PlanItemRepository.java`
+- [x] M05-T02 `PlanRules` (status, progress, remainingSeconds, startsInSeconds, window validation) + unit tests across NOT_STARTED → IN_PROGRESS → COMPLETED with fixed Clock
+  - `plan/domain/PlanRules.java` (+ `groupRank` for D-41), `test/.../plan/domain/PlanRulesTest.java` (7 tests)
+- [x] M05-T03 `PlanSourceResolver` (existence + title/status lookup across task/habit/learning repos)
+  - `plan/service/PlanSourceResolver.java` (batched per type; habit sourceStatus DONE/PENDING/INACTIVE, A-08)
+- [x] M05-T04 `PlanService` create/get/list (sorted)/update/delete with validation (BR-10, BR-11, D-42) and status refresh
+  - `plan/service/PlanService.java` (item replace keeps done flags of kept sources)
+- [x] M05-T05 `PlanController` + records + mapper + Swagger annotations
+  - `plan/api/PlanController.java`, `PlanRequest`, `PlanItemRequest`, `PlanResponse`, `PlanItemResponse`, `PlanMapper`
+- [x] M05-T06 Curl suite `outputs/curl/M05-plans-core.sh` (§4)
+  - `outputs/curl/M05-plans-core.sh` (cases 1–10)
 
 ## 4. Acceptance checks
 | # | Check | Proves | How |
@@ -49,5 +55,15 @@ Regression: M01–M04 suites stay green.
 
 ## 5. Verification trials
 <!-- One section per trial, appended by VERIFY. Maximum 3 trials. -->
+### Trial 1 (2026-09-26T19:59:46+03:00): PASS
+Commands: `./mvnw -q verify` → `scripts/backend.sh start-dev` → `scripts/export-swagger.sh` → `scripts/curl-regression.sh M05` → `scripts/curl-regression.sh` → `scripts/backend.sh stop-dev`.
+| Check | Result |
+|---|---|
+| A1–A10 | PASS (M05 suite 64/64) |
+| A11 | PASS (PlanRulesTest 7/7; total 25/25 unit tests) |
+| Swagger | 5 plan ops (`/plans` GET/POST, `/plans/{id}` GET/PUT/DELETE), each with a summary |
+| Regression | PASS (M01 9, M02 69, M03 50, M04 58, M05 64) |
+
+Evidence: `outputs/evidence/M05/trial-1/` (`verify.log`, `swagger.log`, `curl-M05.log`, `regression.log`, `swagger-check.log`).
 
 ## 6. Notes / Blocked
