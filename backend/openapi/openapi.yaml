@@ -13,6 +13,8 @@ tags:
     \ FR-02)"
 - name: Habits
   description: "Recurring habits and their completions (FR-03, FR-04)"
+- name: Learning
+  description: "Learning cards with milestones and notes (FR-05, FR-06)"
 paths:
   /api/v1/tasks/{id}:
     get:
@@ -85,12 +87,147 @@ paths:
           description: Deleted
         "404":
           description: Task not found
+  /api/v1/learning-cards/{id}:
+    get:
+      tags:
+      - Learning
+      summary: Get a learning card
+      operationId: get_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: Card not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+    put:
+      tags:
+      - Learning
+      summary: Update a learning card
+      description: Replaces title and description. An optional `status` sets it manually
+        (D-31).
+      operationId: update_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LearningCardRequest"
+        required: true
+      responses:
+        "400":
+          description: Validation failed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+        "404":
+          description: Card not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+    delete:
+      tags:
+      - Learning
+      summary: Delete a learning card
+      description: Hard delete; its milestones and notes too (D-32).
+      operationId: delete_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Card not found
+  /api/v1/learning-cards/{id}/milestones/{milestoneId}:
+    put:
+      tags:
+      - Learning
+      summary: Update a milestone
+      description: Replaces title and targetDate; optional `done` marks it. Returns
+        the updated card.
+      operationId: updateMilestone
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: milestoneId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MilestoneRequest"
+        required: true
+      responses:
+        "400":
+          description: Validation failed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+        "404":
+          description: "Card not found, or milestone not on this card"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+    delete:
+      tags:
+      - Learning
+      summary: Remove a milestone
+      description: The card status is re-derived.
+      operationId: removeMilestone
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: milestoneId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Removed
+        "404":
+          description: "Card not found, or milestone not on this card"
   /api/v1/habits/{id}:
     get:
       tags:
       - Habits
       summary: Get a habit
-      operationId: get_1
+      operationId: get_2
       parameters:
       - name: id
         in: path
@@ -109,7 +246,7 @@ paths:
       tags:
       - Habits
       summary: Update a habit
-      operationId: update_1
+      operationId: update_2
       parameters:
       - name: id
         in: path
@@ -141,7 +278,7 @@ paths:
       - Habits
       summary: Delete a habit
       description: Hard delete; its completions are deleted too (D-25).
-      operationId: delete_1
+      operationId: delete_2
       parameters:
       - name: id
         in: path
@@ -328,13 +465,185 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/TaskResponse"
+  /api/v1/learning-cards:
+    get:
+      tags:
+      - Learning
+      summary: List learning cards
+      description: "All cards by id, each with milestones and notes."
+      operationId: list_1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LearningCardResponse"
+    post:
+      tags:
+      - Learning
+      summary: Create a learning card
+      description: Starts NOT_STARTED; `status` in the body is ignored.
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LearningCardRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+        "400":
+          description: Validation failed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+  /api/v1/learning-cards/{id}/notes:
+    post:
+      tags:
+      - Learning
+      summary: Add a note
+      operationId: addNote
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NoteRequest"
+        required: true
+      responses:
+        "201":
+          description: Added
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/NoteResponse"
+        "400":
+          description: Validation failed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/NoteResponse"
+        "404":
+          description: Card not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/NoteResponse"
+  /api/v1/learning-cards/{id}/milestones:
+    post:
+      tags:
+      - Learning
+      summary: Add a milestone
+      description: Appended last. Returns the updated card (status re-derived).
+      operationId: addMilestone
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MilestoneRequest"
+        required: true
+      responses:
+        "201":
+          description: Added; body is the updated card
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+        "400":
+          description: Validation failed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+        "404":
+          description: Card not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+  /api/v1/learning-cards/{id}/milestones/{milestoneId}/uncomplete:
+    post:
+      tags:
+      - Learning
+      summary: Un-complete a milestone
+      description: Clears `completedAt`. Returns the updated card.
+      operationId: uncompleteMilestone
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: milestoneId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: "Card not found, or milestone not on this card"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
+  /api/v1/learning-cards/{id}/milestones/{milestoneId}/complete:
+    post:
+      tags:
+      - Learning
+      summary: Complete a milestone
+      description: Sets `completedAt`. Returns the updated card.
+      operationId: completeMilestone
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: milestoneId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: "Card not found, or milestone not on this card"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
   /api/v1/habits:
     get:
       tags:
       - Habits
       summary: List habits
       description: All habits by id; filter with `active`.
-      operationId: list_1
+      operationId: list_2
       parameters:
       - name: active
         in: query
@@ -355,7 +664,7 @@ paths:
       tags:
       - Habits
       summary: Create a habit
-      operationId: create_1
+      operationId: create_2
       requestBody:
         content:
           application/json:
@@ -482,6 +791,30 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/HabitResponse"
+  /api/v1/learning-cards/{id}/notes/{noteId}:
+    delete:
+      tags:
+      - Learning
+      summary: Remove a note
+      operationId: removeNote
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: noteId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: Removed
+        "404":
+          description: "Card not found, or note not on this card"
   /api/v1/habits/{id}/completions/{date}:
     delete:
       tags:
@@ -618,6 +951,155 @@ components:
           description: "dueDate is before today, status is not DONE, and the task\
             \ is not archived"
           example: false
+    LearningCardRequest:
+      type: object
+      description: Create or update a learning card
+      properties:
+        title:
+          type: string
+          example: Spring Boot in Action
+          maxLength: 200
+          minLength: 0
+        description:
+          type: string
+          description: "Description or source (link, book, course name)"
+          example: https://example.com/course
+          maxLength: 2000
+          minLength: 0
+        status:
+          type: string
+          description: Manual status override (update only; ignored on create). Omit
+            to keep the current status. A later milestone change re-derives it.
+          enum:
+          - NOT_STARTED
+          - IN_PROGRESS
+          - COMPLETED
+          example: IN_PROGRESS
+      required:
+      - title
+    LearningCardResponse:
+      type: object
+      description: "A learning card with its milestones, notes and computed progress"
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        title:
+          type: string
+          example: Spring Boot in Action
+        description:
+          type: string
+          example: https://example.com/course
+        status:
+          type: string
+          description: Derived from milestones (D-31) unless set manually since the
+            last milestone change
+          enum:
+          - NOT_STARTED
+          - IN_PROGRESS
+          - COMPLETED
+          example: IN_PROGRESS
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-09-26T15:00:00Z
+        milestones:
+          type: array
+          description: In display order
+          items:
+            $ref: "#/components/schemas/MilestoneResponse"
+        notes:
+          type: array
+          description: Newest first
+          items:
+            $ref: "#/components/schemas/NoteResponse"
+        milestonesTotal:
+          type: integer
+          format: int32
+          example: 2
+        milestonesDone:
+          type: integer
+          format: int32
+          example: 1
+        progressPercent:
+          type: integer
+          format: int32
+          description: "milestonesDone ÷ milestonesTotal, 0–100; 0 when there are\
+            \ no milestones"
+          example: 50
+    MilestoneResponse:
+      type: object
+      description: A milestone of a learning card
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 3
+        cardId:
+          type: integer
+          format: int64
+          example: 1
+        title:
+          type: string
+          example: Finish chapter 1
+        done:
+          type: boolean
+          example: false
+        targetDate:
+          type: string
+          format: date
+          example: 2026-10-15
+        completedAt:
+          type: string
+          format: date-time
+          description: Set while done (D-30)
+          example: 2026-09-26T15:00:00Z
+        position:
+          type: integer
+          format: int32
+          description: "Display order within the card, 0-based"
+          example: 0
+    NoteResponse:
+      type: object
+      description: A note on a learning card
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 5
+        cardId:
+          type: integer
+          format: int64
+          example: 1
+        text:
+          type: string
+          example: Chapter 3 explains auto-configuration well
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-09-26T15:00:00Z
+    MilestoneRequest:
+      type: object
+      description: Add or update a milestone of a learning card
+      properties:
+        title:
+          type: string
+          example: Finish chapter 1
+          maxLength: 200
+          minLength: 0
+        targetDate:
+          type: string
+          format: date
+          description: Optional target date; null clears it on update
+          example: 2026-10-15
+        done:
+          type: boolean
+          description: "Update only: mark done/not done. Omit to keep. Ignored on\
+            \ create."
+          example: true
+      required:
+      - title
     HabitRequest:
       type: object
       description: Create or update a habit
@@ -693,6 +1175,17 @@ components:
           type: string
           format: date
           example: 2026-09-26
+    NoteRequest:
+      type: object
+      description: Add a note to a learning card
+      properties:
+        text:
+          type: string
+          example: Chapter 3 explains auto-configuration well
+          maxLength: 5000
+          minLength: 0
+      required:
+      - text
     CompletionRequest:
       type: object
       description: Optional completion body. Omit it (or `date`) to complete for today.

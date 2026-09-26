@@ -1,0 +1,63 @@
+$ scripts/curl-regression.sh M04
+=== M04-learning.sh ===
+PASS A1 create card 201
+PASS A1 status NOT_STARTED
+PASS A1 milestones empty
+PASS A1 notes empty
+PASS A1 progress 0
+PASS A1 Location header
+PASS A1 card in list
+PASS A2 blank title 400
+PASS A2 errors.title present
+PASS A2 missing title 400
+PASS A2 blank milestone title 400
+PASS A2 blank note text 400
+PASS A2 unknown card 404
+PASS A3 add milestone 1 201
+PASS A3 Location header
+PASS A3 targetDate kept
+PASS A3 add milestone 2 201
+PASS A3 milestonesTotal 2
+PASS A3 second targetDate null
+PASS A4 complete milestone 200
+PASS A4 done true
+PASS A4 completedAt set
+PASS A4 status IN_PROGRESS
+PASS A4 progress 50
+PASS A4 milestonesDone 1
+PASS A4 all done → COMPLETED
+PASS A4 progress 100
+PASS A4 uncomplete 200
+PASS A4 uncompleted → IN_PROGRESS
+PASS A4 completedAt cleared
+PASS A4 PUT milestone 200
+PASS A4 PUT renames
+PASS A4 PUT done → COMPLETED
+PASS A5 PUT card 200
+PASS A5 manual status saved
+PASS A5 title updated
+PASS A5 manual status persisted
+PASS A5 manual COMPLETED saved
+PASS A5 omitted status keeps it
+PASS A5 bad status 400
+PASS A6 add note 201
+PASS A6 createdAt set
+PASS A6 2 notes on card
+PASS A6 newest first
+PASS A6 delete note 204
+PASS A6 note gone
+PASS A7 milestone of other card 404
+PASS A7 delete milestone via other card 404
+PASS A7 delete note via other card 404
+PASS A7 delete milestone 204
+PASS A7 milestonesTotal 1
+PASS A7 re-derived COMPLETED (1/1 done)
+PASS A7 delete missing milestone 404
+PASS A8 delete card 204
+PASS A8 deleted card 404
+PASS A8 gone from list
+PASS A8 note on deleted card 404
+PASS A8 cleanup other card 204
+--- 58 passed, 0 failed
+
+REGRESSION PASSED: 1 suite(s)

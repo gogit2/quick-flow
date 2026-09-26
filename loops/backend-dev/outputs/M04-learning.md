@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Loop | backend-dev |
-| Status | pending |
+| Status | done |
 | Depends on | M01 |
 | Stories | US-LEARN-01, US-LEARN-02, US-LEARN-03, US-LEARN-04, US-LEARN-05 |
 | Requirements | FR-05, FR-06, BR-8, BR-9, BR-14, D-30..D-32 |
@@ -21,11 +21,11 @@ Learning cards with nested milestones and notes. Cards can be added, updated (in
 - A milestone/note id that belongs to another card → 404 (BR-9).
 
 ## 3. Tasks
-- [ ] M04-T01 Migration `V4__learning.sql` + entities + enum + repositories
-- [ ] M04-T02 `LearningRules` (derive status, mark milestone, progress) + unit tests with fixed Clock
-- [ ] M04-T03 `LearningService` (card CRUD, milestone add/update/complete/uncomplete/remove, note add/remove, status re-derivation)
-- [ ] M04-T04 `LearningCardController` + records + mapper + Swagger annotations
-- [ ] M04-T05 Curl suite `outputs/curl/M04-learning.sh` (§4)
+- [x] M04-T01 Migration `V4__learning.sql` + entities + enum + repositories
+- [x] M04-T02 `LearningRules` (derive status, mark milestone, progress) + unit tests with fixed Clock
+- [x] M04-T03 `LearningService` (card CRUD, milestone add/update/complete/uncomplete/remove, note add/remove, status re-derivation)
+- [x] M04-T04 `LearningCardController` + records + mapper + Swagger annotations
+- [x] M04-T05 Curl suite `outputs/curl/M04-learning.sh` (§4)
 
 ## 4. Acceptance checks
 | # | Check | Proves | How |
@@ -44,5 +44,21 @@ Regression: M01–M03 suites stay green.
 
 ## 5. Verification trials
 <!-- One section per trial, appended by VERIFY. Maximum 3 trials. -->
+### Trial 1 (2026-09-26T19:52+03:00): PASS
+Commands: `./mvnw verify` → `scripts/backend.sh start-dev` → `scripts/export-swagger.sh` → `scripts/curl-regression.sh M04` → `scripts/curl-regression.sh` → `stop-dev`.
+| Check | Result |
+|---|---|
+| A1 create card NOT_STARTED, empty lists | PASS |
+| A2 blank title 400 `errors.title` (+ milestone/note 400s) | PASS |
+| A3 add 2 milestones, `milestonesTotal: 2` | PASS |
+| A4 complete → IN_PROGRESS 50%, all → COMPLETED, uncomplete → IN_PROGRESS | PASS |
+| A5 manual status via PUT saved/persisted | PASS |
+| A6 note add 201 `createdAt`, delete 204 | PASS |
+| A7 delete milestone 204; cross-card ids 404 | PASS |
+| A8 delete card 204, GET 404 | PASS |
+| A9 `./mvnw verify` (LearningRulesTest 4/4, total 18/18) | PASS |
+M04 suite 58/58; regression (M01–M04) green. Swagger: 12 operations under `/api/v1/learning-cards`, all with summaries. Evidence: `outputs/evidence/M04/trial-1/{verify,curl-M04,regression}.log`. Jar published.
 
 ## 6. Notes / Blocked
+- Files: `db/migration/V4__learning.sql`, `learning/domain/{LearningCard,LearningMilestone,LearningNote,LearningStatus,LearningRules}`, `learning/repo/{LearningCardRepository,LearningMilestoneRepository,LearningNoteRepository}`, `learning/service/LearningService`, `learning/api/{LearningCardController,LearningCardRequest,LearningCardResponse,MilestoneRequest,MilestoneResponse,NoteRequest,NoteResponse,LearningMapper}`, test `LearningRulesTest`, `outputs/curl/M04-learning.sh`.
+- Milestone mutations (add/PUT/complete/uncomplete) return the whole updated card; note add returns the note (A-07).

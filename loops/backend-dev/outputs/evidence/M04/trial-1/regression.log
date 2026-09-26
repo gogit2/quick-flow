@@ -1,0 +1,24 @@
+$ scripts/curl-regression.sh   (filtered to suite totals)
+=== M01-foundation.sh ===
+--- 9 passed, 0 failed
+=== M02-tasks.sh ===
+--- 69 passed, 0 failed
+=== M03-habits.sh ===
+--- 50 passed, 0 failed
+=== M04-learning.sh ===
+--- 58 passed, 0 failed
+REGRESSION PASSED: 4 suite(s)
+
+$ jq '.paths' backend/openapi/openapi.json  (learning-cards operations with summaries)
+GET /api/v1/learning-cards List learning cards
+POST /api/v1/learning-cards Create a learning card
+DELETE /api/v1/learning-cards/{id} Delete a learning card
+GET /api/v1/learning-cards/{id} Get a learning card
+PUT /api/v1/learning-cards/{id} Update a learning card
+POST /api/v1/learning-cards/{id}/milestones Add a milestone
+DELETE /api/v1/learning-cards/{id}/milestones/{milestoneId} Remove a milestone
+PUT /api/v1/learning-cards/{id}/milestones/{milestoneId} Update a milestone
+POST /api/v1/learning-cards/{id}/milestones/{milestoneId}/complete Complete a milestone
+POST /api/v1/learning-cards/{id}/milestones/{milestoneId}/uncomplete Un-complete a milestone
+POST /api/v1/learning-cards/{id}/notes Add a note
+DELETE /api/v1/learning-cards/{id}/notes/{noteId} Remove a note

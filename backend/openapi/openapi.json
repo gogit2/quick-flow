@@ -132,6 +132,209 @@
         },
         "type": "object"
       },
+      "LearningCardRequest": {
+        "description": "Create or update a learning card",
+        "properties": {
+          "description": {
+            "description": "Description or source (link, book, course name)",
+            "example": "https://example.com/course",
+            "maxLength": 2000,
+            "minLength": 0,
+            "type": "string"
+          },
+          "status": {
+            "description": "Manual status override (update only; ignored on create). Omit to keep the current status. A later milestone change re-derives it.",
+            "enum": [
+              "NOT_STARTED",
+              "IN_PROGRESS",
+              "COMPLETED"
+            ],
+            "example": "IN_PROGRESS",
+            "type": "string"
+          },
+          "title": {
+            "example": "Spring Boot in Action",
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "LearningCardResponse": {
+        "description": "A learning card with its milestones, notes and computed progress",
+        "properties": {
+          "createdAt": {
+            "example": "2026-09-26T15:00:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "example": "https://example.com/course",
+            "type": "string"
+          },
+          "id": {
+            "example": 1,
+            "format": "int64",
+            "type": "integer"
+          },
+          "milestones": {
+            "description": "In display order",
+            "items": {
+              "$ref": "#/components/schemas/MilestoneResponse"
+            },
+            "type": "array"
+          },
+          "milestonesDone": {
+            "example": 1,
+            "format": "int32",
+            "type": "integer"
+          },
+          "milestonesTotal": {
+            "example": 2,
+            "format": "int32",
+            "type": "integer"
+          },
+          "notes": {
+            "description": "Newest first",
+            "items": {
+              "$ref": "#/components/schemas/NoteResponse"
+            },
+            "type": "array"
+          },
+          "progressPercent": {
+            "description": "milestonesDone ÷ milestonesTotal, 0–100; 0 when there are no milestones",
+            "example": 50,
+            "format": "int32",
+            "type": "integer"
+          },
+          "status": {
+            "description": "Derived from milestones (D-31) unless set manually since the last milestone change",
+            "enum": [
+              "NOT_STARTED",
+              "IN_PROGRESS",
+              "COMPLETED"
+            ],
+            "example": "IN_PROGRESS",
+            "type": "string"
+          },
+          "title": {
+            "example": "Spring Boot in Action",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "MilestoneRequest": {
+        "description": "Add or update a milestone of a learning card",
+        "properties": {
+          "done": {
+            "description": "Update only: mark done/not done. Omit to keep. Ignored on create.",
+            "example": true,
+            "type": "boolean"
+          },
+          "targetDate": {
+            "description": "Optional target date; null clears it on update",
+            "example": "2026-10-15",
+            "format": "date",
+            "type": "string"
+          },
+          "title": {
+            "example": "Finish chapter 1",
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "type": "object"
+      },
+      "MilestoneResponse": {
+        "description": "A milestone of a learning card",
+        "properties": {
+          "cardId": {
+            "example": 1,
+            "format": "int64",
+            "type": "integer"
+          },
+          "completedAt": {
+            "description": "Set while done (D-30)",
+            "example": "2026-09-26T15:00:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "done": {
+            "example": false,
+            "type": "boolean"
+          },
+          "id": {
+            "example": 3,
+            "format": "int64",
+            "type": "integer"
+          },
+          "position": {
+            "description": "Display order within the card, 0-based",
+            "example": 0,
+            "format": "int32",
+            "type": "integer"
+          },
+          "targetDate": {
+            "example": "2026-10-15",
+            "format": "date",
+            "type": "string"
+          },
+          "title": {
+            "example": "Finish chapter 1",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "NoteRequest": {
+        "description": "Add a note to a learning card",
+        "properties": {
+          "text": {
+            "example": "Chapter 3 explains auto-configuration well",
+            "maxLength": 5000,
+            "minLength": 0,
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "type": "object"
+      },
+      "NoteResponse": {
+        "description": "A note on a learning card",
+        "properties": {
+          "cardId": {
+            "example": 1,
+            "format": "int64",
+            "type": "integer"
+          },
+          "createdAt": {
+            "example": "2026-09-26T15:00:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "example": 5,
+            "format": "int64",
+            "type": "integer"
+          },
+          "text": {
+            "example": "Chapter 3 explains auto-configuration well",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "TaskRequest": {
         "description": "Create or update a task",
         "properties": {
@@ -258,7 +461,7 @@
     "/api/v1/habits": {
       "get": {
         "description": "All habits by id; filter with `active`.",
-        "operationId": "list_1",
+        "operationId": "list_2",
         "parameters": [
           {
             "description": "true = active only, false = deactivated only, omitted = all",
@@ -291,7 +494,7 @@
         ]
       },
       "post": {
-        "operationId": "create_1",
+        "operationId": "create_2",
         "requestBody": {
           "content": {
             "application/json": {
@@ -333,7 +536,7 @@
     "/api/v1/habits/{id}": {
       "delete": {
         "description": "Hard delete; its completions are deleted too (D-25).",
-        "operationId": "delete_1",
+        "operationId": "delete_2",
         "parameters": [
           {
             "in": "path",
@@ -359,7 +562,7 @@
         ]
       },
       "get": {
-        "operationId": "get_1",
+        "operationId": "get_2",
         "parameters": [
           {
             "in": "path",
@@ -389,7 +592,7 @@
         ]
       },
       "put": {
-        "operationId": "update_1",
+        "operationId": "update_2",
         "parameters": [
           {
             "in": "path",
@@ -672,6 +875,525 @@
         "summary": "Deactivate a habit",
         "tags": [
           "Habits"
+        ]
+      }
+    },
+    "/api/v1/learning-cards": {
+      "get": {
+        "description": "All cards by id, each with milestones and notes.",
+        "operationId": "list_1",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LearningCardResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "List learning cards",
+        "tags": [
+          "Learning"
+        ]
+      },
+      "post": {
+        "description": "Starts NOT_STARTED; `status` in the body is ignored.",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LearningCardRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Validation failed"
+          }
+        },
+        "summary": "Create a learning card",
+        "tags": [
+          "Learning"
+        ]
+      }
+    },
+    "/api/v1/learning-cards/{id}": {
+      "delete": {
+        "description": "Hard delete; its milestones and notes too (D-32).",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "404": {
+            "description": "Card not found"
+          }
+        },
+        "summary": "Delete a learning card",
+        "tags": [
+          "Learning"
+        ]
+      },
+      "get": {
+        "operationId": "get_1",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Card not found"
+          }
+        },
+        "summary": "Get a learning card",
+        "tags": [
+          "Learning"
+        ]
+      },
+      "put": {
+        "description": "Replaces title and description. An optional `status` sets it manually (D-31).",
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LearningCardRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Validation failed"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Card not found"
+          }
+        },
+        "summary": "Update a learning card",
+        "tags": [
+          "Learning"
+        ]
+      }
+    },
+    "/api/v1/learning-cards/{id}/milestones": {
+      "post": {
+        "description": "Appended last. Returns the updated card (status re-derived).",
+        "operationId": "addMilestone",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MilestoneRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Added; body is the updated card"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Validation failed"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Card not found"
+          }
+        },
+        "summary": "Add a milestone",
+        "tags": [
+          "Learning"
+        ]
+      }
+    },
+    "/api/v1/learning-cards/{id}/milestones/{milestoneId}": {
+      "delete": {
+        "description": "The card status is re-derived.",
+        "operationId": "removeMilestone",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "milestoneId",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Removed"
+          },
+          "404": {
+            "description": "Card not found, or milestone not on this card"
+          }
+        },
+        "summary": "Remove a milestone",
+        "tags": [
+          "Learning"
+        ]
+      },
+      "put": {
+        "description": "Replaces title and targetDate; optional `done` marks it. Returns the updated card.",
+        "operationId": "updateMilestone",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "milestoneId",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MilestoneRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Validation failed"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Card not found, or milestone not on this card"
+          }
+        },
+        "summary": "Update a milestone",
+        "tags": [
+          "Learning"
+        ]
+      }
+    },
+    "/api/v1/learning-cards/{id}/milestones/{milestoneId}/complete": {
+      "post": {
+        "description": "Sets `completedAt`. Returns the updated card.",
+        "operationId": "completeMilestone",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "milestoneId",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Card not found, or milestone not on this card"
+          }
+        },
+        "summary": "Complete a milestone",
+        "tags": [
+          "Learning"
+        ]
+      }
+    },
+    "/api/v1/learning-cards/{id}/milestones/{milestoneId}/uncomplete": {
+      "post": {
+        "description": "Clears `completedAt`. Returns the updated card.",
+        "operationId": "uncompleteMilestone",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "milestoneId",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "Card not found, or milestone not on this card"
+          }
+        },
+        "summary": "Un-complete a milestone",
+        "tags": [
+          "Learning"
+        ]
+      }
+    },
+    "/api/v1/learning-cards/{id}/notes": {
+      "post": {
+        "operationId": "addNote",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteResponse"
+                }
+              }
+            },
+            "description": "Added"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteResponse"
+                }
+              }
+            },
+            "description": "Validation failed"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteResponse"
+                }
+              }
+            },
+            "description": "Card not found"
+          }
+        },
+        "summary": "Add a note",
+        "tags": [
+          "Learning"
+        ]
+      }
+    },
+    "/api/v1/learning-cards/{id}/notes/{noteId}": {
+      "delete": {
+        "operationId": "removeNote",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "noteId",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Removed"
+          },
+          "404": {
+            "description": "Card not found, or note not on this card"
+          }
+        },
+        "summary": "Remove a note",
+        "tags": [
+          "Learning"
         ]
       }
     },
@@ -1064,6 +1786,10 @@
     {
       "description": "Recurring habits and their completions (FR-03, FR-04)",
       "name": "Habits"
+    },
+    {
+      "description": "Learning cards with milestones and notes (FR-05, FR-06)",
+      "name": "Learning"
     }
   ]
 }
