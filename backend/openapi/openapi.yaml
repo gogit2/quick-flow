@@ -36,12 +36,18 @@ paths:
           type: integer
           format: int64
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
         "404":
           description: Task not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/TaskResponse"
+                $ref: "#/components/schemas/ProblemDetail"
     put:
       tags:
       - Tasks
@@ -63,18 +69,24 @@ paths:
               $ref: "#/components/schemas/TaskRequest"
         required: true
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
         "400":
           description: Validation failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/TaskResponse"
+                $ref: "#/components/schemas/ProblemDetail"
         "404":
           description: Task not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/TaskResponse"
+                $ref: "#/components/schemas/ProblemDetail"
     delete:
       tags:
       - Tasks
@@ -93,6 +105,10 @@ paths:
           description: Deleted
         "404":
           description: Task not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/settings:
     get:
       tags:
@@ -105,7 +121,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/SettingsResponse"
     put:
@@ -122,12 +138,18 @@ paths:
               $ref: "#/components/schemas/SettingsRequest"
         required: true
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SettingsResponse"
         "400":
           description: Validation failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/SettingsResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/plans/{id}:
     get:
       tags:
@@ -142,12 +164,18 @@ paths:
           type: integer
           format: int64
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlanResponse"
         "404":
           description: Plan not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/PlanResponse"
+                $ref: "#/components/schemas/ProblemDetail"
     put:
       tags:
       - Plans
@@ -169,18 +197,24 @@ paths:
               $ref: "#/components/schemas/PlanRequest"
         required: true
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlanResponse"
         "400":
           description: Validation or business rule failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/PlanResponse"
+                $ref: "#/components/schemas/ProblemDetail"
         "404":
           description: Plan not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/PlanResponse"
+                $ref: "#/components/schemas/ProblemDetail"
     delete:
       tags:
       - Plans
@@ -199,6 +233,10 @@ paths:
           description: Deleted
         "404":
           description: Plan not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/learning-cards/{id}:
     get:
       tags:
@@ -213,12 +251,18 @@ paths:
           type: integer
           format: int64
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
         "404":
           description: Card not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/LearningCardResponse"
+                $ref: "#/components/schemas/ProblemDetail"
     put:
       tags:
       - Learning
@@ -240,18 +284,24 @@ paths:
               $ref: "#/components/schemas/LearningCardRequest"
         required: true
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
         "400":
           description: Validation failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/LearningCardResponse"
+                $ref: "#/components/schemas/ProblemDetail"
         "404":
           description: Card not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/LearningCardResponse"
+                $ref: "#/components/schemas/ProblemDetail"
     delete:
       tags:
       - Learning
@@ -270,6 +320,10 @@ paths:
           description: Deleted
         "404":
           description: Card not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/learning-cards/{id}/milestones/{milestoneId}:
     put:
       tags:
@@ -298,18 +352,24 @@ paths:
               $ref: "#/components/schemas/MilestoneRequest"
         required: true
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
         "400":
           description: Validation failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/LearningCardResponse"
+                $ref: "#/components/schemas/ProblemDetail"
         "404":
           description: "Card not found, or milestone not on this card"
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/LearningCardResponse"
+                $ref: "#/components/schemas/ProblemDetail"
     delete:
       tags:
       - Learning
@@ -334,6 +394,10 @@ paths:
           description: Removed
         "404":
           description: "Card not found, or milestone not on this card"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/habits/{id}:
     get:
       tags:
@@ -348,12 +412,18 @@ paths:
           type: integer
           format: int64
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HabitResponse"
         "404":
           description: Habit not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/HabitResponse"
+                $ref: "#/components/schemas/ProblemDetail"
     put:
       tags:
       - Habits
@@ -373,18 +443,24 @@ paths:
               $ref: "#/components/schemas/HabitRequest"
         required: true
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HabitResponse"
         "400":
           description: Validation failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/HabitResponse"
+                $ref: "#/components/schemas/ProblemDetail"
         "404":
           description: Habit not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/HabitResponse"
+                $ref: "#/components/schemas/ProblemDetail"
     delete:
       tags:
       - Habits
@@ -403,6 +479,10 @@ paths:
           description: Deleted
         "404":
           description: Habit not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/tasks:
     get:
       tags:
@@ -482,14 +562,20 @@ paths:
           - asc
           - desc
       responses:
-        "400":
-          description: "Invalid filter, sort or dir"
+        "200":
+          description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/TaskResponse"
+        "400":
+          description: "Invalid filter, sort or dir"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
     post:
       tags:
       - Tasks
@@ -506,15 +592,15 @@ paths:
         "201":
           description: Created
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/TaskResponse"
         "400":
           description: Validation failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/TaskResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/tasks/{id}/restore:
     post:
       tags:
@@ -529,12 +615,18 @@ paths:
           type: integer
           format: int64
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
         "404":
           description: Task not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/TaskResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/tasks/{id}/complete:
     post:
       tags:
@@ -550,12 +642,18 @@ paths:
           type: integer
           format: int64
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
         "404":
           description: Task not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/TaskResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/tasks/{id}/archive:
     post:
       tags:
@@ -571,12 +669,18 @@ paths:
           type: integer
           format: int64
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResponse"
         "404":
           description: Task not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/TaskResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/plans:
     get:
       tags:
@@ -597,14 +701,20 @@ paths:
           - IN_PROGRESS
           - COMPLETED
       responses:
-        "400":
-          description: Invalid status filter
+        "200":
+          description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/PlanResponse"
+        "400":
+          description: Invalid status filter
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
     post:
       tags:
       - Plans
@@ -622,15 +732,15 @@ paths:
         "201":
           description: Created
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/PlanResponse"
         "400":
           description: Validation or business rule failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/PlanResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/learning-cards:
     get:
       tags:
@@ -642,7 +752,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 type: array
                 items:
@@ -663,15 +773,15 @@ paths:
         "201":
           description: Created
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LearningCardResponse"
         "400":
           description: Validation failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/LearningCardResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/learning-cards/{id}/notes:
     post:
       tags:
@@ -695,21 +805,21 @@ paths:
         "201":
           description: Added
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/NoteResponse"
         "400":
           description: Validation failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/NoteResponse"
+                $ref: "#/components/schemas/ProblemDetail"
         "404":
           description: Card not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/NoteResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/learning-cards/{id}/milestones:
     post:
       tags:
@@ -734,21 +844,21 @@ paths:
         "201":
           description: Added; body is the updated card
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/LearningCardResponse"
         "400":
           description: Validation failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/LearningCardResponse"
+                $ref: "#/components/schemas/ProblemDetail"
         "404":
           description: Card not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/LearningCardResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/learning-cards/{id}/milestones/{milestoneId}/uncomplete:
     post:
       tags:
@@ -770,12 +880,18 @@ paths:
           type: integer
           format: int64
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
         "404":
           description: "Card not found, or milestone not on this card"
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/LearningCardResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/learning-cards/{id}/milestones/{milestoneId}/complete:
     post:
       tags:
@@ -797,12 +913,18 @@ paths:
           type: integer
           format: int64
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearningCardResponse"
         "404":
           description: "Card not found, or milestone not on this card"
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/LearningCardResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/habits:
     get:
       tags:
@@ -821,7 +943,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 type: array
                 items:
@@ -841,15 +963,15 @@ paths:
         "201":
           description: Created
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/HabitResponse"
         "400":
           description: Validation failed
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/HabitResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/habits/{id}/deactivate:
     post:
       tags:
@@ -868,9 +990,15 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/HabitResponse"
+        "404":
+          description: Habit not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/habits/{id}/completions:
     get:
       tags:
@@ -886,14 +1014,20 @@ paths:
           type: integer
           format: int64
       responses:
-        "404":
-          description: Habit not found
+        "200":
+          description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/CompletionResponse"
+        "404":
+          description: Habit not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
     post:
       tags:
       - Habits
@@ -916,27 +1050,27 @@ paths:
         "201":
           description: Completion recorded
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/CompletionResponse"
         "400":
           description: Date in the future
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/CompletionResponse"
+                $ref: "#/components/schemas/ProblemDetail"
         "404":
           description: Habit not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/CompletionResponse"
+                $ref: "#/components/schemas/ProblemDetail"
         "409":
           description: Already completed on that date
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/CompletionResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/habits/{id}/activate:
     post:
       tags:
@@ -954,9 +1088,15 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/HabitResponse"
+        "404":
+          description: Habit not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/plans/{id}/items/{itemId}:
     patch:
       tags:
@@ -986,18 +1126,24 @@ paths:
               $ref: "#/components/schemas/PlanItemDoneRequest"
         required: true
       responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlanResponse"
         "400":
           description: Missing done flag
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/PlanResponse"
+                $ref: "#/components/schemas/ProblemDetail"
         "404":
           description: Plan or item not found
           content:
-            '*/*':
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/PlanResponse"
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/plans/history:
     get:
       tags:
@@ -1010,7 +1156,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 type: array
                 items:
@@ -1029,7 +1175,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/DashboardResponse"
   /api/v1/learning-cards/{id}/notes/{noteId}:
@@ -1056,6 +1202,10 @@ paths:
           description: Removed
         "404":
           description: "Card not found, or note not on this card"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/habits/{id}/completions/{date}:
     delete:
       tags:
@@ -1080,6 +1230,10 @@ paths:
           description: Removed
         "404":
           description: "Habit not found, or not completed on that date"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
   /api/v1/habits/{id}/completions/today:
     delete:
       tags:
@@ -1098,6 +1252,10 @@ paths:
           description: Removed
         "404":
           description: "Habit not found, or not completed today"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
 components:
   schemas:
     TaskRequest:
@@ -1846,3 +2004,30 @@ components:
           description: "doneCount ÷ totalActive, rounded, 0–100; 0 when there are\
             \ no tasks (D-15)"
           example: 38
+    ProblemDetail:
+      type: object
+      description: RFC 7807 error body (D-05)
+      properties:
+        type:
+          type: string
+          example: about:blank
+        title:
+          type: string
+          example: Validation failed
+        status:
+          type: integer
+          format: int32
+          example: 400
+        detail:
+          type: string
+          example: One or more fields are invalid
+        instance:
+          type: string
+          example: /api/v1/tasks
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+          description: Field name → message; present on validation and business-rule
+            errors
+          example: "{title=Title is required}"

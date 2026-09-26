@@ -82,12 +82,14 @@ public class HabitController {
 
     @PostMapping("/{id}/deactivate")
     @Operation(summary = "Deactivate a habit", description = "Hidden from today's lists but kept.")
+    @ApiResponse(responseCode = "404", description = "Habit not found")
     public HabitResponse deactivate(@PathVariable Long id) {
         return respond(service.setActive(id, false));
     }
 
     @PostMapping("/{id}/activate")
     @Operation(summary = "Activate a habit")
+    @ApiResponse(responseCode = "404", description = "Habit not found")
     public HabitResponse activate(@PathVariable Long id) {
         return respond(service.setActive(id, true));
     }

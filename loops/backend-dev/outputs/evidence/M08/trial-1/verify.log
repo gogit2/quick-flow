@@ -1,0 +1,9 @@
+$ cd backend && ./mvnw verify   (filtered: Tests run / BUILD lines)
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0 -- in com.quickflow.plan.domain.PlanRulesTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0 -- in com.quickflow.common.time.AppTimeTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0 -- in com.quickflow.habit.domain.HabitRulesTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0 -- in com.quickflow.dashboard.domain.DashboardRulesTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0 -- in com.quickflow.task.domain.TaskRulesTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0 -- in com.quickflow.learning.domain.LearningRulesTest
+[INFO] Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS

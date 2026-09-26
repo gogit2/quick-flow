@@ -6,7 +6,7 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 8,
+  "iteration": 9,
   "current_milestone": null,
   "milestones": [
     {
@@ -97,21 +97,21 @@
       "id": "M08",
       "title": "Hardening",
       "file": "outputs/M08-hardening.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": ["M07"],
       "stories": [],
       "tasks_total": 4,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 4,
+      "trials": 1,
       "last_error": null
     }
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M07",
+    "milestone": "M08",
     "mode": "VERIFY",
-    "summary": "M07 T01-T05 built (V6 settings + GET/PUT /settings, DashboardRules + 5 tests, DashboardService, GET /dashboard); trial 1 PASS 51/51, regression green (M01-M07), jar published; A-10",
+    "summary": "M08 T01-T04 done (OpenApiCustomizer: 200s restored on 19 ops, 4xx as ProblemDetail, JSON content type; no bad-input 500s found; M08 suite; coverage updated); trial 1 PASS 254/254, regression green (M01-M08, 606 checks), jar published",
     "result": "ok"
   },
-  "updated_at": "2026-09-26T20:11:02+03:00"
+  "updated_at": "2026-09-26T20:17:08+03:00"
 }

@@ -1,0 +1,258 @@
+=== M08-hardening.sh ===
+PASS A1 api-docs 200
+PASS A1 every operation has a summary
+PASS A1 every operation has a tag
+PASS A1 every request body has a schema
+PASS A1 every operation declares a 2xx
+PASS A1 non-void 2xx responses are application/json
+PASS A1 every 4xx response is a ProblemDetail
+PASS A1 every write operation documents 400
+PASS A1 every {id} operation documents 404
+PASS A2 POST /tasks truncated JSON → 400
+PASS A2 POST /tasks truncated JSON → 400: ProblemDetail body
+PASS A2 POST /tasks garbage → 400
+PASS A2 POST /tasks garbage → 400: ProblemDetail body
+PASS A2 POST /tasks array body → 400
+PASS A2 POST /tasks array body → 400: ProblemDetail body
+PASS A2 POST /tasks text/plain → 415
+PASS A2 POST /tasks text/plain → 415: ProblemDetail body
+PASS A2 PUT /tasks/1 truncated JSON → 400
+PASS A2 PUT /tasks/1 truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /tasks/1 garbage → 400
+PASS A2 PUT /tasks/1 garbage → 400: ProblemDetail body
+PASS A2 PUT /tasks/1 array body → 400
+PASS A2 PUT /tasks/1 array body → 400: ProblemDetail body
+PASS A2 PUT /tasks/1 text/plain → 415
+PASS A2 PUT /tasks/1 text/plain → 415: ProblemDetail body
+PASS A2 POST /habits truncated JSON → 400
+PASS A2 POST /habits truncated JSON → 400: ProblemDetail body
+PASS A2 POST /habits garbage → 400
+PASS A2 POST /habits garbage → 400: ProblemDetail body
+PASS A2 POST /habits array body → 400
+PASS A2 POST /habits array body → 400: ProblemDetail body
+PASS A2 POST /habits text/plain → 415
+PASS A2 POST /habits text/plain → 415: ProblemDetail body
+PASS A2 PUT /habits/1 truncated JSON → 400
+PASS A2 PUT /habits/1 truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /habits/1 garbage → 400
+PASS A2 PUT /habits/1 garbage → 400: ProblemDetail body
+PASS A2 PUT /habits/1 array body → 400
+PASS A2 PUT /habits/1 array body → 400: ProblemDetail body
+PASS A2 PUT /habits/1 text/plain → 415
+PASS A2 PUT /habits/1 text/plain → 415: ProblemDetail body
+PASS A2 POST /habits/1/completions truncated JSON → 400
+PASS A2 POST /habits/1/completions truncated JSON → 400: ProblemDetail body
+PASS A2 POST /habits/1/completions garbage → 400
+PASS A2 POST /habits/1/completions garbage → 400: ProblemDetail body
+PASS A2 POST /habits/1/completions array body → 400
+PASS A2 POST /habits/1/completions array body → 400: ProblemDetail body
+PASS A2 POST /habits/1/completions text/plain → 415
+PASS A2 POST /habits/1/completions text/plain → 415: ProblemDetail body
+PASS A2 POST /learning-cards truncated JSON → 400
+PASS A2 POST /learning-cards truncated JSON → 400: ProblemDetail body
+PASS A2 POST /learning-cards garbage → 400
+PASS A2 POST /learning-cards garbage → 400: ProblemDetail body
+PASS A2 POST /learning-cards array body → 400
+PASS A2 POST /learning-cards array body → 400: ProblemDetail body
+PASS A2 POST /learning-cards text/plain → 415
+PASS A2 POST /learning-cards text/plain → 415: ProblemDetail body
+PASS A2 PUT /learning-cards/1 truncated JSON → 400
+PASS A2 PUT /learning-cards/1 truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/1 garbage → 400
+PASS A2 PUT /learning-cards/1 garbage → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/1 array body → 400
+PASS A2 PUT /learning-cards/1 array body → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/1 text/plain → 415
+PASS A2 PUT /learning-cards/1 text/plain → 415: ProblemDetail body
+PASS A2 POST /learning-cards/1/milestones truncated JSON → 400
+PASS A2 POST /learning-cards/1/milestones truncated JSON → 400: ProblemDetail body
+PASS A2 POST /learning-cards/1/milestones garbage → 400
+PASS A2 POST /learning-cards/1/milestones garbage → 400: ProblemDetail body
+PASS A2 POST /learning-cards/1/milestones array body → 400
+PASS A2 POST /learning-cards/1/milestones array body → 400: ProblemDetail body
+PASS A2 POST /learning-cards/1/milestones text/plain → 415
+PASS A2 POST /learning-cards/1/milestones text/plain → 415: ProblemDetail body
+PASS A2 PUT /learning-cards/1/milestones/1 truncated JSON → 400
+PASS A2 PUT /learning-cards/1/milestones/1 truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/1/milestones/1 garbage → 400
+PASS A2 PUT /learning-cards/1/milestones/1 garbage → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/1/milestones/1 array body → 400
+PASS A2 PUT /learning-cards/1/milestones/1 array body → 400: ProblemDetail body
+PASS A2 PUT /learning-cards/1/milestones/1 text/plain → 415
+PASS A2 PUT /learning-cards/1/milestones/1 text/plain → 415: ProblemDetail body
+PASS A2 POST /learning-cards/1/notes truncated JSON → 400
+PASS A2 POST /learning-cards/1/notes truncated JSON → 400: ProblemDetail body
+PASS A2 POST /learning-cards/1/notes garbage → 400
+PASS A2 POST /learning-cards/1/notes garbage → 400: ProblemDetail body
+PASS A2 POST /learning-cards/1/notes array body → 400
+PASS A2 POST /learning-cards/1/notes array body → 400: ProblemDetail body
+PASS A2 POST /learning-cards/1/notes text/plain → 415
+PASS A2 POST /learning-cards/1/notes text/plain → 415: ProblemDetail body
+PASS A2 POST /plans truncated JSON → 400
+PASS A2 POST /plans truncated JSON → 400: ProblemDetail body
+PASS A2 POST /plans garbage → 400
+PASS A2 POST /plans garbage → 400: ProblemDetail body
+PASS A2 POST /plans array body → 400
+PASS A2 POST /plans array body → 400: ProblemDetail body
+PASS A2 POST /plans text/plain → 415
+PASS A2 POST /plans text/plain → 415: ProblemDetail body
+PASS A2 PUT /plans/1 truncated JSON → 400
+PASS A2 PUT /plans/1 truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /plans/1 garbage → 400
+PASS A2 PUT /plans/1 garbage → 400: ProblemDetail body
+PASS A2 PUT /plans/1 array body → 400
+PASS A2 PUT /plans/1 array body → 400: ProblemDetail body
+PASS A2 PUT /plans/1 text/plain → 415
+PASS A2 PUT /plans/1 text/plain → 415: ProblemDetail body
+PASS A2 PATCH /plans/1/items/1 truncated JSON → 400
+PASS A2 PATCH /plans/1/items/1 truncated JSON → 400: ProblemDetail body
+PASS A2 PATCH /plans/1/items/1 garbage → 400
+PASS A2 PATCH /plans/1/items/1 garbage → 400: ProblemDetail body
+PASS A2 PATCH /plans/1/items/1 array body → 400
+PASS A2 PATCH /plans/1/items/1 array body → 400: ProblemDetail body
+PASS A2 PATCH /plans/1/items/1 text/plain → 415
+PASS A2 PATCH /plans/1/items/1 text/plain → 415: ProblemDetail body
+PASS A2 PUT /settings truncated JSON → 400
+PASS A2 PUT /settings truncated JSON → 400: ProblemDetail body
+PASS A2 PUT /settings garbage → 400
+PASS A2 PUT /settings garbage → 400: ProblemDetail body
+PASS A2 PUT /settings array body → 400
+PASS A2 PUT /settings array body → 400: ProblemDetail body
+PASS A2 PUT /settings text/plain → 415
+PASS A2 PUT /settings text/plain → 415: ProblemDetail body
+PASS A2 POST /tasks empty body → 400
+PASS A2 POST /tasks empty body → 400: ProblemDetail body
+PASS A2 PUT /tasks/1 empty body → 400
+PASS A2 PUT /tasks/1 empty body → 400: ProblemDetail body
+PASS A2 POST /habits empty body → 400
+PASS A2 POST /habits empty body → 400: ProblemDetail body
+PASS A2 POST /learning-cards empty body → 400
+PASS A2 POST /learning-cards empty body → 400: ProblemDetail body
+PASS A2 POST /plans empty body → 400
+PASS A2 POST /plans empty body → 400: ProblemDetail body
+PASS A2 PATCH /plans/1/items/1 empty body → 400
+PASS A2 PATCH /plans/1/items/1 empty body → 400: ProblemDetail body
+PASS A2 PUT /settings empty body → 400
+PASS A2 PUT /settings empty body → 400: ProblemDetail body
+PASS A2 plan estimatedDuration string → 400
+PASS A2 plan estimatedDuration string → 400: ProblemDetail body
+PASS A2 plan bad instant → 400
+PASS A2 plan bad instant → 400: ProblemDetail body
+PASS A2 plan item sourceId string → 400
+PASS A2 plan item sourceId string → 400: ProblemDetail body
+PASS A2 plan null item → 400
+PASS A2 plan null item → 400: ProblemDetail body
+PASS A2 plan items object → 400
+PASS A2 plan items object → 400: ProblemDetail body
+PASS A2 plan int overflow → 400
+PASS A2 plan int overflow → 400: ProblemDetail body
+PASS A2 item done non-boolean → 400
+PASS A2 item done non-boolean → 400: ProblemDetail body
+PASS A2 task impossible date → 400
+PASS A2 task impossible date → 400: ProblemDetail body
+PASS A2 task title array → 400
+PASS A2 task title array → 400: ProblemDetail body
+PASS A2 completion bad date → 400
+PASS A2 completion bad date → 400: ProblemDetail body
+PASS A2 settings flag non-boolean → 400
+PASS A2 settings flag non-boolean → 400: ProblemDetail body
+PASS A3 GET /tasks/abc → 400
+PASS A3 GET /tasks/abc → 400: ProblemDetail body
+PASS A3 PUT /tasks/abc → 400
+PASS A3 PUT /tasks/abc → 400: ProblemDetail body
+PASS A3 DELETE /tasks/abc → 400
+PASS A3 DELETE /tasks/abc → 400: ProblemDetail body
+PASS A3 GET /tasks/<overflow> → 400
+PASS A3 GET /tasks/<overflow> → 400: ProblemDetail body
+PASS A3 GET /tasks/<missing> → 404
+PASS A3 GET /tasks/<missing> → 404: ProblemDetail body
+PASS A3 GET /habits/abc → 400
+PASS A3 GET /habits/abc → 400: ProblemDetail body
+PASS A3 PUT /habits/abc → 400
+PASS A3 PUT /habits/abc → 400: ProblemDetail body
+PASS A3 DELETE /habits/abc → 400
+PASS A3 DELETE /habits/abc → 400: ProblemDetail body
+PASS A3 GET /habits/<overflow> → 400
+PASS A3 GET /habits/<overflow> → 400: ProblemDetail body
+PASS A3 GET /habits/<missing> → 404
+PASS A3 GET /habits/<missing> → 404: ProblemDetail body
+PASS A3 GET /plans/abc → 400
+PASS A3 GET /plans/abc → 400: ProblemDetail body
+PASS A3 PUT /plans/abc → 400
+PASS A3 PUT /plans/abc → 400: ProblemDetail body
+PASS A3 DELETE /plans/abc → 400
+PASS A3 DELETE /plans/abc → 400: ProblemDetail body
+PASS A3 GET /plans/<overflow> → 400
+PASS A3 GET /plans/<overflow> → 400: ProblemDetail body
+PASS A3 GET /plans/<missing> → 404
+PASS A3 GET /plans/<missing> → 404: ProblemDetail body
+PASS A3 GET /learning-cards/abc → 400
+PASS A3 GET /learning-cards/abc → 400: ProblemDetail body
+PASS A3 PUT /learning-cards/abc → 400
+PASS A3 PUT /learning-cards/abc → 400: ProblemDetail body
+PASS A3 DELETE /learning-cards/abc → 400
+PASS A3 DELETE /learning-cards/abc → 400: ProblemDetail body
+PASS A3 GET /learning-cards/<overflow> → 400
+PASS A3 GET /learning-cards/<overflow> → 400: ProblemDetail body
+PASS A3 GET /learning-cards/<missing> → 404
+PASS A3 GET /learning-cards/<missing> → 404: ProblemDetail body
+PASS A3 POST /tasks/abc/complete → 400
+PASS A3 POST /tasks/abc/complete → 400: ProblemDetail body
+PASS A3 POST /habits/abc/activate → 400
+PASS A3 POST /habits/abc/activate → 400: ProblemDetail body
+PASS A3 GET /habits/abc/completions → 400
+PASS A3 GET /habits/abc/completions → 400: ProblemDetail body
+PASS A3 DELETE completion bad date → 400
+PASS A3 DELETE completion bad date → 400: ProblemDetail body
+PASS A3 PATCH item xyz → 400
+PASS A3 PATCH item xyz → 400: ProblemDetail body
+PASS A3 complete milestone abc → 400
+PASS A3 complete milestone abc → 400: ProblemDetail body
+PASS A3 DELETE note abc → 400
+PASS A3 DELETE note abc → 400: ProblemDetail body
+PASS A3 unknown route → 404
+PASS A3 unknown route → 404: ProblemDetail body
+PASS A3 wrong method → 405
+PASS A3 wrong method → 405: ProblemDetail body
+PASS A4 task status NOPE → 400
+PASS A4 task status NOPE → 400: ProblemDetail body
+PASS A4 task priority URGENT → 400
+PASS A4 task priority URGENT → 400: ProblemDetail body
+PASS A4 task priority lowercase → 400
+PASS A4 task priority lowercase → 400: ProblemDetail body
+PASS A4 habit frequency HOURLY → 400
+PASS A4 habit frequency HOURLY → 400: ProblemDetail body
+PASS A4 learning status PAUSED → 400
+PASS A4 learning status PAUSED → 400: ProblemDetail body
+PASS A4 plan sourceType NOTE → 400
+PASS A4 plan sourceType NOTE → 400: ProblemDetail body
+PASS A4 settings defaultView CALENDAR → 400
+PASS A4 settings defaultView CALENDAR → 400: ProblemDetail body
+PASS A4 GET /tasks?status=NOPE → 400
+PASS A4 GET /tasks?status=NOPE → 400: ProblemDetail body
+PASS A4 GET /tasks?priority=NOPE → 400
+PASS A4 GET /tasks?priority=NOPE → 400: ProblemDetail body
+PASS A4 GET /tasks?sort=title → 400
+PASS A4 GET /tasks?sort=title → 400: ProblemDetail body
+PASS A4 GET /tasks?dir=up → 400
+PASS A4 GET /tasks?dir=up → 400: ProblemDetail body
+PASS A4 GET /tasks?dueDate=soon → 400
+PASS A4 GET /tasks?dueDate=soon → 400: ProblemDetail body
+PASS A4 GET /tasks?archived=maybe → 400
+PASS A4 GET /tasks?archived=maybe → 400: ProblemDetail body
+PASS A4 GET /habits?active=maybe → 400
+PASS A4 GET /habits?active=maybe → 400: ProblemDetail body
+PASS A4 GET /plans?status=NOPE → 400
+PASS A4 GET /plans?status=NOPE → 400: ProblemDetail body
+PASS A4 seeded task intact
+PASS A4 seeded plan intact
+PASS A5 GET /tasks 0.006988s < 0.5s
+PASS A5 GET /habits 0.004711s < 0.5s
+PASS A5 GET /learning-cards 0.005665s < 0.5s
+PASS A5 GET /plans 0.007433s < 0.5s
+PASS A5 GET /plans/history 0.006537s < 0.5s
+PASS A5 GET /dashboard 0.018655s < 0.5s
+PASS A5 GET /settings 0.003408s < 0.5s
+--- 254 passed, 0 failed
+
+REGRESSION PASSED: 1 suite(s)

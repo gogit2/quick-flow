@@ -760,6 +760,41 @@
         },
         "type": "object"
       },
+      "ProblemDetail": {
+        "description": "RFC 7807 error body (D-05)",
+        "properties": {
+          "detail": {
+            "example": "One or more fields are invalid",
+            "type": "string"
+          },
+          "errors": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Field name → message; present on validation and business-rule errors",
+            "example": "{title=Title is required}",
+            "type": "object"
+          },
+          "instance": {
+            "example": "/api/v1/tasks",
+            "type": "string"
+          },
+          "status": {
+            "example": 400,
+            "format": "int32",
+            "type": "integer"
+          },
+          "title": {
+            "example": "Validation failed",
+            "type": "string"
+          },
+          "type": {
+            "example": "about:blank",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "SettingsRequest": {
         "description": "Update the settings. Omitted flags or defaultView keep their current value (A-10)",
         "properties": {
@@ -957,7 +992,7 @@
         "responses": {
           "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DashboardResponse"
                 }
@@ -990,7 +1025,7 @@
         "responses": {
           "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "items": {
                     "$ref": "#/components/schemas/HabitResponse"
@@ -1022,7 +1057,7 @@
         "responses": {
           "201": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HabitResponse"
                 }
@@ -1032,9 +1067,9 @@
           },
           "400": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HabitResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1067,6 +1102,13 @@
             "description": "Deleted"
           },
           "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
             "description": "Habit not found"
           }
         },
@@ -1089,11 +1131,21 @@
           }
         ],
         "responses": {
-          "404": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HabitResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1129,11 +1181,21 @@
           "required": true
         },
         "responses": {
-          "400": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HabitResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1141,9 +1203,9 @@
           },
           "404": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HabitResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1173,13 +1235,23 @@
         "responses": {
           "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HabitResponse"
                 }
               }
             },
             "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Habit not found"
           }
         },
         "summary": "Activate a habit",
@@ -1204,14 +1276,24 @@
           }
         ],
         "responses": {
-          "404": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "items": {
                     "$ref": "#/components/schemas/CompletionResponse"
                   },
                   "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1249,7 +1331,7 @@
         "responses": {
           "201": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CompletionResponse"
                 }
@@ -1259,9 +1341,9 @@
           },
           "400": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CompletionResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1269,9 +1351,9 @@
           },
           "404": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CompletionResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1279,9 +1361,9 @@
           },
           "409": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CompletionResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1313,6 +1395,13 @@
             "description": "Removed"
           },
           "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
             "description": "Habit not found, or not completed today"
           }
         },
@@ -1350,6 +1439,13 @@
             "description": "Removed"
           },
           "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
             "description": "Habit not found, or not completed on that date"
           }
         },
@@ -1377,13 +1473,23 @@
         "responses": {
           "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HabitResponse"
                 }
               }
             },
             "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
+            "description": "Habit not found"
           }
         },
         "summary": "Deactivate a habit",
@@ -1399,7 +1505,7 @@
         "responses": {
           "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "items": {
                     "$ref": "#/components/schemas/LearningCardResponse"
@@ -1432,7 +1538,7 @@
         "responses": {
           "201": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LearningCardResponse"
                 }
@@ -1442,9 +1548,9 @@
           },
           "400": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LearningCardResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1477,6 +1583,13 @@
             "description": "Deleted"
           },
           "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
             "description": "Card not found"
           }
         },
@@ -1499,11 +1612,21 @@
           }
         ],
         "responses": {
-          "404": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1540,11 +1663,21 @@
           "required": true
         },
         "responses": {
-          "400": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1552,9 +1685,9 @@
           },
           "404": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LearningCardResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1595,7 +1728,7 @@
         "responses": {
           "201": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LearningCardResponse"
                 }
@@ -1605,9 +1738,9 @@
           },
           "400": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LearningCardResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1615,9 +1748,9 @@
           },
           "404": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LearningCardResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1659,6 +1792,13 @@
             "description": "Removed"
           },
           "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
             "description": "Card not found, or milestone not on this card"
           }
         },
@@ -1701,11 +1841,21 @@
           "required": true
         },
         "responses": {
-          "400": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1713,9 +1863,9 @@
           },
           "404": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LearningCardResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1753,11 +1903,21 @@
           }
         ],
         "responses": {
-          "404": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1795,11 +1955,21 @@
           }
         ],
         "responses": {
-          "404": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LearningCardResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1839,7 +2009,7 @@
         "responses": {
           "201": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NoteResponse"
                 }
@@ -1849,9 +2019,9 @@
           },
           "400": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NoteResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1859,9 +2029,9 @@
           },
           "404": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NoteResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1902,6 +2072,13 @@
             "description": "Removed"
           },
           "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
             "description": "Card not found, or note not on this card"
           }
         },
@@ -1932,14 +2109,24 @@
           }
         ],
         "responses": {
-          "400": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "items": {
                     "$ref": "#/components/schemas/PlanResponse"
                   },
                   "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1967,7 +2154,7 @@
         "responses": {
           "201": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PlanResponse"
                 }
@@ -1977,9 +2164,9 @@
           },
           "400": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PlanResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -1999,7 +2186,7 @@
         "responses": {
           "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "items": {
                     "$ref": "#/components/schemas/PlanResponse"
@@ -2037,6 +2224,13 @@
             "description": "Deleted"
           },
           "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
             "description": "Plan not found"
           }
         },
@@ -2059,11 +2253,21 @@
           }
         ],
         "responses": {
-          "404": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2100,11 +2304,21 @@
           "required": true
         },
         "responses": {
-          "400": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2112,9 +2326,9 @@
           },
           "404": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PlanResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2162,11 +2376,21 @@
           "required": true
         },
         "responses": {
-          "400": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2174,9 +2398,9 @@
           },
           "404": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PlanResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2196,7 +2420,7 @@
         "responses": {
           "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SettingsResponse"
                 }
@@ -2224,11 +2448,21 @@
           "required": true
         },
         "responses": {
-          "400": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SettingsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2347,14 +2581,24 @@
           }
         ],
         "responses": {
-          "400": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "items": {
                     "$ref": "#/components/schemas/TaskResponse"
                   },
                   "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2382,7 +2626,7 @@
         "responses": {
           "201": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskResponse"
                 }
@@ -2392,9 +2636,9 @@
           },
           "400": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TaskResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2427,6 +2671,13 @@
             "description": "Deleted"
           },
           "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            },
             "description": "Task not found"
           }
         },
@@ -2449,11 +2700,21 @@
           }
         ],
         "responses": {
-          "404": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2490,11 +2751,21 @@
           "required": true
         },
         "responses": {
-          "400": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2502,9 +2773,9 @@
           },
           "404": {
             "content": {
-              "*/*": {
+              "application/problem+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TaskResponse"
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2533,11 +2804,21 @@
           }
         ],
         "responses": {
-          "404": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2566,11 +2847,21 @@
           }
         ],
         "responses": {
-          "404": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
@@ -2598,11 +2889,21 @@
           }
         ],
         "responses": {
-          "404": {
+          "200": {
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
                 }
               }
             },
