@@ -1,0 +1,4 @@
+date,session_id,tool,purpose,prompt
+2026-09-26,37cd54d7-905c-4914-9673-26d669b48c5d,Claude Code (interactive),Learn the loop concept,"explain this in more detail with a practical example [loop infographic]"
+2026-09-26,37cd54d7-905c-4914-9673-26d669b48c5d,Claude Code (interactive),Agree on the approach,"Fine I'll give u a requirement files for a new feature which will be implmented using loops ... provide the required md files so it caould make the full feature"
+2026-09-26,37cd54d7-905c-4914-9673-26d669b48c5d,Claude Code (interactive),Design and scaffold the reusable loops,"/home/ahmoh/Documents/proj/Backend & Frontend DEVs Task One.txt + /home/ahmoh/Documents/proj/Task_PRD.md (stack: java spring boot and angular)"

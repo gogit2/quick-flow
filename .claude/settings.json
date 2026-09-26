@@ -1,0 +1,22 @@
+{
+  "enableAllProjectMcpServers": true,
+  "permissions": {
+    "allow": [
+      "Edit", "Write", "Read", "Glob", "Grep",
+      "mcp__playwright",
+      "Bash(./mvnw:*)", "Bash(mvn:*)", "Bash(java:*)", "Bash(cd backend && ./mvnw:*)",
+      "Bash(npm:*)", "Bash(npx:*)", "Bash(ng:*)", "Bash(node:*)", "Bash(cd frontend && npx:*)", "Bash(cd frontend && npm:*)",
+      "Bash(curl:*)", "Bash(jq:*)",
+      "Bash(scripts/backend.sh:*)", "Bash(scripts/frontend.sh:*)", "Bash(scripts/export-swagger.sh:*)",
+      "Bash(scripts/curl-regression.sh:*)", "Bash(BASE_URL=* scripts/curl-regression.sh:*)",
+      "Bash(bash loops/backend-dev/outputs/curl/:*)", "Bash(python3 scripts/loopctl.py:*)",
+      "Bash(git status:*)", "Bash(git add:*)", "Bash(git commit:*)", "Bash(git diff:*)", "Bash(git log:*)",
+      "Bash(date:*)", "Bash(ls:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(grep:*)", "Bash(find:*)",
+      "Bash(mkdir:*)", "Bash(cp:*)", "Bash(mv:*)", "Bash(chmod:*)", "Bash(touch:*)", "Bash(tee:*)", "Bash(wc:*)", "Bash(sort:*)",
+      "Bash(sed:*)", "Bash(echo:*)", "Bash(test:*)", "Bash(sha1sum:*)", "Bash(lsof:*)", "Bash(ps:*)"
+    ],
+    "deny": [
+      "Bash(git push:*)", "Bash(rm -rf /:*)", "Bash(rm -rf ~:*)", "Bash(sudo:*)"
+    ]
+  }
+}

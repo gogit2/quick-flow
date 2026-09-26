@@ -1,0 +1,14 @@
+# build output
+backend/target/
+backend/data/
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+# runtime (keep logs, prompts, sessions, playwright evidence — they are deliverables)
+run-artifacts/run/
+run-artifacts/data/
+run-artifacts/backend-latest.jar
+*.tmp
+.idea/
+.vscode/
+__pycache__/

@@ -1,0 +1,28 @@
+{
+  "loop": "orchestrator",
+  "status": "not_started",
+  "input": {
+    "type": "prd",
+    "path": "requirements/PRD.md",
+    "scope": "ALL"
+  },
+  "iteration": 0,
+  "current_milestone": null,
+  "milestones": [],
+  "blocked_reason": null,
+  "last_iteration": {
+    "milestone": null,
+    "mode": null,
+    "summary": null,
+    "result": null
+  },
+  "updated_at": null,
+  "dispatch": {
+    "mode": null,
+    "round": 0,
+    "loops": [
+      "backend-dev",
+      "frontend-dev"
+    ]
+  }
+}
