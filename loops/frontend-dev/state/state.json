@@ -1,20 +1,129 @@
 {
   "loop": "frontend-dev",
-  "status": "not_started",
+  "status": "in_progress",
   "input": {
     "type": "prd",
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 0,
-  "current_milestone": null,
-  "milestones": [],
+  "iteration": 2,
+  "current_milestone": "M01",
+  "milestones": [
+    {
+      "id": "M01",
+      "title": "App shell",
+      "file": "outputs/M01-shell.md",
+      "status": "done",
+      "depends_on": ["backend-dev:M01"],
+      "stories": [],
+      "tasks_total": 5,
+      "tasks_done": 5,
+      "trials": 1,
+      "last_error": null
+    },
+    {
+      "id": "M02",
+      "title": "Tasks page",
+      "file": "outputs/M02-tasks.md",
+      "status": "pending",
+      "depends_on": ["M01", "backend-dev:M02"],
+      "stories": ["US-TASK-01", "US-TASK-02", "US-TASK-03", "US-TASK-04", "US-TASK-05", "US-TASK-06", "US-TASK-07"],
+      "tasks_total": 6,
+      "tasks_done": 0,
+      "trials": 0,
+      "last_error": null
+    },
+    {
+      "id": "M03",
+      "title": "Habits page",
+      "file": "outputs/M03-habits.md",
+      "status": "pending",
+      "depends_on": ["M01", "backend-dev:M03"],
+      "stories": ["US-HABIT-01", "US-HABIT-02", "US-HABIT-03", "US-HABIT-04", "US-HABIT-05"],
+      "tasks_total": 5,
+      "tasks_done": 0,
+      "trials": 0,
+      "last_error": null
+    },
+    {
+      "id": "M04",
+      "title": "Learning Resources page",
+      "file": "outputs/M04-learning.md",
+      "status": "pending",
+      "depends_on": ["M01", "backend-dev:M04"],
+      "stories": ["US-LEARN-01", "US-LEARN-02", "US-LEARN-03", "US-LEARN-04", "US-LEARN-05"],
+      "tasks_total": 5,
+      "tasks_done": 0,
+      "trials": 0,
+      "last_error": null
+    },
+    {
+      "id": "M05",
+      "title": "Todo Plans: builder, list, progress, rest time",
+      "file": "outputs/M05-plans-core.md",
+      "status": "pending",
+      "depends_on": ["M02", "M03", "M04", "backend-dev:M05"],
+      "stories": ["US-PLAN-01", "US-PLAN-02", "US-PLAN-03", "US-PLAN-04", "US-PLAN-06", "US-PLAN-08", "US-PLAN-09"],
+      "tasks_total": 5,
+      "tasks_done": 0,
+      "trials": 0,
+      "last_error": null
+    },
+    {
+      "id": "M06",
+      "title": "Plan items, start notification, history",
+      "file": "outputs/M06-plan-items.md",
+      "status": "pending",
+      "depends_on": ["M05", "backend-dev:M06"],
+      "stories": ["US-PLAN-05", "US-PLAN-07", "US-PLAN-09", "US-PLAN-10"],
+      "tasks_total": 4,
+      "tasks_done": 0,
+      "trials": 0,
+      "last_error": null
+    },
+    {
+      "id": "M07",
+      "title": "Settings page",
+      "file": "outputs/M07-settings.md",
+      "status": "pending",
+      "depends_on": ["M01", "backend-dev:M07"],
+      "stories": [],
+      "tasks_total": 4,
+      "tasks_done": 0,
+      "trials": 0,
+      "last_error": null
+    },
+    {
+      "id": "M08",
+      "title": "Dashboard",
+      "file": "outputs/M08-dashboard.md",
+      "status": "pending",
+      "depends_on": ["M06", "M07", "backend-dev:M07"],
+      "stories": ["US-DASH-01", "US-DASH-02", "US-DASH-03", "US-DASH-04", "US-DASH-05", "US-DASH-06"],
+      "tasks_total": 6,
+      "tasks_done": 0,
+      "trials": 0,
+      "last_error": null
+    },
+    {
+      "id": "M09",
+      "title": "End-to-end journey and UX pass",
+      "file": "outputs/M09-e2e-journey.md",
+      "status": "pending",
+      "depends_on": ["M08"],
+      "stories": [],
+      "tasks_total": 3,
+      "tasks_done": 0,
+      "trials": 0,
+      "last_error": null
+    }
+  ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": null,
-    "mode": null,
-    "summary": null,
-    "result": null
+    "milestone": "M01",
+    "mode": "VERIFY",
+    "summary": "Built app shell (M01-T01..T05) and passed trial 1: 8/8 nav steps, no console errors, no 5xx",
+    "result": "ok"
   },
-  "updated_at": null
+  "updated_at": "2026-09-26T20:27:08+03:00"
 }
