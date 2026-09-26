@@ -335,6 +335,20 @@
         },
         "type": "object"
       },
+      "PlanItemDoneRequest": {
+        "description": "Mark a plan item done or not done",
+        "properties": {
+          "done": {
+            "description": "true = done (applies the BR-13 side effect), false = not done (source is not reverted)",
+            "example": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "done"
+        ],
+        "type": "object"
+      },
       "PlanItemRequest": {
         "description": "A plan item: an existing task, habit or learning card",
         "properties": {
@@ -1693,6 +1707,31 @@
         ]
       }
     },
+    "/api/v1/plans/history": {
+      "get": {
+        "description": "COMPLETED plans (derived status), most recent endDateTime first, with final progress (D-49).",
+        "operationId": "history",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PlanResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Plan history",
+        "tags": [
+          "Plans"
+        ]
+      }
+    },
     "/api/v1/plans/{id}": {
       "delete": {
         "description": "Hard delete of the plan and its items; sources are untouched.",
@@ -1798,6 +1837,68 @@
           }
         },
         "summary": "Update a plan",
+        "tags": [
+          "Plans"
+        ]
+      }
+    },
+    "/api/v1/plans/{id}/items/{itemId}": {
+      "patch": {
+        "description": "Returns the whole plan with recomputed progress and status (FR-08). Done: task → DONE, habit → completion for today (existing one ignored), learning → no change. Un-marking never reverts the source (BR-13, D-47).",
+        "operationId": "setItemDone",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "itemId",
+            "required": true,
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanItemDoneRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Missing done flag"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            },
+            "description": "Plan or item not found"
+          }
+        },
+        "summary": "Mark a plan item done or not done",
         "tags": [
           "Plans"
         ]

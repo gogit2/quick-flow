@@ -18,6 +18,8 @@ import com.quickflow.habit.domain.HabitFrequency;
 import com.quickflow.habit.domain.HabitRules;
 import com.quickflow.habit.repo.HabitCompletionRepository;
 import com.quickflow.habit.repo.HabitRepository;
+import com.quickflow.plan.domain.PlanSourceType;
+import com.quickflow.plan.repo.PlanItemRepository;
 
 @Service
 @Transactional
@@ -29,11 +31,14 @@ public class HabitService {
 
     private final HabitRepository habits;
     private final HabitCompletionRepository completions;
+    private final PlanItemRepository planItems;
     private final AppTime time;
 
-    public HabitService(HabitRepository habits, HabitCompletionRepository completions, AppTime time) {
+    public HabitService(HabitRepository habits, HabitCompletionRepository completions,
+            PlanItemRepository planItems, AppTime time) {
         this.habits = habits;
         this.completions = completions;
+        this.planItems = planItems;
         this.time = time;
     }
 
@@ -71,7 +76,9 @@ public class HabitService {
     }
 
     public void delete(Long id) {
-        habits.delete(find(id)); // completions cascade in the DB (D-25)
+        Habit habit = find(id);
+        planItems.deleteBySource(PlanSourceType.HABIT, habit.getId()); // D-48
+        habits.delete(habit); // completions cascade in the DB (D-25)
     }
 
     public HabitView setActive(Long id, boolean active) {
@@ -110,7 +117,7 @@ public class HabitService {
         return completions.findByHabitIdOrderByCompletionDateDesc(find(id).getId());
     }
 
-    /** D-47 (used by plan items in M06): complete for today, silently ignoring an existing completion. */
+    /** D-47 (used by plan items): complete for today, silently ignoring an existing completion. */
     public void recordCompletionIfAbsent(Long habitId, LocalDate today) {
         Habit habit = find(habitId);
         if (!completions.existsByHabitIdAndCompletionDate(habit.getId(), today)) {

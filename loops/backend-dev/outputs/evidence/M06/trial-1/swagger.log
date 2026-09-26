@@ -1,0 +1,39 @@
+exported 24 paths → backend/openapi/openapi.{json,yaml}
+GET	/api/v1/habits	List habits
+POST	/api/v1/habits	Create a habit
+DELETE	/api/v1/habits/{id}	Delete a habit
+GET	/api/v1/habits/{id}	Get a habit
+PUT	/api/v1/habits/{id}	Update a habit
+POST	/api/v1/habits/{id}/activate	Activate a habit
+GET	/api/v1/habits/{id}/completions	List a habit's completions
+POST	/api/v1/habits/{id}/completions	Complete a habit
+DELETE	/api/v1/habits/{id}/completions/today	Un-complete a habit for today
+DELETE	/api/v1/habits/{id}/completions/{date}	Remove a completion on a date
+POST	/api/v1/habits/{id}/deactivate	Deactivate a habit
+GET	/api/v1/learning-cards	List learning cards
+POST	/api/v1/learning-cards	Create a learning card
+DELETE	/api/v1/learning-cards/{id}	Delete a learning card
+GET	/api/v1/learning-cards/{id}	Get a learning card
+PUT	/api/v1/learning-cards/{id}	Update a learning card
+POST	/api/v1/learning-cards/{id}/milestones	Add a milestone
+DELETE	/api/v1/learning-cards/{id}/milestones/{milestoneId}	Remove a milestone
+PUT	/api/v1/learning-cards/{id}/milestones/{milestoneId}	Update a milestone
+POST	/api/v1/learning-cards/{id}/milestones/{milestoneId}/complete	Complete a milestone
+POST	/api/v1/learning-cards/{id}/milestones/{milestoneId}/uncomplete	Un-complete a milestone
+POST	/api/v1/learning-cards/{id}/notes	Add a note
+DELETE	/api/v1/learning-cards/{id}/notes/{noteId}	Remove a note
+GET	/api/v1/plans	List plans
+POST	/api/v1/plans	Create a plan
+GET	/api/v1/plans/history	Plan history
+DELETE	/api/v1/plans/{id}	Delete a plan
+GET	/api/v1/plans/{id}	Get a plan
+PUT	/api/v1/plans/{id}	Update a plan
+PATCH	/api/v1/plans/{id}/items/{itemId}	Mark a plan item done or not done
+GET	/api/v1/tasks	List and search tasks
+POST	/api/v1/tasks	Create a task
+DELETE	/api/v1/tasks/{id}	Delete a task
+GET	/api/v1/tasks/{id}	Get a task
+PUT	/api/v1/tasks/{id}	Update a task
+POST	/api/v1/tasks/{id}/archive	Archive a task
+POST	/api/v1/tasks/{id}/complete	Complete a task
+POST	/api/v1/tasks/{id}/restore	Restore an archived task

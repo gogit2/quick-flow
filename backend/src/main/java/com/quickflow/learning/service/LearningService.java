@@ -19,6 +19,8 @@ import com.quickflow.learning.domain.LearningStatus;
 import com.quickflow.learning.repo.LearningCardRepository;
 import com.quickflow.learning.repo.LearningMilestoneRepository;
 import com.quickflow.learning.repo.LearningNoteRepository;
+import com.quickflow.plan.domain.PlanSourceType;
+import com.quickflow.plan.repo.PlanItemRepository;
 
 @Service
 @Transactional
@@ -36,13 +38,15 @@ public class LearningService {
     private final LearningCardRepository cards;
     private final LearningMilestoneRepository milestones;
     private final LearningNoteRepository notes;
+    private final PlanItemRepository planItems;
     private final AppTime time;
 
     public LearningService(LearningCardRepository cards, LearningMilestoneRepository milestones,
-            LearningNoteRepository notes, AppTime time) {
+            LearningNoteRepository notes, PlanItemRepository planItems, AppTime time) {
         this.cards = cards;
         this.milestones = milestones;
         this.notes = notes;
+        this.planItems = planItems;
         this.time = time;
     }
 
@@ -86,7 +90,9 @@ public class LearningService {
     }
 
     public void delete(Long id) {
-        cards.delete(find(id)); // milestones and notes cascade in the DB (D-32)
+        LearningCard card = find(id);
+        planItems.deleteBySource(PlanSourceType.LEARNING_RESOURCE, card.getId()); // D-48
+        cards.delete(card); // milestones and notes cascade in the DB (D-32)
     }
 
     public CardView addMilestone(Long cardId, String title, LocalDate targetDate) {

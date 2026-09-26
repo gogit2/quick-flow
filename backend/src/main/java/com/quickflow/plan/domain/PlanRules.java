@@ -53,6 +53,24 @@ public final class PlanRules {
         }
     }
 
+    /**
+     * BR-13 / D-47: the side effect of setting an item to {@code done}. Task → DONE, habit → today's completion,
+     * learning → none. Un-marking ({@code done == false}) never reverts the source.
+     */
+    public static PlanItemEffect sideEffect(PlanSourceType type, boolean done) {
+        if (!done) {
+            return PlanItemEffect.NONE;
+        }
+        switch (type) {
+            case TASK:
+                return PlanItemEffect.COMPLETE_TASK;
+            case HABIT:
+                return PlanItemEffect.COMPLETE_HABIT_TODAY;
+            default:
+                return PlanItemEffect.NONE;
+        }
+    }
+
     /** D-41: list group rank — IN_PROGRESS first, then NOT_STARTED, then COMPLETED. */
     public static int groupRank(PlanStatus status) {
         switch (status) {

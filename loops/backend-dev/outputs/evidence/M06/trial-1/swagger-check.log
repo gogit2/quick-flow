@@ -1,0 +1,7 @@
+GET /api/v1/plans List plans
+POST /api/v1/plans Create a plan
+GET /api/v1/plans/history Plan history
+DELETE /api/v1/plans/{id} Delete a plan
+GET /api/v1/plans/{id} Get a plan
+PUT /api/v1/plans/{id} Update a plan
+PATCH /api/v1/plans/{id}/items/{itemId} Mark a plan item done or not done

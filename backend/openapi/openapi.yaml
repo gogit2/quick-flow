@@ -918,6 +918,64 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/HabitResponse"
+  /api/v1/plans/{id}/items/{itemId}:
+    patch:
+      tags:
+      - Plans
+      summary: Mark a plan item done or not done
+      description: "Returns the whole plan with recomputed progress and status (FR-08).\
+        \ Done: task → DONE, habit → completion for today (existing one ignored),\
+        \ learning → no change. Un-marking never reverts the source (BR-13, D-47)."
+      operationId: setItemDone
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlanItemDoneRequest"
+        required: true
+      responses:
+        "400":
+          description: Missing done flag
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PlanResponse"
+        "404":
+          description: Plan or item not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PlanResponse"
+  /api/v1/plans/history:
+    get:
+      tags:
+      - Plans
+      summary: Plan history
+      description: "COMPLETED plans (derived status), most recent endDateTime first,\
+        \ with final progress (D-49)."
+      operationId: history
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlanResponse"
   /api/v1/learning-cards/{id}/notes/{noteId}:
     delete:
       tags:
@@ -1517,3 +1575,14 @@ components:
           type: string
           format: date-time
           example: 2026-09-26T15:00:00Z
+    PlanItemDoneRequest:
+      type: object
+      description: Mark a plan item done or not done
+      properties:
+        done:
+          type: boolean
+          description: "true = done (applies the BR-13 side effect), false = not done\
+            \ (source is not reverted)"
+          example: true
+      required:
+      - done

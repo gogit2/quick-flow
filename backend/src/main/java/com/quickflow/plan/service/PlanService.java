@@ -50,12 +50,15 @@ public class PlanService {
     private final PlanRepository plans;
     private final PlanItemRepository items;
     private final PlanSourceResolver resolver;
+    private final PlanItemSideEffects sideEffects;
     private final AppTime time;
 
-    public PlanService(PlanRepository plans, PlanItemRepository items, PlanSourceResolver resolver, AppTime time) {
+    public PlanService(PlanRepository plans, PlanItemRepository items, PlanSourceResolver resolver,
+            PlanItemSideEffects sideEffects, AppTime time) {
         this.plans = plans;
         this.items = items;
         this.resolver = resolver;
+        this.sideEffects = sideEffects;
         this.time = time;
     }
 
@@ -127,6 +130,25 @@ public class PlanService {
 
     public void delete(Long id) {
         plans.delete(find(id)); // items cascade in the DB; sources are untouched (BR-14)
+    }
+
+    /** FR-08: mark one item done/not done; BR-13 side effects on done, never reverted (D-47). */
+    public PlanView setItemDone(Long planId, Long itemId, boolean done) {
+        Plan plan = find(planId);
+        PlanItem item = items.findByIdAndPlanId(itemId, plan.getId())
+                .orElseThrow(() -> new NotFoundException("Plan " + planId + " has no item " + itemId));
+        item.setDone(done);
+        items.saveAndFlush(item);
+        sideEffects.apply(item, done);
+        return view(plan);
+    }
+
+    /** D-49: COMPLETED plans (derived status), most recent end first. */
+    public List<PlanView> history() {
+        return list(PlanStatus.COMPLETED).stream()
+                .sorted(Comparator.<PlanView, Instant>comparing(v -> v.plan().getEndDateTime()).reversed()
+                        .thenComparing(v -> v.plan().getId(), Comparator.reverseOrder()))
+                .toList();
     }
 
     private Plan find(Long id) {

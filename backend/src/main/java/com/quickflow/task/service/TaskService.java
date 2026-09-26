@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.quickflow.common.error.BusinessRuleException;
 import com.quickflow.common.error.NotFoundException;
 import com.quickflow.common.time.AppTime;
+import com.quickflow.plan.domain.PlanSourceType;
+import com.quickflow.plan.repo.PlanItemRepository;
 import com.quickflow.task.domain.Task;
 import com.quickflow.task.domain.TaskPriority;
 import com.quickflow.task.domain.TaskRules;
@@ -36,10 +38,12 @@ public class TaskService {
     }
 
     private final TaskRepository tasks;
+    private final PlanItemRepository planItems;
     private final AppTime time;
 
-    public TaskService(TaskRepository tasks, AppTime time) {
+    public TaskService(TaskRepository tasks, PlanItemRepository planItems, AppTime time) {
         this.tasks = tasks;
+        this.planItems = planItems;
         this.time = time;
     }
 
@@ -81,10 +85,12 @@ public class TaskService {
     }
 
     public void delete(Long id) {
-        tasks.delete(find(id));
+        Task task = find(id);
+        planItems.deleteBySource(PlanSourceType.TASK, task.getId()); // D-48
+        tasks.delete(task);
     }
 
-    /** US-TASK-03. Also used by plan items in M06 (D-47). */
+    /** US-TASK-03. Also used by plan items (D-47); idempotent. */
     public Task complete(Long id) {
         Task task = find(id);
         TaskRules.applyStatus(task, TaskStatus.DONE, time.now());

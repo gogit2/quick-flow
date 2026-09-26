@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,6 +46,13 @@ public class PlanController {
         return service.list(status).stream().map(PlanMapper::toResponse).toList();
     }
 
+    @GetMapping("/history")
+    @Operation(summary = "Plan history",
+            description = "COMPLETED plans (derived status), most recent endDateTime first, with final progress (D-49).")
+    public List<PlanResponse> history() {
+        return service.history().stream().map(PlanMapper::toResponse).toList();
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Get a plan")
     @ApiResponse(responseCode = "404", description = "Plan not found")
@@ -69,6 +77,18 @@ public class PlanController {
     @ApiResponse(responseCode = "404", description = "Plan not found")
     public PlanResponse update(@PathVariable Long id, @Valid @RequestBody PlanRequest req) {
         return PlanMapper.toResponse(service.update(id, PlanMapper.toInput(req)));
+    }
+
+    @PatchMapping("/{id}/items/{itemId}")
+    @Operation(summary = "Mark a plan item done or not done",
+            description = "Returns the whole plan with recomputed progress and status (FR-08). Done: task → DONE, "
+                    + "habit → completion for today (existing one ignored), learning → no change. "
+                    + "Un-marking never reverts the source (BR-13, D-47).")
+    @ApiResponse(responseCode = "400", description = "Missing done flag")
+    @ApiResponse(responseCode = "404", description = "Plan or item not found")
+    public PlanResponse setItemDone(@PathVariable Long id, @PathVariable Long itemId,
+            @Valid @RequestBody PlanItemDoneRequest req) {
+        return PlanMapper.toResponse(service.setItemDone(id, itemId, req.done()));
     }
 
     @DeleteMapping("/{id}")

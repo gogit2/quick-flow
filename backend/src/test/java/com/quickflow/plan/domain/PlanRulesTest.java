@@ -77,4 +77,28 @@ class PlanRulesTest {
         assertThat(PlanRules.groupRank(PlanStatus.IN_PROGRESS)).isLessThan(PlanRules.groupRank(PlanStatus.NOT_STARTED));
         assertThat(PlanRules.groupRank(PlanStatus.NOT_STARTED)).isLessThan(PlanRules.groupRank(PlanStatus.COMPLETED));
     }
+
+    @Test
+    void markingLastItemDoneCompletesBeforeEndAndUnmarkingReopens() {
+        Instant during = at(Duration.ofMinutes(20));
+        assertThat(PlanRules.status(START, END, 2, 3, during)).isEqualTo(PlanStatus.IN_PROGRESS);
+        assertThat(PlanRules.status(START, END, 3, 3, during)).isEqualTo(PlanStatus.COMPLETED);
+        assertThat(PlanRules.remainingSeconds(PlanRules.status(START, END, 3, 3, during), END, during)).isNull();
+        assertThat(PlanRules.progressPercent(1, 3)).isEqualTo(33);
+        assertThat(PlanRules.status(START, END, 2, 3, during)).isEqualTo(PlanStatus.IN_PROGRESS);
+    }
+
+    @Test
+    void sideEffectPerSourceType() {
+        assertThat(PlanRules.sideEffect(PlanSourceType.TASK, true)).isEqualTo(PlanItemEffect.COMPLETE_TASK);
+        assertThat(PlanRules.sideEffect(PlanSourceType.HABIT, true)).isEqualTo(PlanItemEffect.COMPLETE_HABIT_TODAY);
+        assertThat(PlanRules.sideEffect(PlanSourceType.LEARNING_RESOURCE, true)).isEqualTo(PlanItemEffect.NONE);
+    }
+
+    @Test
+    void unmarkingNeverRevertsTheSource() {
+        for (PlanSourceType type : PlanSourceType.values()) {
+            assertThat(PlanRules.sideEffect(type, false)).isEqualTo(PlanItemEffect.NONE);
+        }
+    }
 }
