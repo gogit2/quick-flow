@@ -11,6 +11,10 @@ tags:
 - name: Tasks
   description: "Tasks: CRUD, complete, archive/restore, search and filters (FR-01,\
     \ FR-02)"
+- name: Dashboard
+  description: "Summary of tasks, habits, plans and learning (FR-09)"
+- name: Settings
+  description: Single-user application preferences (D-51)
 - name: Habits
   description: "Recurring habits and their completions (FR-03, FR-04)"
 - name: Plans
@@ -89,12 +93,47 @@ paths:
           description: Deleted
         "404":
           description: Task not found
+  /api/v1/settings:
+    get:
+      tags:
+      - Settings
+      summary: Get the settings
+      description: "Defaults: displayName Friend, notificationsEnabled true, browserNotifications\
+        \ false, defaultView DASHBOARD."
+      operationId: get_1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SettingsResponse"
+    put:
+      tags:
+      - Settings
+      summary: Update the settings
+      description: displayName is required (max 100). Omitted flags or defaultView
+        keep their value (A-10).
+      operationId: update_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SettingsRequest"
+        required: true
+      responses:
+        "400":
+          description: Validation failed
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SettingsResponse"
   /api/v1/plans/{id}:
     get:
       tags:
       - Plans
       summary: Get a plan
-      operationId: get_1
+      operationId: get_2
       parameters:
       - name: id
         in: path
@@ -115,7 +154,7 @@ paths:
       summary: Update a plan
       description: Replaces every field and the item list; kept sources keep their
         done flag. Status is recomputed.
-      operationId: update_1
+      operationId: update_2
       parameters:
       - name: id
         in: path
@@ -165,7 +204,7 @@ paths:
       tags:
       - Learning
       summary: Get a learning card
-      operationId: get_2
+      operationId: get_3
       parameters:
       - name: id
         in: path
@@ -186,7 +225,7 @@ paths:
       summary: Update a learning card
       description: Replaces title and description. An optional `status` sets it manually
         (D-31).
-      operationId: update_2
+      operationId: update_3
       parameters:
       - name: id
         in: path
@@ -300,7 +339,7 @@ paths:
       tags:
       - Habits
       summary: Get a habit
-      operationId: get_3
+      operationId: get_4
       parameters:
       - name: id
         in: path
@@ -319,7 +358,7 @@ paths:
       tags:
       - Habits
       summary: Update a habit
-      operationId: update_3
+      operationId: update_4
       parameters:
       - name: id
         in: path
@@ -976,6 +1015,23 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/PlanResponse"
+  /api/v1/dashboard:
+    get:
+      tags:
+      - Dashboard
+      summary: Get the dashboard
+      description: "One payload with every widget (D-50): greeting, today's/overdue/completed-today\
+        \ tasks, task completion %, today's habits, active and upcoming plans, learning\
+        \ snapshot. Computed at request time, so plan item changes show immediately\
+        \ (FR-08)."
+      operationId: get_5
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DashboardResponse"
   /api/v1/learning-cards/{id}/notes/{noteId}:
     delete:
       tags:
@@ -1136,6 +1192,59 @@ components:
           description: "dueDate is before today, status is not DONE, and the task\
             \ is not archived"
           example: false
+    SettingsRequest:
+      type: object
+      description: Update the settings. Omitted flags or defaultView keep their current
+        value (A-10)
+      properties:
+        displayName:
+          type: string
+          example: Ahmed
+          maxLength: 100
+          minLength: 0
+        notificationsEnabled:
+          type: boolean
+          example: true
+        browserNotifications:
+          type: boolean
+          example: false
+        defaultView:
+          type: string
+          enum:
+          - DASHBOARD
+          - TASKS
+          - HABITS
+          - LEARNING
+          - PLANS
+          - SETTINGS
+          example: DASHBOARD
+      required:
+      - displayName
+    SettingsResponse:
+      type: object
+      description: Application settings (D-51)
+      properties:
+        displayName:
+          type: string
+          description: Used in the dashboard greeting
+          example: Friend
+        notificationsEnabled:
+          type: boolean
+          example: true
+        browserNotifications:
+          type: boolean
+          example: false
+        defaultView:
+          type: string
+          description: Page opened at app start
+          enum:
+          - DASHBOARD
+          - TASKS
+          - HABITS
+          - LEARNING
+          - PLANS
+          - SETTINGS
+          example: DASHBOARD
     PlanItemRequest:
       type: object
       description: "A plan item: an existing task, habit or learning card"
@@ -1586,3 +1695,154 @@ components:
           example: true
       required:
       - done
+    DashboardCard:
+      type: object
+      description: A learning card summary
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        title:
+          type: string
+          example: Spring Boot in Action
+        milestonesDone:
+          type: integer
+          format: int32
+          example: 1
+        milestonesTotal:
+          type: integer
+          format: int32
+          example: 2
+        progressPercent:
+          type: integer
+          format: int32
+          example: 50
+    DashboardHabits:
+      type: object
+      description: Habit widgets
+      properties:
+        today:
+          type: array
+          description: Active daily habits plus active weekly habits not done this
+            week (D-24)
+          items:
+            $ref: "#/components/schemas/HabitResponse"
+        activeCount:
+          type: integer
+          format: int32
+          description: Active habits
+          example: 4
+        completedTodayCount:
+          type: integer
+          format: int32
+          description: Active habits with a completion today
+          example: 2
+    DashboardLearning:
+      type: object
+      description: Learning snapshot
+      properties:
+        byStatus:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+          description: Number of cards per status; every status is present
+          example:
+            NOT_STARTED: 2
+            IN_PROGRESS: 1
+            COMPLETED: 0
+        inProgress:
+          type: array
+          description: "IN_PROGRESS cards, by id"
+          items:
+            $ref: "#/components/schemas/DashboardCard"
+        milestonesCompletedLast7Days:
+          type: integer
+          format: int32
+          description: Milestones marked done in the last 7 days (D-30)
+          example: 3
+    DashboardPlans:
+      type: object
+      description: Plan widgets
+      properties:
+        active:
+          type: array
+          description: IN_PROGRESS plans with progress and remainingSeconds (BR-12)
+          items:
+            $ref: "#/components/schemas/PlanResponse"
+        upcoming:
+          type: array
+          description: Next NOT_STARTED plans by startDateTime (max 5)
+          items:
+            $ref: "#/components/schemas/PlanResponse"
+        activeCount:
+          type: integer
+          format: int32
+          example: 1
+    DashboardResponse:
+      type: object
+      description: "Every dashboard widget, computed from live data at serverTime\
+        \ (FR-09, D-50)"
+      properties:
+        greeting:
+          type: string
+          description: "\"Good morning/afternoon/evening, {displayName}\" in the app\
+            \ zone (D-52, A-02)"
+          example: "Good morning, Friend"
+        displayName:
+          type: string
+          description: From settings
+          example: Friend
+        serverTime:
+          type: string
+          format: date-time
+          example: 2026-09-26T08:30:00Z
+        today:
+          type: string
+          format: date
+          description: Today in the app zone
+          example: 2026-09-26
+        tasks:
+          $ref: "#/components/schemas/DashboardTasks"
+        habits:
+          $ref: "#/components/schemas/DashboardHabits"
+        plans:
+          $ref: "#/components/schemas/DashboardPlans"
+        learning:
+          $ref: "#/components/schemas/DashboardLearning"
+    DashboardTasks:
+      type: object
+      description: Task widgets. Archived tasks are ignored everywhere
+      properties:
+        dueToday:
+          type: array
+          description: "dueDate = today, any status, by id"
+          items:
+            $ref: "#/components/schemas/TaskResponse"
+        overdue:
+          type: array
+          description: "Overdue tasks (D-12), by dueDate"
+          items:
+            $ref: "#/components/schemas/TaskResponse"
+        completedToday:
+          type: array
+          description: "DONE with completedAt today, newest first"
+          items:
+            $ref: "#/components/schemas/TaskResponse"
+        totalActive:
+          type: integer
+          format: int32
+          description: All non-archived tasks
+          example: 8
+        doneCount:
+          type: integer
+          format: int32
+          description: Non-archived DONE tasks
+          example: 3
+        completionPercent:
+          type: integer
+          format: int32
+          description: "doneCount ÷ totalActive, rounded, 0–100; 0 when there are\
+            \ no tasks (D-15)"
+          example: 38

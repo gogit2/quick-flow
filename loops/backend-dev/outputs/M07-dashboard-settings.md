@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Loop | backend-dev |
-| Status | pending |
+| Status | done |
 | Depends on | M06 |
 | Stories | US-DASH-01, US-DASH-02, US-DASH-03, US-DASH-04, US-DASH-05, US-DASH-06 |
 | Requirements | FR-09, FR-08 (dashboard reflects item changes), D-15, D-24, D-50, D-51, D-52 |
@@ -23,11 +23,11 @@ One `GET /api/v1/dashboard` payload with every widget the UI needs, computed fro
 - `settings/`: `V6__settings.sql` table `app_settings(id=1, display_name varchar(100), notifications_enabled, browser_notifications, default_view)` seeded with defaults; `GET/PUT /api/v1/settings` (D-51); `defaultView` enum `DASHBOARD, TASKS, HABITS, LEARNING, PLANS, SETTINGS`.
 
 ## 3. Tasks
-- [ ] M07-T01 `V6__settings.sql` + `Settings` entity/repo/service/controller + Swagger (D-51)
-- [ ] M07-T02 `DashboardRules` (greeting, completion %, today's habits) + unit tests with fixed Clock
-- [ ] M07-T03 `DashboardService` aggregation (tasks, habits, plans, learning)
-- [ ] M07-T04 `DashboardController` + response records + Swagger
-- [ ] M07-T05 Curl suite `outputs/curl/M07-dashboard-settings.sh` (§4)
+- [x] M07-T01 `V6__settings.sql` + `Settings` entity/repo/service/controller + Swagger (D-51) — `settings/` domain (Settings, DefaultView), repo, service, api (controller, request, response); A-10
+- [x] M07-T02 `DashboardRules` (greeting, completion %, today's habits) + unit tests with fixed Clock — `dashboard/domain/DashboardRules.java`, `DashboardRulesTest` (5 tests; also zone-aware "completed today" and 7-day milestone window)
+- [x] M07-T03 `DashboardService` aggregation (tasks, habits, plans, learning) — `dashboard/service/DashboardService.java`
+- [x] M07-T04 `DashboardController` + response records + Swagger — `dashboard/api/DashboardController.java`, `DashboardResponse.java` (nested widget records); Task/Habit/PlanMapper made public for reuse
+- [x] M07-T05 Curl suite `outputs/curl/M07-dashboard-settings.sh` (§4)
 
 ## 4. Acceptance checks
 Checks are relative (before/after deltas) because the regression DB holds data from earlier suites.
@@ -47,5 +47,23 @@ Regression: M01–M06 suites stay green.
 
 ## 5. Verification trials
 <!-- One section per trial, appended by VERIFY. Maximum 3 trials. -->
+
+### Trial 1 (2026-09-26T20:11+03:00): PASS
+Commands: `./mvnw -q verify` → `scripts/backend.sh start-dev` → `scripts/export-swagger.sh` → `scripts/curl-regression.sh M07` → `scripts/curl-regression.sh` → `scripts/backend.sh stop-dev`.
+
+| Check | Result |
+|---|---|
+| A1 settings GET/PUT/validation (101 chars, bad enum, blank → 400) | pass |
+| A2 greeting "Good …, {displayName}" | pass |
+| A3 dueToday / overdue / archived hidden | pass |
+| A4 completedToday + completionPercent matches GET /tasks | pass |
+| A5 today's habits, doneToday, completedTodayCount +1, weekly-done hidden, deactivated absent | pass |
+| A6 active plan remainingSeconds > 0, upcoming, progress 0 → 50 after PATCH | pass |
+| A7 milestonesCompletedLast7Days +1, byStatus matches GET /learning-cards | pass |
+| A8 DashboardRulesTest 5/5 (33/33 total) | pass |
+| Regression M01–M07 (352 checks) | pass |
+| Swagger: GET /dashboard, GET+PUT /settings documented with summaries | pass |
+
+Evidence: `outputs/evidence/M07/trial-1/{verify,curl-M07,regression,swagger-check}.log`. Jar published.
 
 ## 6. Notes / Blocked

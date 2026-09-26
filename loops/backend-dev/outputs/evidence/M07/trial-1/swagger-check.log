@@ -1,0 +1,3 @@
+GET /api/v1/dashboard Get the dashboard
+GET /api/v1/settings Get the settings
+PUT /api/v1/settings Update the settings

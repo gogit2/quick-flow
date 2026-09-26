@@ -39,6 +39,202 @@
         },
         "type": "object"
       },
+      "DashboardCard": {
+        "description": "A learning card summary",
+        "properties": {
+          "id": {
+            "example": 1,
+            "format": "int64",
+            "type": "integer"
+          },
+          "milestonesDone": {
+            "example": 1,
+            "format": "int32",
+            "type": "integer"
+          },
+          "milestonesTotal": {
+            "example": 2,
+            "format": "int32",
+            "type": "integer"
+          },
+          "progressPercent": {
+            "example": 50,
+            "format": "int32",
+            "type": "integer"
+          },
+          "title": {
+            "example": "Spring Boot in Action",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DashboardHabits": {
+        "description": "Habit widgets",
+        "properties": {
+          "activeCount": {
+            "description": "Active habits",
+            "example": 4,
+            "format": "int32",
+            "type": "integer"
+          },
+          "completedTodayCount": {
+            "description": "Active habits with a completion today",
+            "example": 2,
+            "format": "int32",
+            "type": "integer"
+          },
+          "today": {
+            "description": "Active daily habits plus active weekly habits not done this week (D-24)",
+            "items": {
+              "$ref": "#/components/schemas/HabitResponse"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "DashboardLearning": {
+        "description": "Learning snapshot",
+        "properties": {
+          "byStatus": {
+            "additionalProperties": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "description": "Number of cards per status; every status is present",
+            "example": {
+              "COMPLETED": 0,
+              "IN_PROGRESS": 1,
+              "NOT_STARTED": 2
+            },
+            "type": "object"
+          },
+          "inProgress": {
+            "description": "IN_PROGRESS cards, by id",
+            "items": {
+              "$ref": "#/components/schemas/DashboardCard"
+            },
+            "type": "array"
+          },
+          "milestonesCompletedLast7Days": {
+            "description": "Milestones marked done in the last 7 days (D-30)",
+            "example": 3,
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "DashboardPlans": {
+        "description": "Plan widgets",
+        "properties": {
+          "active": {
+            "description": "IN_PROGRESS plans with progress and remainingSeconds (BR-12)",
+            "items": {
+              "$ref": "#/components/schemas/PlanResponse"
+            },
+            "type": "array"
+          },
+          "activeCount": {
+            "example": 1,
+            "format": "int32",
+            "type": "integer"
+          },
+          "upcoming": {
+            "description": "Next NOT_STARTED plans by startDateTime (max 5)",
+            "items": {
+              "$ref": "#/components/schemas/PlanResponse"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "DashboardResponse": {
+        "description": "Every dashboard widget, computed from live data at serverTime (FR-09, D-50)",
+        "properties": {
+          "displayName": {
+            "description": "From settings",
+            "example": "Friend",
+            "type": "string"
+          },
+          "greeting": {
+            "description": "\"Good morning/afternoon/evening, {displayName}\" in the app zone (D-52, A-02)",
+            "example": "Good morning, Friend",
+            "type": "string"
+          },
+          "habits": {
+            "$ref": "#/components/schemas/DashboardHabits"
+          },
+          "learning": {
+            "$ref": "#/components/schemas/DashboardLearning"
+          },
+          "plans": {
+            "$ref": "#/components/schemas/DashboardPlans"
+          },
+          "serverTime": {
+            "example": "2026-09-26T08:30:00Z",
+            "format": "date-time",
+            "type": "string"
+          },
+          "tasks": {
+            "$ref": "#/components/schemas/DashboardTasks"
+          },
+          "today": {
+            "description": "Today in the app zone",
+            "example": "2026-09-26",
+            "format": "date",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DashboardTasks": {
+        "description": "Task widgets. Archived tasks are ignored everywhere",
+        "properties": {
+          "completedToday": {
+            "description": "DONE with completedAt today, newest first",
+            "items": {
+              "$ref": "#/components/schemas/TaskResponse"
+            },
+            "type": "array"
+          },
+          "completionPercent": {
+            "description": "doneCount ÷ totalActive, rounded, 0–100; 0 when there are no tasks (D-15)",
+            "example": 38,
+            "format": "int32",
+            "type": "integer"
+          },
+          "doneCount": {
+            "description": "Non-archived DONE tasks",
+            "example": 3,
+            "format": "int32",
+            "type": "integer"
+          },
+          "dueToday": {
+            "description": "dueDate = today, any status, by id",
+            "items": {
+              "$ref": "#/components/schemas/TaskResponse"
+            },
+            "type": "array"
+          },
+          "overdue": {
+            "description": "Overdue tasks (D-12), by dueDate",
+            "items": {
+              "$ref": "#/components/schemas/TaskResponse"
+            },
+            "type": "array"
+          },
+          "totalActive": {
+            "description": "All non-archived tasks",
+            "example": 8,
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
       "HabitRequest": {
         "description": "Create or update a habit",
         "properties": {
@@ -564,6 +760,73 @@
         },
         "type": "object"
       },
+      "SettingsRequest": {
+        "description": "Update the settings. Omitted flags or defaultView keep their current value (A-10)",
+        "properties": {
+          "browserNotifications": {
+            "example": false,
+            "type": "boolean"
+          },
+          "defaultView": {
+            "enum": [
+              "DASHBOARD",
+              "TASKS",
+              "HABITS",
+              "LEARNING",
+              "PLANS",
+              "SETTINGS"
+            ],
+            "example": "DASHBOARD",
+            "type": "string"
+          },
+          "displayName": {
+            "example": "Ahmed",
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "notificationsEnabled": {
+            "example": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "displayName"
+        ],
+        "type": "object"
+      },
+      "SettingsResponse": {
+        "description": "Application settings (D-51)",
+        "properties": {
+          "browserNotifications": {
+            "example": false,
+            "type": "boolean"
+          },
+          "defaultView": {
+            "description": "Page opened at app start",
+            "enum": [
+              "DASHBOARD",
+              "TASKS",
+              "HABITS",
+              "LEARNING",
+              "PLANS",
+              "SETTINGS"
+            ],
+            "example": "DASHBOARD",
+            "type": "string"
+          },
+          "displayName": {
+            "description": "Used in the dashboard greeting",
+            "example": "Friend",
+            "type": "string"
+          },
+          "notificationsEnabled": {
+            "example": true,
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "TaskRequest": {
         "description": "Create or update a task",
         "properties": {
@@ -687,6 +950,28 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/dashboard": {
+      "get": {
+        "description": "One payload with every widget (D-50): greeting, today's/overdue/completed-today tasks, task completion %, today's habits, active and upcoming plans, learning snapshot. Computed at request time, so plan item changes show immediately (FR-08).",
+        "operationId": "get_5",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get the dashboard",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
     "/api/v1/habits": {
       "get": {
         "description": "All habits by id; filter with `active`.",
@@ -791,7 +1076,7 @@
         ]
       },
       "get": {
-        "operationId": "get_3",
+        "operationId": "get_4",
         "parameters": [
           {
             "in": "path",
@@ -821,7 +1106,7 @@
         ]
       },
       "put": {
-        "operationId": "update_3",
+        "operationId": "update_4",
         "parameters": [
           {
             "in": "path",
@@ -1201,7 +1486,7 @@
         ]
       },
       "get": {
-        "operationId": "get_2",
+        "operationId": "get_3",
         "parameters": [
           {
             "in": "path",
@@ -1232,7 +1517,7 @@
       },
       "put": {
         "description": "Replaces title and description. An optional `status` sets it manually (D-31).",
-        "operationId": "update_2",
+        "operationId": "update_3",
         "parameters": [
           {
             "in": "path",
@@ -1761,7 +2046,7 @@
         ]
       },
       "get": {
-        "operationId": "get_1",
+        "operationId": "get_2",
         "parameters": [
           {
             "in": "path",
@@ -1792,7 +2077,7 @@
       },
       "put": {
         "description": "Replaces every field and the item list; kept sources keep their done flag. Status is recomputed.",
-        "operationId": "update_1",
+        "operationId": "update_2",
         "parameters": [
           {
             "in": "path",
@@ -1901,6 +2186,58 @@
         "summary": "Mark a plan item done or not done",
         "tags": [
           "Plans"
+        ]
+      }
+    },
+    "/api/v1/settings": {
+      "get": {
+        "description": "Defaults: displayName Friend, notificationsEnabled true, browserNotifications false, defaultView DASHBOARD.",
+        "operationId": "get_1",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get the settings",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "description": "displayName is required (max 100). Omitted flags or defaultView keep their value (A-10).",
+        "operationId": "update_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsResponse"
+                }
+              }
+            },
+            "description": "Validation failed"
+          }
+        },
+        "summary": "Update the settings",
+        "tags": [
+          "Settings"
         ]
       }
     },
@@ -2289,6 +2626,14 @@
     {
       "description": "Tasks: CRUD, complete, archive/restore, search and filters (FR-01, FR-02)",
       "name": "Tasks"
+    },
+    {
+      "description": "Summary of tasks, habits, plans and learning (FR-09)",
+      "name": "Dashboard"
+    },
+    {
+      "description": "Single-user application preferences (D-51)",
+      "name": "Settings"
     },
     {
       "description": "Recurring habits and their completions (FR-03, FR-04)",

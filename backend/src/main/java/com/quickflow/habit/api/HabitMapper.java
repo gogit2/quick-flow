@@ -8,12 +8,12 @@ import com.quickflow.habit.domain.HabitCompletion;
 import com.quickflow.habit.domain.HabitRules;
 import com.quickflow.habit.service.HabitService.HabitView;
 
-final class HabitMapper {
+public final class HabitMapper {
 
     private HabitMapper() {
     }
 
-    static HabitResponse toResponse(HabitView view, LocalDate today) {
+    public static HabitResponse toResponse(HabitView view, LocalDate today) {
         Habit h = view.habit();
         List<LocalDate> dates = view.completionDates();
         return new HabitResponse(

@@ -10,7 +10,7 @@ import com.quickflow.plan.service.PlanService.PlanView;
 import com.quickflow.plan.service.PlanSourceResolver.SourceInfo;
 import com.quickflow.plan.service.PlanSourceResolver.SourceKey;
 
-final class PlanMapper {
+public final class PlanMapper {
 
     private PlanMapper() {
     }
@@ -21,7 +21,7 @@ final class PlanMapper {
                 req.items().stream().map(i -> new SourceKey(i.sourceType(), i.sourceId())).toList());
     }
 
-    static PlanResponse toResponse(PlanView view) {
+    public static PlanResponse toResponse(PlanView view) {
         Plan p = view.plan();
         List<PlanItem> items = view.items();
         int done = (int) items.stream().filter(PlanItem::isDone).count();

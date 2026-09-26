@@ -1,0 +1,9 @@
+$ cd backend && ./mvnw -q verify     -> exit 0 (no output in quiet mode)
+surefire:
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0 -- com.quickflow.task.domain.TaskRulesTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0 -- com.quickflow.habit.domain.HabitRulesTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0 -- com.quickflow.common.time.AppTimeTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0 -- com.quickflow.learning.domain.LearningRulesTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0 -- com.quickflow.dashboard.domain.DashboardRulesTest
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0 -- com.quickflow.plan.domain.PlanRulesTest
+Total: 33 tests, 0 failures
