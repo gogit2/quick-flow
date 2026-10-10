@@ -38,3 +38,5 @@ Append-only. One row per action (see LOOP_PROTOCOL §6).
 | 2026-10-10T19:09:35+03:00 | 7 | M06 | VERIFY | trial 1: build green, S1–S4 13/13 ✅ (start notification fired within 3 s of start, no repeat after reload), M01–M05 smoke ✅, no console errors, no 5xx; M06 done | ok |
 | 2026-10-10T19:21:32+03:00 | 8 | M07 | BUILD | M07-T01..T04 done (settings model/API/store synced to notification prefs, default-view root guard, settings form with permission request + hint, scenario file) | ok |
 | 2026-10-10T19:21:32+03:00 | 8 | M07 | VERIFY | trial 1: build green, S1–S5 14/14 ✅, M01–M06 smoke ✅, no console errors, no 5xx; M07 done | ok |
+| 2026-10-10T19:28:21+03:00 | 9 | M08 | BUILD | M08-T01..T06 done (dashboard model/API, greeting + metric cards, today/overdue/completed tasks, today's habits toggle, active/upcoming plans with rest time, learning snapshot, quick add, scenario file) | ok |
+| 2026-10-10T19:28:21+03:00 | 9 | M08 | VERIFY | trial 1: build green, S1–S5 ✅, M01–M07 smoke ✅, no console errors, no 5xx; M08 done | ok |

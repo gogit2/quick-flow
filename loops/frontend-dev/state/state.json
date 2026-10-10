@@ -6,8 +6,8 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 8,
-  "current_milestone": "M07",
+  "iteration": 9,
+  "current_milestone": "M09",
   "milestones": [
     {
       "id": "M01",
@@ -152,7 +152,7 @@
       "id": "M08",
       "title": "Dashboard",
       "file": "outputs/M08-dashboard.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": [
         "M06",
         "M07",
@@ -167,8 +167,8 @@
         "US-DASH-06"
       ],
       "tasks_total": 6,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 6,
+      "trials": 1,
       "last_error": null
     },
     {
@@ -188,10 +188,10 @@
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M07",
+    "milestone": "M08",
     "mode": "VERIFY",
-    "summary": "M07 built (T01–T04) and trial 1 PASS: S1–S5 14/14 incl. default-view redirect and reminders-off check, M01–M06 smoke ✅, no console errors, no 5xx",
+    "summary": "M08 built (T01–T06) and trial 1 PASS: S1–S5 incl. quick add, overdue, habit toggle, live plan progress and learning snapshot; M01–M07 smoke ✅, no console errors, no 5xx",
     "result": "ok"
   },
-  "updated_at": "2026-10-10T19:21:32+03:00"
+  "updated_at": "2026-10-10T19:28:21+03:00"
 }
