@@ -51,7 +51,8 @@ case "${1:-}" in
   stop-dev)     stop backend-dev ;;
   start-stable) start backend-stable 8080 "$JAR_STABLE" "$ROOT/run-artifacts/data/stable" "$([[ "${2:-}" == --fresh ]] && echo 1 || echo 0)" ;;
   stop-stable)  stop backend-stable ;;
-  publish)      cp "$(build_jar)" "$JAR_STABLE" && echo "published $JAR_STABLE" ;;
+  # atomic replace (new inode) so a running stable backend keeps its jar while a parallel loop publishes
+  publish)      cp "$(build_jar)" "$JAR_STABLE.tmp" && mv -f "$JAR_STABLE.tmp" "$JAR_STABLE" && echo "published $JAR_STABLE" ;;
   status)       for n in backend-dev backend-stable; do
                   [[ -f "$RUN/$n.pid" ]] && kill -0 "$(cat "$RUN/$n.pid")" 2>/dev/null && echo "$n: running" || echo "$n: stopped"
                 done ;;
