@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { PlanStartWatcher } from '../core/notify/plan-start-watcher.service';
 import { NAV_ITEMS } from './nav-items';
 
 /** App shell: persistent side navigation + top bar. */
@@ -47,4 +48,9 @@ import { NAV_ITEMS } from './nav-items';
 })
 export class ShellComponent {
   readonly navItems = NAV_ITEMS;
+
+  constructor() {
+    // Plan start notifications work on every page (D-46).
+    inject(PlanStartWatcher).start();
+  }
 }

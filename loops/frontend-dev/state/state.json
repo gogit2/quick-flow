@@ -6,8 +6,8 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 6,
-  "current_milestone": "M05",
+  "iteration": 7,
+  "current_milestone": "M06",
   "milestones": [
     {
       "id": "M01",
@@ -117,7 +117,7 @@
       "id": "M06",
       "title": "Plan items, start notification, history",
       "file": "outputs/M06-plan-items.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": [
         "M05",
         "backend-dev:M06"
@@ -129,8 +129,8 @@
         "US-PLAN-10"
       ],
       "tasks_total": 4,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 4,
+      "trials": 1,
       "last_error": null
     },
     {
@@ -188,10 +188,10 @@
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M05",
+    "milestone": "M06",
     "mode": "VERIFY",
-    "summary": "M05 built (T01–T05) and trial 1 PASS: S1–S5 12/12, M01–M04 smoke ✅, no 5xx; label spacing fixed during trial",
+    "summary": "M06 built (T01–T04) and trial 1 PASS: S1–S4 13/13 incl. live start notification, M01–M05 smoke ✅, no console errors, no 5xx",
     "result": "ok"
   },
-  "updated_at": "2026-10-10T19:03:08+03:00"
+  "updated_at": "2026-10-10T19:09:35+03:00"
 }

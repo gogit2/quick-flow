@@ -34,3 +34,5 @@ Append-only. One row per action (see LOOP_PROTOCOL §6).
 | 2026-10-10T18:16:37+03:00 | 5 | M04 | VERIFY | trial 1: build green, S1–S4 16/16 ✅, M01–M03 smoke ✅, no console errors, no 5xx; M04 done | ok |
 | 2026-10-10T19:03:08+03:00 | 6 | M05 | BUILD | M05-T01..T05 done (plan model + PlanApi, builder dialog with task/habit/learning pickers + BR-10/BR-11 validation, grouped plans page + plan card, RestTimeComponent with skew correction, scenario file) | ok |
 | 2026-10-10T19:03:08+03:00 | 6 | M05 | VERIFY | trial 1: build green, S1–S5 12/12 ✅, M01–M04 smoke ✅, no 5xx; builder label spacing fixed; one scenario expectation and one regression driver corrected (see M05 file); M05 done | ok |
+| 2026-10-10T19:09:35+03:00 | 7 | M06 | BUILD | M06-T01..T04 done (item done toggles + live progress/status/group move, History table, PlanStartWatcher + NotificationService.remind + localStorage dedupe + card highlight, scenario file) | ok |
+| 2026-10-10T19:09:35+03:00 | 7 | M06 | VERIFY | trial 1: build green, S1–S4 13/13 ✅ (start notification fired within 3 s of start, no repeat after reload), M01–M05 smoke ✅, no console errors, no 5xx; M06 done | ok |
