@@ -30,3 +30,5 @@ Append-only. One row per action (see LOOP_PROTOCOL §6).
 | 2026-10-10T17:42:47+03:00 | 3 | M02 | VERIFY | trial 1: build green, S1–S6 20/20 ✅, M01 smoke ✅, no console errors, no 5xx; M02 done (iteration 3 had built T01..T06 but crashed before verifying) | ok |
 | 2026-10-10T17:48:37+03:00 | 4 | M03 | BUILD | M03-T01..T05 done (habit model + HabitApi, habits page cards with streak/progress/toggle, add/edit dialog, deactivate/activate/delete, scenario file) | ok |
 | 2026-10-10T17:48:37+03:00 | 4 | M03 | VERIFY | trial 1: build green, S1–S4 14/14 ✅, M01+M02 smoke ✅, no 5xx; two test-input corrections recorded in M03 file; M03 done | ok |
+| 2026-10-10T18:16:37+03:00 | 5 | M04 | BUILD | M04-T01..T05 done (learning model + LearningApi, card grid + expandable card component with milestones/notes/manual status, add/edit dialog, scenario file) | ok |
+| 2026-10-10T18:16:37+03:00 | 5 | M04 | VERIFY | trial 1: build green, S1–S4 16/16 ✅, M01–M03 smoke ✅, no console errors, no 5xx; M04 done | ok |

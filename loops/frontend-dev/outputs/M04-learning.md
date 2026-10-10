@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Loop | frontend-dev |
-| Status | pending |
+| Status | done |
 | Depends on | M01, backend-dev:M04 |
 | Stories | US-LEARN-01..05 |
 | Requirements | FR-05, FR-06, BR-8, BR-9, UX Learning Resources Page, AC Learning |
@@ -17,11 +17,11 @@ The Learning Resources page: card grid (title, description/source, status chip, 
 - testids: `learning-add-btn`, `learning-form-title|description|save|cancel`, `learning-card-<id>`, `learning-status-<id>`, `learning-expand-<id>`, `learning-delete-<id>`, `milestone-input-<cardId>`, `milestone-date-<cardId>`, `milestone-add-<cardId>`, `milestone-row-<id>`, `milestone-toggle-<id>`, `milestone-delete-<id>`, `note-input-<cardId>`, `note-add-<cardId>`, `note-row-<id>`, `note-delete-<id>`, `empty-state-learning`.
 
 ## 3. Tasks
-- [ ] M04-T01 Learning models + `LearningApi` service
-- [ ] M04-T02 Card grid with status chip, milestone count, expand/collapse, empty state; add/remove card (confirm)
-- [ ] M04-T03 Milestones panel: add (title + optional date), toggle complete, remove
-- [ ] M04-T04 Notes panel: add, list with timestamp, remove; manual status select
-- [ ] M04-T05 Write scenario file `outputs/e2e/M04-learning.md` (§4)
+- [x] M04-T01 Learning models + `LearningApi` service. Files: `core/models/learning.ts`, `core/api/learning-api.service.ts`
+- [x] M04-T02 Card grid with status chip, milestone count, expand/collapse, empty state; add/remove card (confirm). Files: `features/learning/learning-page.component.ts`, `learning-card.component.ts`, `learning-form-dialog.component.ts` (also edit title/description)
+- [x] M04-T03 Milestones panel: add (title + optional date), toggle complete, remove. Files: `learning-card.component.ts` (card swapped in place from the response; after 204 the card is fetched again)
+- [x] M04-T04 Notes panel: add, list with timestamp, remove; manual status select. Files: `learning-card.component.ts` (`learning-status-select-<id>` → PUT with status)
+- [x] M04-T05 Write scenario file `outputs/e2e/M04-learning.md` (§4)
 
 ## 4. Acceptance checks
 | # | Check | Proves | How |
@@ -35,5 +35,11 @@ The Learning Resources page: card grid (title, description/source, status chip, 
 Regression: M01–M03 smoke.
 
 ## 5. Verification trials
+### Trial 1 (2026-10-10T18:16:37+03:00)
+- Commands: `npx ng build` (green); `scripts/backend.sh start-stable --fresh`; `scripts/frontend.sh start`; scenario `outputs/e2e/M04-learning.md` S1–S4 with Playwright MCP; M01 S1, M02 S1 and M03 S1 smoke; servers stopped.
+- A1 S1 ✅ (card "Not started", 0 / 0) · A2 S2 ✅ (empty milestone blocked, no request; 2 milestones → 1 done "In progress" 50% → 2 done "Completed" 100% → undo "In progress" → remove → "1 / 1 · 100%" "Completed"; manual "Not started" persisted, API status NOT_STARTED) · A3 S3 ✅ (empty note blocked; note with timestamp Oct 10, 2026 6:15:32 PM, input cleared; removed) · A4 S4 ✅ (empty title error, no POST; delete with confirm leaves 1 card) · A5 ✅ no console errors, no 5xx (20 API calls, all 2xx)
+- Regression: M01 S1 8/8 ✅, M02 S1 ✅, M03 S1 ✅
+- Evidence: `evidence/M04/trial-1/M04-trial-1-final.png`
+- Result: PASS
 
 ## 6. Notes / Blocked

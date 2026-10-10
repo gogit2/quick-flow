@@ -6,8 +6,8 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 4,
-  "current_milestone": "M03",
+  "iteration": 5,
+  "current_milestone": "M04",
   "milestones": [
     {
       "id": "M01",
@@ -71,7 +71,7 @@
       "id": "M04",
       "title": "Learning Resources page",
       "file": "outputs/M04-learning.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": [
         "M01",
         "backend-dev:M04"
@@ -84,8 +84,8 @@
         "US-LEARN-05"
       ],
       "tasks_total": 5,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 5,
+      "trials": 1,
       "last_error": null
     },
     {
@@ -188,10 +188,10 @@
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M03",
+    "milestone": "M04",
     "mode": "VERIFY",
-    "summary": "M03 built (T01–T05) and trial 1 PASS: S1–S4 14/14, M01+M02 smoke ✅, no 5xx",
+    "summary": "M04 built (T01–T05) and trial 1 PASS: S1–S4 16/16, M01–M03 smoke ✅, no console errors, no 5xx",
     "result": "ok"
   },
-  "updated_at": "2026-10-10T17:48:37+03:00"
+  "updated_at": "2026-10-10T18:16:37+03:00"
 }
