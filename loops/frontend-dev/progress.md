@@ -36,3 +36,5 @@ Append-only. One row per action (see LOOP_PROTOCOL §6).
 | 2026-10-10T19:03:08+03:00 | 6 | M05 | VERIFY | trial 1: build green, S1–S5 12/12 ✅, M01–M04 smoke ✅, no 5xx; builder label spacing fixed; one scenario expectation and one regression driver corrected (see M05 file); M05 done | ok |
 | 2026-10-10T19:09:35+03:00 | 7 | M06 | BUILD | M06-T01..T04 done (item done toggles + live progress/status/group move, History table, PlanStartWatcher + NotificationService.remind + localStorage dedupe + card highlight, scenario file) | ok |
 | 2026-10-10T19:09:35+03:00 | 7 | M06 | VERIFY | trial 1: build green, S1–S4 13/13 ✅ (start notification fired within 3 s of start, no repeat after reload), M01–M05 smoke ✅, no console errors, no 5xx; M06 done | ok |
+| 2026-10-10T19:21:32+03:00 | 8 | M07 | BUILD | M07-T01..T04 done (settings model/API/store synced to notification prefs, default-view root guard, settings form with permission request + hint, scenario file) | ok |
+| 2026-10-10T19:21:32+03:00 | 8 | M07 | VERIFY | trial 1: build green, S1–S5 14/14 ✅, M01–M06 smoke ✅, no console errors, no 5xx; M07 done | ok |

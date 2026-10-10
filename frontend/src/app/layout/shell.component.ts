@@ -5,6 +5,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { PlanStartWatcher } from '../core/notify/plan-start-watcher.service';
+import { SettingsStore } from '../core/settings/settings.store';
 import { NAV_ITEMS } from './nav-items';
 
 /** App shell: persistent side navigation + top bar. */
@@ -50,6 +51,8 @@ export class ShellComponent {
   readonly navItems = NAV_ITEMS;
 
   constructor() {
+    // Settings drive the notification preferences (and the greeting); load them once at start.
+    void inject(SettingsStore).load();
     // Plan start notifications work on every page (D-46).
     inject(PlanStartWatcher).start();
   }

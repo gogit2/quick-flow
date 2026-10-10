@@ -6,8 +6,8 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 7,
-  "current_milestone": "M06",
+  "iteration": 8,
+  "current_milestone": "M07",
   "milestones": [
     {
       "id": "M01",
@@ -137,15 +137,15 @@
       "id": "M07",
       "title": "Settings page",
       "file": "outputs/M07-settings.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": [
         "M01",
         "backend-dev:M07"
       ],
       "stories": [],
       "tasks_total": 4,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 4,
+      "trials": 1,
       "last_error": null
     },
     {
@@ -188,10 +188,10 @@
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M06",
+    "milestone": "M07",
     "mode": "VERIFY",
-    "summary": "M06 built (T01–T04) and trial 1 PASS: S1–S4 13/13 incl. live start notification, M01–M05 smoke ✅, no console errors, no 5xx",
+    "summary": "M07 built (T01–T04) and trial 1 PASS: S1–S5 14/14 incl. default-view redirect and reminders-off check, M01–M06 smoke ✅, no console errors, no 5xx",
     "result": "ok"
   },
-  "updated_at": "2026-10-10T19:09:35+03:00"
+  "updated_at": "2026-10-10T19:21:32+03:00"
 }

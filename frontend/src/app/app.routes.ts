@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
+import { defaultViewGuard } from './core/settings/default-view.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  // The root opens the default view from Settings (D-51); the guard always redirects.
+  { path: '', pathMatch: 'full', canActivate: [defaultViewGuard], children: [] },
   {
     path: 'dashboard',
     title: 'Dashboard · QuickFlow',
