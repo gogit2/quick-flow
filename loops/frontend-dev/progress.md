@@ -40,3 +40,5 @@ Append-only. One row per action (see LOOP_PROTOCOL §6).
 | 2026-10-10T19:21:32+03:00 | 8 | M07 | VERIFY | trial 1: build green, S1–S5 14/14 ✅, M01–M06 smoke ✅, no console errors, no 5xx; M07 done | ok |
 | 2026-10-10T19:28:21+03:00 | 9 | M08 | BUILD | M08-T01..T06 done (dashboard model/API, greeting + metric cards, today/overdue/completed tasks, today's habits toggle, active/upcoming plans with rest time, learning snapshot, quick add, scenario file) | ok |
 | 2026-10-10T19:28:21+03:00 | 9 | M08 | VERIFY | trial 1: build green, S1–S5 ✅, M01–M07 smoke ✅, no console errors, no 5xx; M08 done | ok |
+| 2026-10-10T19:37:27+03:00 | 10 | M09 | BUILD | M09-T01..T03 done (journey + UX + load-error scenarios; FIX: shared load-state (loading bar / error + Retry) on Tasks, Habits, Learning, Plans, Dashboard; coverage refs) | ok |
+| 2026-10-10T19:37:27+03:00 | 10 | M09 | VERIFY | trial 1: build green, S1 13/13, S2 5/5, S3 3/3 ✅, M01–M08 smoke ✅, no console errors, no 5xx; M09 done | ok |

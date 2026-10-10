@@ -6,8 +6,8 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 9,
-  "current_milestone": "M09",
+  "iteration": 10,
+  "current_milestone": null,
   "milestones": [
     {
       "id": "M01",
@@ -175,23 +175,23 @@
       "id": "M09",
       "title": "End-to-end journey and UX pass",
       "file": "outputs/M09-e2e-journey.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": [
         "M08"
       ],
       "stories": [],
       "tasks_total": 3,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 3,
+      "trials": 1,
       "last_error": null
     }
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M08",
+    "milestone": "M09",
     "mode": "VERIFY",
-    "summary": "M08 built (T01–T06) and trial 1 PASS: S1–S5 incl. quick add, overdue, habit toggle, live plan progress and learning snapshot; M01–M07 smoke ✅, no console errors, no 5xx",
+    "summary": "M09 built (T01–T03: journey + UX scenarios, load/error state FIX on 5 pages, coverage refs) and trial 1 PASS: S1 journey 13/13, S2 UX 5/5, S3 load-error retry, M01–M08 smoke ✅, no console errors, no 5xx",
     "result": "ok"
   },
-  "updated_at": "2026-10-10T19:28:21+03:00"
+  "updated_at": "2026-10-10T19:37:27+03:00"
 }

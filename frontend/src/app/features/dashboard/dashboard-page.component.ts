@@ -17,6 +17,7 @@ import { LEARNING_STATUSES, LEARNING_STATUS_LABELS } from '../../core/models/lea
 import { TASK_PRIORITY_LABELS, TASK_STATUS_LABELS, TaskResponse } from '../../core/models/task';
 import { NotificationService } from '../../core/notify/notification.service';
 import { PlanStartWatcher } from '../../core/notify/plan-start-watcher.service';
+import { LoadStateComponent } from '../../shared/load-state/load-state.component';
 import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 import { RestTimeComponent } from '../../shared/rest-time/rest-time.component';
 import { HabitFormDialogComponent } from '../habits/habit-form-dialog.component';
@@ -27,7 +28,7 @@ import { TaskFormDialogComponent } from '../tasks/task-form-dialog.component';
 /** Dashboard (FR-09, UX Dashboard 1–6): one `GET /dashboard` payload, re-fetched after every change made here. */
 @Component({
   selector: 'app-dashboard-page',
-  imports: [DatePipe, NgTemplateOutlet, RouterLink, PageHeaderComponent, RestTimeComponent, MatButtonModule, MatIconModule, MatProgressBarModule, MatTooltipModule],
+  imports: [DatePipe, NgTemplateOutlet, RouterLink, PageHeaderComponent, LoadStateComponent, RestTimeComponent, MatButtonModule, MatIconModule, MatProgressBarModule, MatTooltipModule],
   template: `
     <app-page-header heading="Dashboard" testid="dashboard-title">
       <div class="quick-add" role="group" aria-label="Quick add">
@@ -186,6 +187,8 @@ import { TaskFormDialogComponent } from '../tasks/task-form-dialog.component';
           }
         </div>
       </ng-template>
+    } @else {
+      <app-load-state testid="dashboard" what="the dashboard" [failed]="loadFailed()" (retry)="reload()" />
     }
   `,
   styles: `
@@ -235,6 +238,7 @@ export class DashboardPageComponent {
 
   /** null until the first response. */
   readonly data = signal<DashboardResponse | null>(null);
+  readonly loadFailed = signal(false);
   /** Server clock − client clock (D-44), for the rest-time countdowns. */
   readonly skewMs = signal(0);
   readonly busy = signal(false);
@@ -244,6 +248,7 @@ export class DashboardPageComponent {
   }
 
   reload(): void {
+    this.loadFailed.set(false);
     this.api
       .get()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -252,9 +257,8 @@ export class DashboardPageComponent {
           this.skewMs.set(Date.parse(d.serverTime) - Date.now());
           this.data.set(d);
         },
-        error: () => {
-          /* the interceptor shows the error */
-        },
+        // The interceptor shows the error; the page offers a retry until the first load succeeds.
+        error: () => this.loadFailed.set(true),
       });
   }
 

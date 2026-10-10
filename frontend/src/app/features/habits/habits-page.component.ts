@@ -11,12 +11,13 @@ import { HABIT_FREQUENCY_LABELS, HabitResponse } from '../../core/models/habit';
 import { NotificationService } from '../../core/notify/notification.service';
 import { confirmDialog } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { EmptyStateComponent } from '../../shared/empty-state/empty-state.component';
+import { LoadStateComponent } from '../../shared/load-state/load-state.component';
 import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 import { HabitFormDialogComponent, HabitFormDialogData } from './habit-form-dialog.component';
 
 @Component({
   selector: 'app-habits-page',
-  imports: [PageHeaderComponent, EmptyStateComponent, MatButtonModule, MatIconModule, MatProgressBarModule, MatTooltipModule],
+  imports: [PageHeaderComponent, LoadStateComponent, EmptyStateComponent, MatButtonModule, MatIconModule, MatProgressBarModule, MatTooltipModule],
   template: `
     <app-page-header heading="Habits" testid="habits-title">
       <button mat-flat-button type="button" data-testid="habit-add-btn" (click)="openForm(null)">
@@ -94,6 +95,8 @@ import { HabitFormDialogComponent, HabitFormDialogData } from './habit-form-dial
       } @else {
         <app-empty-state testid="empty-state-habits" icon="repeat" message="No habits yet. Add a habit to start building a streak." actionLabel="Add Habit" (action)="openForm(null)" />
       }
+    } @else {
+      <app-load-state testid="habits" what="habits" [failed]="loadFailed()" (retry)="reload()" />
     }
   `,
   styles: `
@@ -127,6 +130,7 @@ export class HabitsPageComponent {
 
   /** null until the first response, so the empty state does not flash. */
   readonly habits = signal<HabitResponse[] | null>(null);
+  readonly loadFailed = signal(false);
   /** Habits with a toggle request in flight (prevents double completions). */
   readonly busy = signal<ReadonlySet<number>>(new Set());
 
@@ -200,10 +204,11 @@ export class HabitsPageComponent {
     });
   }
 
-  private reload(): void {
+  reload(): void {
+    this.loadFailed.set(false);
     this.api
       .list()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({ next: (list) => this.habits.set(list), error: () => this.habits.update((l) => l ?? []) });
+      .subscribe({ next: (list) => this.habits.set(list), error: () => this.loadFailed.set(true) });
   }
 }

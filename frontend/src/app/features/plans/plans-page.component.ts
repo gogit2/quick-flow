@@ -10,13 +10,14 @@ import { NotificationService } from '../../core/notify/notification.service';
 import { PlanStartWatcher } from '../../core/notify/plan-start-watcher.service';
 import { confirmDialog } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { EmptyStateComponent } from '../../shared/empty-state/empty-state.component';
+import { LoadStateComponent } from '../../shared/load-state/load-state.component';
 import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 import { PlanCardComponent } from './plan-card.component';
 import { PlanFormDialogComponent, PlanFormDialogData } from './plan-form-dialog.component';
 
 @Component({
   selector: 'app-plans-page',
-  imports: [DatePipe, PageHeaderComponent, EmptyStateComponent, PlanCardComponent, MatButtonModule, MatIconModule],
+  imports: [DatePipe, PageHeaderComponent, LoadStateComponent, EmptyStateComponent, PlanCardComponent, MatButtonModule, MatIconModule],
   template: `
     <app-page-header heading="Todo Plans" testid="plans-title">
       <button mat-flat-button type="button" data-testid="plan-add-btn" (click)="openForm(null)">
@@ -90,6 +91,8 @@ import { PlanFormDialogComponent, PlanFormDialogData } from './plan-form-dialog.
           <p class="muted" data-testid="plans-history-empty">Completed plans will appear here with how much of each was done.</p>
         }
       </section>
+    } @else {
+      <app-load-state testid="plans" what="plans" [failed]="loadFailed()" (retry)="reload()" />
     }
   `,
   styles: `
@@ -113,6 +116,7 @@ export class PlansPageComponent {
 
   /** null until the first response, so the empty state does not flash. */
   readonly plans = signal<PlanResponse[] | null>(null);
+  readonly loadFailed = signal(false);
   /** COMPLETED plans, most recent end first (D-49). */
   readonly history = signal<PlanResponse[]>([]);
   /** Server clock − client clock, from the last response (D-44). */
@@ -131,6 +135,7 @@ export class PlansPageComponent {
   }
 
   reload(): void {
+    this.loadFailed.set(false);
     this.api
       .list()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -139,7 +144,7 @@ export class PlansPageComponent {
           if (list.length) this.skewMs.set(Date.parse(list[0].serverTime) - Date.now());
           this.plans.set(list);
         },
-        error: () => this.plans.update((l) => l ?? []),
+        error: () => this.loadFailed.set(true),
       });
     this.api
       .history()

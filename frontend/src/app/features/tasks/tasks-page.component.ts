@@ -27,6 +27,7 @@ import { NotificationService } from '../../core/notify/notification.service';
 import { isoLocalDate } from '../../core/time/local-date';
 import { confirmDialog } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { EmptyStateComponent } from '../../shared/empty-state/empty-state.component';
+import { LoadStateComponent } from '../../shared/load-state/load-state.component';
 import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 import { TaskFormDialogComponent, TaskFormDialogData } from './task-form-dialog.component';
 
@@ -52,6 +53,7 @@ const SORT_OPTIONS: SortOption[] = [
     DatePipe,
     PageHeaderComponent,
     EmptyStateComponent,
+    LoadStateComponent,
     MatButtonModule,
     MatButtonToggleModule,
     MatFormFieldModule,
@@ -175,6 +177,8 @@ const SORT_OPTIONS: SortOption[] = [
       } @else {
         <app-empty-state testid="empty-state-tasks" icon="task_alt" message="No tasks yet. Add your first task to get started." actionLabel="Add Task" (action)="openForm(null)" />
       }
+    } @else {
+      <app-load-state testid="tasks" what="tasks" [failed]="loadFailed()" (retry)="reload()" />
     }
   `,
   styles: `
@@ -221,6 +225,7 @@ export class TasksPageComponent {
 
   /** null until the first response, so the empty state does not flash. */
   readonly tasks = signal<TaskResponse[] | null>(null);
+  readonly loadFailed = signal(false);
 
   readonly hasFilters = computed(() => !!(this.search() || this.status() || this.priority() || this.due()));
 
@@ -247,11 +252,21 @@ export class TasksPageComponent {
 
     toObservable(this.query)
       .pipe(
-        switchMap((q) => this.api.list(q).pipe(catchError(() => of(null)))),
+        switchMap((q) =>
+          this.api.list(q).pipe(
+            catchError(() => {
+              this.loadFailed.set(true);
+              return of(null);
+            }),
+          ),
+        ),
         filter((list): list is TaskResponse[] => list !== null),
         takeUntilDestroyed(),
       )
-      .subscribe((list) => this.tasks.set(list));
+      .subscribe((list) => {
+        this.loadFailed.set(false);
+        this.tasks.set(list);
+      });
   }
 
   onSearch(text: string): void {
@@ -313,7 +328,8 @@ export class TasksPageComponent {
     });
   }
 
-  private reload(): void {
+  reload(): void {
+    this.loadFailed.set(false);
     this.refresh.update((n) => n + 1);
   }
 }

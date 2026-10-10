@@ -8,13 +8,14 @@ import { LearningCardResponse } from '../../core/models/learning';
 import { NotificationService } from '../../core/notify/notification.service';
 import { confirmDialog } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { EmptyStateComponent } from '../../shared/empty-state/empty-state.component';
+import { LoadStateComponent } from '../../shared/load-state/load-state.component';
 import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 import { LearningCardComponent } from './learning-card.component';
 import { LearningFormDialogComponent, LearningFormDialogData } from './learning-form-dialog.component';
 
 @Component({
   selector: 'app-learning-page',
-  imports: [PageHeaderComponent, EmptyStateComponent, LearningCardComponent, MatButtonModule, MatIconModule],
+  imports: [PageHeaderComponent, LoadStateComponent, EmptyStateComponent, LearningCardComponent, MatButtonModule, MatIconModule],
   template: `
     <app-page-header heading="Learning Resources" testid="learning-title">
       <button mat-flat-button type="button" data-testid="learning-add-btn" (click)="openForm(null)">
@@ -38,6 +39,8 @@ import { LearningFormDialogComponent, LearningFormDialogData } from './learning-
           (action)="openForm(null)"
         />
       }
+    } @else {
+      <app-load-state testid="learning" what="learning cards" [failed]="loadFailed()" (retry)="reload()" />
     }
   `,
   styles: `
@@ -52,6 +55,7 @@ export class LearningPageComponent {
 
   /** null until the first response, so the empty state does not flash. */
   readonly cards = signal<LearningCardResponse[] | null>(null);
+  readonly loadFailed = signal(false);
 
   constructor() {
     this.reload();
@@ -94,10 +98,11 @@ export class LearningPageComponent {
     });
   }
 
-  private reload(): void {
+  reload(): void {
+    this.loadFailed.set(false);
     this.api
       .list()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({ next: (list) => this.cards.set(list), error: () => this.cards.update((l) => l ?? []) });
+      .subscribe({ next: (list) => this.cards.set(list), error: () => this.loadFailed.set(true) });
   }
 }
