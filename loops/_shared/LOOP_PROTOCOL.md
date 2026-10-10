@@ -80,6 +80,9 @@ The protocol is **project-agnostic**: nothing here is specific to one applicatio
 2. SELECT
    - current = the milestone with status in_progress|verifying, else the first pending milestone whose
      depends_on are all done (across loops: read loops/<other>/state/state.json).
+   - Human override: if task.md has `priority_override: [Mxx, ...]`, pick pending milestones from that
+     list first (in list order, only if their depends_on are done). Once a listed milestone is done, remove it
+     from the list in task.md. Never skip a milestone's depends_on because of the override.
    - If no milestone can start because of cross-loop dependencies → status = waiting, log, EXIT.
    - If every milestone is done → go to step 5 (FINAL).
 
