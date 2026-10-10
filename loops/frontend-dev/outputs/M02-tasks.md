@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Loop | frontend-dev |
-| Status | pending |
+| Status | done |
 | Depends on | M01, backend-dev:M02 |
 | Stories | US-TASK-01..07 |
 | Requirements | FR-01, FR-02, BR-1..5, BR-14, UX Tasks Page, AC Tasks |
@@ -19,12 +19,12 @@ The Tasks page: add/edit task form (title, description, status, priority, due da
 - testids: `task-add-btn`, `task-form-title|description|status|priority|due|save|cancel`, `task-row-<id>`, `task-complete-<id>`, `task-edit-<id>`, `task-archive-<id>`, `task-restore-<id>`, `task-delete-<id>`, `task-search`, `task-filter-status`, `task-filter-priority`, `task-filter-due`, `task-sort`, `task-show-archived`, `empty-state-tasks`.
 
 ## 3. Tasks
-- [ ] M02-T01 Task models + `TaskApi` service matching the contract
-- [ ] M02-T02 Task list page: rows, status/priority/due/overdue display, empty state
-- [ ] M02-T03 Add/edit dialog with validators and backend field errors
-- [ ] M02-T04 Row actions: complete, archive, restore (archived view), delete with confirm
-- [ ] M02-T05 Search, status/priority/due filters, sort controls (debounced, query params to API)
-- [ ] M02-T06 Write scenario file `outputs/e2e/M02-tasks.md` (§4)
+- [x] M02-T01 Task models + `TaskApi` service matching the contract. Files: `core/models/task.ts`, `core/api/task-api.service.ts`
+- [x] M02-T02 Task list page: rows, status/priority/due/overdue display, empty state. Files: `features/tasks/tasks-page.component.ts`, `core/time/local-date.ts`
+- [x] M02-T03 Add/edit dialog with validators and backend field errors. Files: `features/tasks/task-form-dialog.component.ts`
+- [x] M02-T04 Row actions: complete, archive, restore (archived view), delete with confirm. Files: `tasks-page.component.ts` (Active/Archived toggle `task-show-active|archived`)
+- [x] M02-T05 Search, status/priority/due filters, sort controls (debounced, query params to API). Files: `tasks-page.component.ts` (search 300 ms debounce → `q`; due filter = today / next 7 days / before today → `dueDate`/`dueFrom`/`dueTo`)
+- [x] M02-T06 Write scenario file `outputs/e2e/M02-tasks.md` (§4)
 
 ## 4. Acceptance checks
 | # | Check | Proves | How |
@@ -40,5 +40,12 @@ The Tasks page: add/edit task form (title, description, status, priority, due da
 Regression: M01 S1 smoke.
 
 ## 5. Verification trials
+### Trial 1 (2026-10-10T17:42+03:00)
+- Context: iteration 3 built T01–T06 but its session ended before any trial was recorded (empty `evidence/M02/trial-1/`). This trial was run interactively, following the VERIFY procedure.
+- Commands: `npx ng build` (green); `scripts/backend.sh start-stable --fresh`; `scripts/frontend.sh start`; scenario `outputs/e2e/M02-tasks.md` S1–S6 with Playwright MCP; M01 S1 smoke; servers stopped.
+- A1 S1 ✅ · A2 S2 ✅ (required + 200-char errors, only 1 POST sent) · A3 S3 ✅ · A4 S4 ✅ (archived view empty after delete, checked via API) · A5 S5 ✅ (requests `q=gamm`, `status=IN_PROGRESS`, `priority=HIGH`, `dueFrom=2026-10-10&dueTo=2026-10-16`, `sort=dueDate&dir=asc`; extra check: `desc` reorders to Gamma, Delta, Alpha) · A6 S6 ✅ · A7 ✅ no console errors, no 5xx
+- Regression: M01 S1 smoke 8/8 ✅
+- Evidence: `evidence/M02/trial-1/M02-trial-1-final.png`
+- Result: PASS
 
 ## 6. Notes / Blocked
