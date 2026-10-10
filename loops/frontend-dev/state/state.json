@@ -6,8 +6,8 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 3,
-  "current_milestone": "M02",
+  "iteration": 4,
+  "current_milestone": "M03",
   "milestones": [
     {
       "id": "M01",
@@ -50,7 +50,7 @@
       "id": "M03",
       "title": "Habits page",
       "file": "outputs/M03-habits.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": [
         "M01",
         "backend-dev:M03"
@@ -63,8 +63,8 @@
         "US-HABIT-05"
       ],
       "tasks_total": 5,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 5,
+      "trials": 1,
       "last_error": null
     },
     {
@@ -188,10 +188,10 @@
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M02",
+    "milestone": "M03",
     "mode": "VERIFY",
-    "summary": "M02 trial 1 PASS: S1–S6 all steps ✅, M01 smoke 8/8, no console errors, no 5xx",
+    "summary": "M03 built (T01–T05) and trial 1 PASS: S1–S4 14/14, M01+M02 smoke ✅, no 5xx",
     "result": "ok"
   },
-  "updated_at": "2026-10-10T17:42:47+03:00"
+  "updated_at": "2026-10-10T17:48:37+03:00"
 }
