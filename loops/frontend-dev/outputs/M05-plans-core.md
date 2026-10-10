@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Loop | frontend-dev |
-| Status | pending |
+| Status | done |
 | Depends on | M02, M03, M04, backend-dev:M05 |
 | Stories | US-PLAN-01, US-PLAN-02, US-PLAN-03, US-PLAN-04, US-PLAN-06, US-PLAN-08, US-PLAN-09 |
 | Requirements | FR-07, FR-08 (rest time, progress, status), BR-10, BR-11, BR-12, UX Todo Plans Page, AC Plans |
@@ -20,11 +20,11 @@ The Todo Plans page: a Create Plan builder that lists existing tasks, habits and
 - testids: `plan-add-btn`, `plan-form-title|duration|start|end|priority|save|cancel`, `plan-source-task-<id>`, `plan-source-habit-<id>`, `plan-source-learning-<id>`, `plan-card-<id>`, `plan-status-<id>`, `plan-progress-<id>`, `plan-rest-time-<id>`, `plan-item-<itemId>`, `plan-delete-<id>`, `plans-group-active`, `plans-group-completed`, `empty-state-plans`.
 
 ## 3. Tasks
-- [ ] M05-T01 Plan models + `PlanApi` service
-- [ ] M05-T02 Plan builder dialog: source pickers (tasks/habits/learning loaded from their APIs), fields, validators (BR-10, BR-11)
-- [ ] M05-T03 Plans page: grouped list (active/upcoming vs completed), cards with status, progress bar %, item list, empty state, remove with confirm
-- [ ] M05-T04 Rest-time countdown component (NowService, skew correction, BR-12 visibility, D-45 format) + refresh on start/end crossing
-- [ ] M05-T05 Write scenario file `outputs/e2e/M05-plans-core.md` (§4)
+- [x] M05-T01 Plan models + `PlanApi` service. Files: `core/models/plan.ts`, `core/api/plan-api.service.ts` (also PATCH item + history for M06)
+- [x] M05-T02 Plan builder dialog: source pickers (tasks/habits/learning loaded from their APIs), fields, validators (BR-10, BR-11). Files: `features/plans/plan-form-dialog.component.ts`, `core/time/local-date.ts` (datetime-local ↔ ISO). Sources: non-archived tasks, active habits, all cards. Defaults: start = now, end = +1 h, 60 min, priority 1. Also used for edit (PUT).
+- [x] M05-T03 Plans page: grouped list (active/upcoming vs completed), cards with status, progress bar %, item list, empty state, remove with confirm. Files: `features/plans/plans-page.component.ts`, `plan-card.component.ts`
+- [x] M05-T04 Rest-time countdown component (NowService, skew correction, BR-12 visibility, D-45 format) + refresh on start/end crossing. Files: `shared/rest-time/rest-time.component.ts` (`formatRestTime`; skew = serverTime − client time of the last list response; `phaseChange` → page reload)
+- [x] M05-T05 Write scenario file `outputs/e2e/M05-plans-core.md` (§4)
 
 ## 4. Acceptance checks
 | # | Check | Proves | How |
@@ -40,5 +40,15 @@ The Todo Plans page: a Create Plan builder that lists existing tasks, habits and
 Regression: M01–M04 smoke.
 
 ## 5. Verification trials
+### Trial 1 (2026-10-10T19:03:08+03:00)
+- Commands: `npx ng build` (green); `scripts/backend.sh start-stable --fresh`; `scripts/frontend.sh start`; scenario `outputs/e2e/M05-plans-core.md` S1–S5 with Playwright MCP (browser TZ Africa/Cairo, UTC+3); regression on a second fresh backend; servers stopped.
+- A1/A6 S1 ✅ (sources created via the Tasks/Habits/Learning pages; builder lists them as plan-source-task-1 / habit-1 / learning-1; "Morning plan" 18:55 → 20:01, 65 min, P1 → In progress, "0 / 3 items · 0%", 3 item rows) · A2 S2 ✅ (01:00:13 → 01:00:10 over 3.0 s; matches end − now within 1 s; HH:MM:SS) · A3 S3 ✅ (tomorrow plan: Not started, "Starts Oct 11, 19:00", no rest time; listed after the In-progress plan) · A4 S4 ✅ (no items → items error; end < start → range error; empty title → title error; no POST in any case; cancel keeps 2 plans) · A5 S5 ✅ (delete with confirm → 1 plan; its task still exists) · A7 ✅ no 5xx (18 API calls, all 2xx)
+- Notes:
+  - S2.1: the expected value in the scenario ("≤ 01:00:00") was wrong, because the end was typed as 20:01, rounded up from now + 1 h. The scenario now expects end − now (±1 s). The app value (01:00:20 at about 19:00:40) was correct.
+  - Fix made during the trial: the builder labels read "Title· detail" because Angular strips the whitespace between the two spans. The space now sits inside the detail span. Checked after the fix: "Plan task 1010 · To do". The regression below ran on the fixed code.
+  - Regression: the first attempt drove M02–M04 with a DOM script that clicked Save before each dialog's form had bound. That raised three `_syncPendingControls` console errors and created nothing (only GETs were sent). It was a test-driver mistake, not an app bug; a real click cannot reach Save before the dialog renders. After a reload it was redone with Playwright MCP clicks/typing: clean console.
+- Regression: M01 S1 ✅ (7 navigations), M02 S1 ✅, M03 S1 ✅, M04 S1 ✅ (fresh backend)
+- Evidence: `evidence/M05/trial-1/M05-trial-1-final.png`
+- Result: PASS
 
 ## 6. Notes / Blocked

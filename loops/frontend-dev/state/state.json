@@ -6,8 +6,8 @@
     "path": "requirements/PRD.md",
     "scope": "ALL"
   },
-  "iteration": 5,
-  "current_milestone": "M04",
+  "iteration": 6,
+  "current_milestone": "M05",
   "milestones": [
     {
       "id": "M01",
@@ -92,7 +92,7 @@
       "id": "M05",
       "title": "Todo Plans: builder, list, progress, rest time",
       "file": "outputs/M05-plans-core.md",
-      "status": "pending",
+      "status": "done",
       "depends_on": [
         "M02",
         "M03",
@@ -109,8 +109,8 @@
         "US-PLAN-09"
       ],
       "tasks_total": 5,
-      "tasks_done": 0,
-      "trials": 0,
+      "tasks_done": 5,
+      "trials": 1,
       "last_error": null
     },
     {
@@ -188,10 +188,10 @@
   ],
   "blocked_reason": null,
   "last_iteration": {
-    "milestone": "M04",
+    "milestone": "M05",
     "mode": "VERIFY",
-    "summary": "M04 built (T01–T05) and trial 1 PASS: S1–S4 16/16, M01–M03 smoke ✅, no console errors, no 5xx",
+    "summary": "M05 built (T01–T05) and trial 1 PASS: S1–S5 12/12, M01–M04 smoke ✅, no 5xx; label spacing fixed during trial",
     "result": "ok"
   },
-  "updated_at": "2026-10-10T18:16:37+03:00"
+  "updated_at": "2026-10-10T19:03:08+03:00"
 }

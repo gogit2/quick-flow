@@ -32,3 +32,5 @@ Append-only. One row per action (see LOOP_PROTOCOL §6).
 | 2026-10-10T17:48:37+03:00 | 4 | M03 | VERIFY | trial 1: build green, S1–S4 14/14 ✅, M01+M02 smoke ✅, no 5xx; two test-input corrections recorded in M03 file; M03 done | ok |
 | 2026-10-10T18:16:37+03:00 | 5 | M04 | BUILD | M04-T01..T05 done (learning model + LearningApi, card grid + expandable card component with milestones/notes/manual status, add/edit dialog, scenario file) | ok |
 | 2026-10-10T18:16:37+03:00 | 5 | M04 | VERIFY | trial 1: build green, S1–S4 16/16 ✅, M01–M03 smoke ✅, no console errors, no 5xx; M04 done | ok |
+| 2026-10-10T19:03:08+03:00 | 6 | M05 | BUILD | M05-T01..T05 done (plan model + PlanApi, builder dialog with task/habit/learning pickers + BR-10/BR-11 validation, grouped plans page + plan card, RestTimeComponent with skew correction, scenario file) | ok |
+| 2026-10-10T19:03:08+03:00 | 6 | M05 | VERIFY | trial 1: build green, S1–S5 12/12 ✅, M01–M04 smoke ✅, no 5xx; builder label spacing fixed; one scenario expectation and one regression driver corrected (see M05 file); M05 done | ok |
